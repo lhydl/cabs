@@ -4,9 +4,15 @@
   </div>
 
   <div class="col-md-9">
-    <h1 class="display-4"><span>Welcome, Java Hipster!</span> (Cabs)</h1>
+    <h1 class="display-4"><span>Welcome to CABS!</span></h1>
 
-    <p class="lead">This is your homepage</p>
+    <p class="lead">Book <b>same-day</b> appointments at our clinics up to <b>an hour</b> in advance.</p>
+
+    <div>
+      <button type="submit" class="btn btn-primary">Book a Consultation</button>
+      <button type="submit" class="btn btn-primary">View Appoinments</button>
+    </div>
+    <br />
 
     <div>
       @if (account !== null) {
@@ -16,14 +22,14 @@
           }
         </div>
       } @else {
-        <div class="alert alert-warning">
+        <!-- <div class="alert alert-warning">
           <span>If you want to </span>
           <a class="alert-link" (click)="login()">sign in</a
           ><span
             >, you can try the default accounts:<br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;) <br />- User
             (login=&quot;user&quot; and password=&quot;user&quot;).</span
           >
-        </div>
+        </div> -->
 
         <div class="alert alert-warning">
           <span>You don&apos;t have an account yet?</span>&nbsp;
@@ -32,7 +38,7 @@
       }
     </div>
 
-    <p>If you have any question on JHipster:</p>
+    <!-- <p>If you have any question on JHipster:</p>
 
     <ul>
       <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer">JHipster homepage</a></li>
@@ -53,6 +59,6 @@
     <p>
       <span>If you like JHipster, don&apos;t forget to give us a star on</span>
       <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">GitHub</a>!
-    </p>
+    </p> -->
   </div>
 </div>
