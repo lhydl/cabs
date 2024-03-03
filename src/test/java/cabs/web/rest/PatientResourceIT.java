@@ -34,11 +34,11 @@ class PatientResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_EMAIL = "Smy@ufL0PIjt";
-    private static final String UPDATED_EMAIL = "pQG@gR0l9H{szoWluT";
+    private static final String DEFAULT_EMAIL = "QndW5p@D2\"ZYISRib";
+    private static final String UPDATED_EMAIL = "W@8MJ86_ZRcAc";
 
-    private static final String DEFAULT_PHONE_NUMBER = "2";
-    private static final String UPDATED_PHONE_NUMBER = "70266";
+    private static final String DEFAULT_PHONE_NUMBER = "436";
+    private static final String UPDATED_PHONE_NUMBER = "315";
 
     private static final String ENTITY_API_URL = "/api/patients";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
