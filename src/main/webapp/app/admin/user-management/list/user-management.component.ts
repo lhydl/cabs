@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { HttpResponse, HttpHeaders } from '@angular/common/http';
+import { HttpResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -30,6 +30,7 @@ export default class UserManagementComponent implements OnInit {
   page!: number;
   predicate!: string;
   ascending!: boolean;
+  isSuccess: boolean = false;
 
   constructor(
     private userService: UserManagementService,
@@ -112,5 +113,19 @@ export default class UserManagementComponent implements OnInit {
   private onSuccess(users: User[] | null, headers: HttpHeaders): void {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.users = users;
+  }
+
+  // Demo: Step 2
+  public getAdminDetails() {
+    console.log('button clicked');
+    const params = new HttpParams().set('role', 'ROLE_ADMIN');
+    this.userService.getAdminDetails(params).subscribe(res => {
+      if (res) {
+        this.isSuccess = true;
+        console.log('results: ' + JSON.stringify(res));
+      } else {
+        this.isSuccess = false;
+      }
+    });
   }
 }

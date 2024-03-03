@@ -8,6 +8,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -33,4 +35,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
     Page<User> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+
+    // Demo: Step 6
+    @Query(
+        value = " SELECT " +
+        "     * " +
+        " FROM " +
+        "     cabs.jhi_user U " +
+        "     INNER JOIN cabs.jhi_user_authority UA on UA.user_id = U.id " +
+        " WHERE " +
+        "     UA.authority_name = :role ",
+        nativeQuery = true
+    )
+    List<User> getAdminDetails(@Param("role") String role);
 }

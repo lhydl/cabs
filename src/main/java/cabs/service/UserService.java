@@ -324,4 +324,9 @@ public class UserService {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
         }
     }
+
+    // Demo: Step 5
+    public List<User> getAdminDetails(String role) {
+        return userRepository.getAdminDetails(role);
+    }
 }
