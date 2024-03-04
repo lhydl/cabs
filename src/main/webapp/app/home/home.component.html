@@ -9,8 +9,8 @@
     <p class="lead">Book <b>same-day</b> appointments at our clinics up to <b>an hour</b> in advance.</p>
 
     <div>
-      <button type="submit" class="btn btn-primary">Book a Consultation</button>
-      <button type="submit" class="btn btn-primary">View Appoinments</button>
+      <button type="submit" class="btn btn-primary" (click)="bookConsultation()">Book a Consultation</button>
+      <button type="submit" class="btn btn-primary" (click)="viewAppointment()">View Appoinments</button>
     </div>
     <br />
 
@@ -21,6 +21,16 @@
             <span id="home-logged-message">You are logged in as user &quot;{{ account.login }}&quot;.</span>
           }
         </div>
+        @if (account.login == 'user') {
+          <div>
+            <button type="submit" class="btn btn-primary" (click)="bookConsultation()">Book a Consultation</button>
+          </div>
+        }
+        @if (account.login == 'admin') {
+          <div>
+            <button type="submit" class="btn btn-primary" (click)="viewAppointment()">View Appoinments</button>
+          </div>
+        }
       } @else {
         <!-- <div class="alert alert-warning">
           <span>If you want to </span>

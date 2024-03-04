@@ -7,6 +7,7 @@ import { errorRoute } from './layouts/error/error.route';
 import HomeComponent from './home/home.component';
 import NavbarComponent from './layouts/navbar/navbar.component';
 import LoginComponent from './login/login.component';
+import BookConsultationComponent from './bookConsultation/bookConsultation.component';
 
 const routes: Routes = [
   {
@@ -39,6 +40,11 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import(`./entities/entity.routes`),
+  },
+  {
+    path: 'bookConsultation',
+    component: BookConsultationComponent,
+    title: 'CABS',
   },
   ...errorRoute,
 ];
