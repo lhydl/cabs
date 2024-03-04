@@ -39,12 +39,4 @@ export default class HomeComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  bookConsultation(): void {
-    this.router.navigate(['/bookConsultation']);
-  }
-
-  viewAppointment(): void {
-    this.router.navigate(['/appointment']);
-  }
 }
