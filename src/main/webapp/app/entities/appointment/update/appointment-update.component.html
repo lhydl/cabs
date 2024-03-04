@@ -1,0 +1,123 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-appointment-heading" data-cy="AppointmentCreateUpdateHeading">Create or edit a Appointment</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_appt_type">Appt Type</label>
+          <input type="text" class="form-control" name="appt_type" id="field_appt_type" data-cy="appt_type" formControlName="appt_type" />
+          @if (editForm.get('appt_type')!.invalid && (editForm.get('appt_type')!.dirty || editForm.get('appt_type')!.touched)) {
+            <div>
+              @if (editForm.get('appt_type')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+              @if (editForm.get('appt_type')?.errors?.maxlength) {
+                <small class="form-text text-danger">This field cannot be longer than 100 characters.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_appt_datetime">Appt Datetime</label>
+          <div class="d-flex">
+            <input
+              id="field_appt_datetime"
+              data-cy="appt_datetime"
+              type="datetime-local"
+              class="form-control"
+              name="appt_datetime"
+              formControlName="appt_datetime"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (editForm.get('appt_datetime')!.invalid && (editForm.get('appt_datetime')!.dirty || editForm.get('appt_datetime')!.touched)) {
+            <div>
+              @if (editForm.get('appt_datetime')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('appt_datetime')?.errors?.datetimelocal"
+                >This field should be a date and time.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_remarks">Remarks</label>
+          <input type="text" class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks" />
+          @if (editForm.get('remarks')!.invalid && (editForm.get('remarks')!.dirty || editForm.get('remarks')!.touched)) {
+            <div>
+              @if (editForm.get('remarks')?.errors?.maxlength) {
+                <small class="form-text text-danger">This field cannot be longer than 200 characters.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_patient_id">Patient Id</label>
+          <input
+            type="number"
+            class="form-control"
+            name="patient_id"
+            id="field_patient_id"
+            data-cy="patient_id"
+            formControlName="patient_id"
+          />
+          @if (editForm.get('patient_id')!.invalid && (editForm.get('patient_id')!.dirty || editForm.get('patient_id')!.touched)) {
+            <div>
+              @if (editForm.get('patient_id')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('patient_id')?.errors?.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_doctor_id">Doctor Id</label>
+          <input type="number" class="form-control" name="doctor_id" id="field_doctor_id" data-cy="doctor_id" formControlName="doctor_id" />
+          @if (editForm.get('doctor_id')!.invalid && (editForm.get('doctor_id')!.dirty || editForm.get('doctor_id')!.touched)) {
+            <div>
+              @if (editForm.get('doctor_id')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('doctor_id')?.errors?.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
