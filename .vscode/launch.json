@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-CabsApp<cabs>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "cabs.CabsApp",
+      "projectName": "cabs",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
