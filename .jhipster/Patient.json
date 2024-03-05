@@ -22,6 +22,10 @@
       "fieldType": "String",
       "fieldValidateRules": ["required", "pattern"],
       "fieldValidateRulesPattern": "^[0-9]{1,8}$"
+    },
+    {
+      "fieldName": "user_id",
+      "fieldType": "Integer"
     }
   ],
   "jpaMetamodelFiltering": false,

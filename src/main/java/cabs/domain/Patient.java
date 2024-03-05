@@ -37,6 +37,9 @@ public class Patient implements Serializable {
     @Column(name = "phone_number", nullable = false)
     private String phone_number;
 
+    @Column(name = "user_id")
+    private Integer user_id;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -91,6 +94,19 @@ public class Patient implements Serializable {
         this.phone_number = phone_number;
     }
 
+    public Integer getUser_id() {
+        return this.user_id;
+    }
+
+    public Patient user_id(Integer user_id) {
+        this.setUser_id(user_id);
+        return this;
+    }
+
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -118,6 +134,7 @@ public class Patient implements Serializable {
             ", name='" + getName() + "'" +
             ", email='" + getEmail() + "'" +
             ", phone_number='" + getPhone_number() + "'" +
+            ", user_id='" + getUser_id() + "'" +
             "}";
     }
 }

@@ -1,6 +1,6 @@
 <div>
   <h2 id="page-heading" data-cy="AppointmentHeading">
-    <span>Appointments</span>
+    <span>Manage Appointments</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
@@ -15,7 +15,7 @@
         [routerLink]="['/appointment/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span>Create a new Appointment</span>
+        <span>Book a new Appointment</span>
       </button>
     </div>
   </h2>
@@ -44,25 +44,26 @@
             </th>
             <th scope="col" jhiSortBy="appt_type">
               <div class="d-flex">
-                <span>Appt Type</span>
+                <span>Appointment Type</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="appt_datetime">
               <div class="d-flex">
-                <span>Appt Datetime</span>
+                <span>Appointment Schedule</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="remarks">
               <div class="d-flex">
-                <span>Remarks</span>
+                <span>Special Requests/Remarks</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <!-- TODO: remove once not needed -->
             <th scope="col" jhiSortBy="patient_id">
               <div class="d-flex">
                 <span>Patient Id</span>

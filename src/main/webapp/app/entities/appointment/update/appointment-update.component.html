@@ -1,8 +1,11 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-appointment-heading" data-cy="AppointmentCreateUpdateHeading">Create or edit a Appointment</h2>
-
+      @if (editForm.controls.id.value !== null) {
+        <h2 id="jhi-appointment-heading" data-cy="AppointmentCreateUpdateHeading">Edit Appointment Booking</h2>
+      } @else {
+        <h2 id="jhi-appointment-heading" data-cy="AppointmentCreateUpdateHeading">Book new Appointment</h2>
+      }
       <div>
         <jhi-alert-error></jhi-alert-error>
 
@@ -14,7 +17,7 @@
         }
 
         <div class="mb-3">
-          <label class="form-label" for="field_appt_type">Appt Type</label>
+          <label class="form-label" for="field_appt_type">Select Appointment Type</label>
           <input type="text" class="form-control" name="appt_type" id="field_appt_type" data-cy="appt_type" formControlName="appt_type" />
           @if (editForm.get('appt_type')!.invalid && (editForm.get('appt_type')!.dirty || editForm.get('appt_type')!.touched)) {
             <div>
@@ -29,7 +32,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_appt_datetime">Appt Datetime</label>
+          <label class="form-label" for="field_appt_datetime">Select Date and Time</label>
           <div class="d-flex">
             <input
               id="field_appt_datetime"
@@ -54,7 +57,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_remarks">Remarks</label>
+          <label class="form-label" for="field_remarks">Special Request/Remarks</label>
           <input type="text" class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks" />
           @if (editForm.get('remarks')!.invalid && (editForm.get('remarks')!.dirty || editForm.get('remarks')!.touched)) {
             <div>
