@@ -40,8 +40,7 @@ public class Appointment implements Serializable {
     @Column(name = "patient_id", nullable = false)
     private Integer patient_id;
 
-    @NotNull
-    @Column(name = "doctor_id", nullable = false)
+    @Column(name = "doctor_id", nullable = true)
     private Integer doctor_id;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

@@ -14,7 +14,7 @@
         }
 
         <div class="mb-3">
-          <label class="form-label" for="field_appt_type">Appt Type</label>
+          <label class="form-label" for="field_appt_type">Select Appointment Type</label>
           <input type="text" class="form-control" name="appt_type" id="field_appt_type" data-cy="appt_type" formControlName="appt_type" />
           @if (editForm.get('appt_type')!.invalid && (editForm.get('appt_type')!.dirty || editForm.get('appt_type')!.touched)) {
             <div>
@@ -29,7 +29,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_appt_datetime">Appt Datetime</label>
+          <label class="form-label" for="field_appt_datetime">Select Date and Time</label>
           <div class="d-flex">
             <input
               id="field_appt_datetime"
@@ -54,7 +54,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_remarks">Remarks</label>
+          <label class="form-label" for="field_remarks">Special Request/Remarks</label>
           <input type="text" class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks" />
           @if (editForm.get('remarks')!.invalid && (editForm.get('remarks')!.dirty || editForm.get('remarks')!.touched)) {
             <div>
