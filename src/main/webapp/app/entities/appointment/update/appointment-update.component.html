@@ -1,8 +1,11 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-appointment-heading" data-cy="AppointmentCreateUpdateHeading">Create or edit a Appointment</h2>
-
+      @if (editForm.controls.id.value !== null) {
+        <h2 id="jhi-appointment-heading" data-cy="AppointmentCreateUpdateHeading">Edit Appointment Booking</h2>
+      } @else {
+        <h2 id="jhi-appointment-heading" data-cy="AppointmentCreateUpdateHeading">Book new Appointment</h2>
+      }
       <div>
         <jhi-alert-error></jhi-alert-error>
 

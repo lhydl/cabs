@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
@@ -27,6 +28,7 @@ export class AppointmentUpdateComponent implements OnInit {
     protected appointmentService: AppointmentService,
     protected appointmentFormService: AppointmentFormService,
     protected activatedRoute: ActivatedRoute,
+    protected router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -60,7 +62,8 @@ export class AppointmentUpdateComponent implements OnInit {
   }
 
   protected onSaveSuccess(): void {
-    this.previousState();
+    // this.previousState();
+    this.router.navigate(['/appointment']);
   }
 
   protected onSaveError(): void {
