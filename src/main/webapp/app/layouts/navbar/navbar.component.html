@@ -50,6 +50,7 @@
                   routerLinkActive="active"
                   [routerLinkActiveOptions]="{ exact: true }"
                   (click)="collapseNavbar()"
+                  *jhiHasAnyAuthority="'ROLE_ADMIN'"
                 >
                   <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
                   <span>Patient</span>
