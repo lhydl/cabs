@@ -64,6 +64,77 @@
           </div>
 
           <div class="mb-3">
+            <label class="form-label" for="firstName">First name</label>
+            <input
+              type="firstName"
+              class="form-control"
+              id="firstName"
+              name="firstName"
+              placeholder="Enter first name"
+              formControlName="firstName"
+              data-cy="firstName"
+              maxlength="100"
+            />
+            @if (
+              registerForm.get('firstName')!.invalid && (registerForm.get('firstName')!.dirty || registerForm.get('firstName')!.touched)
+            ) {
+              <div>
+                @if (registerForm.get('firstName')?.errors?.required) {
+                  <small class="form-text text-danger">First name is required.</small>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="lastName">Last name</label>
+            <input
+              type="lastName"
+              class="form-control"
+              id="lastName"
+              name="lastName"
+              placeholder="Enter last name"
+              formControlName="lastName"
+              data-cy="lastName"
+              maxlength="100"
+            />
+            @if (registerForm.get('lastName')!.invalid && (registerForm.get('lastName')!.dirty || registerForm.get('lastName')!.touched)) {
+              <div>
+                @if (registerForm.get('lastName')?.errors?.required) {
+                  <small class="form-text text-danger">Last name is required.</small>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="phoneNumber">Phone number</label>
+            <input
+              type="phoneNumber"
+              class="form-control"
+              id="phoneNumber"
+              name="phoneNumber"
+              placeholder="Enter phone number"
+              formControlName="phoneNumber"
+              data-cy="phoneNumber"
+              maxlength="8"
+            />
+            @if (
+              registerForm.get('phoneNumber')!.invalid &&
+              (registerForm.get('phoneNumber')!.dirty || registerForm.get('phoneNumber')!.touched)
+            ) {
+              <div>
+                @if (registerForm.get('phoneNumber')?.errors?.required) {
+                  <small class="form-text text-danger">Phone number is required.</small>
+                }
+                @if (registerForm.get('phoneNumber')?.errors?.pattern) {
+                  <small class="form-text text-danger">Your phone number is invalid.</small>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="mb-3">
             <label class="form-label" for="email">Email</label>
             <input
               type="email"

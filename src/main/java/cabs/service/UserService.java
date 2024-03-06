@@ -2,8 +2,10 @@ package cabs.service;
 
 import cabs.config.Constants;
 import cabs.domain.Authority;
+import cabs.domain.Patient;
 import cabs.domain.User;
 import cabs.repository.AuthorityRepository;
+import cabs.repository.PatientRepository;
 import cabs.repository.UserRepository;
 import cabs.security.AuthoritiesConstants;
 import cabs.security.SecurityUtils;
@@ -41,16 +43,20 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final PatientRepository patientRepository;
+
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
-        CacheManager cacheManager
+        CacheManager cacheManager,
+        PatientRepository patientRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.patientRepository = patientRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -123,15 +129,22 @@ public class UserService {
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
-        newUser.setActivated(false);
+        newUser.setActivated(true);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
-        userRepository.save(newUser);
+        User newlyCreatedUser = userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
+        Patient newPatient = new Patient();
+        newPatient.setUser_id(newlyCreatedUser.getId().intValue());
+        newPatient.setEmail(newlyCreatedUser.getEmail());
+        newPatient.setName(newlyCreatedUser.getFirstName() + " " + newlyCreatedUser.getLastName());
+        newPatient.setPhone_number(userDTO.getPhoneNumber());
+        patientRepository.save(newPatient);
+
         return newUser;
     }
 
