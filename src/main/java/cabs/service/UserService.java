@@ -135,15 +135,16 @@ public class UserService {
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
-        User newlyCreatedUser = userRepository.save(newUser);
+        newUser.setPhoneNumber(userDTO.getPhoneNumber());
+        userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
-        Patient newPatient = new Patient();
-        newPatient.setUser_id(newlyCreatedUser.getId().intValue());
-        newPatient.setEmail(newlyCreatedUser.getEmail());
-        newPatient.setName(newlyCreatedUser.getFirstName() + " " + newlyCreatedUser.getLastName());
-        newPatient.setPhone_number(userDTO.getPhoneNumber());
-        patientRepository.save(newPatient);
+        // Patient newPatient = new Patient();
+        // newPatient.setUser_id(newlyCreatedUser.getId().intValue());
+        // newPatient.setEmail(newlyCreatedUser.getEmail());
+        // newPatient.setName(newlyCreatedUser.getFirstName() + " " + newlyCreatedUser.getLastName());
+        // newPatient.setPhone_number(userDTO.getPhoneNumber());
+        // patientRepository.save(newPatient);
 
         return newUser;
     }
@@ -251,7 +252,7 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, String phoneNumber) {
         SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -263,6 +264,7 @@ public class UserService {
                 }
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
+                user.setPhoneNumber(phoneNumber);
                 userRepository.save(user);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);

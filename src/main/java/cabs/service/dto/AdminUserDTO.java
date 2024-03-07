@@ -71,6 +71,7 @@ public class AdminUserDTO implements Serializable {
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
         this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
+        this.phoneNumber = user.getPhoneNumber();
     }
 
     public Long getId() {
@@ -181,6 +182,10 @@ public class AdminUserDTO implements Serializable {
         return phoneNumber;
     }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     // prettier-ignore
     @Override
     public String toString() {
@@ -197,6 +202,7 @@ public class AdminUserDTO implements Serializable {
             ", lastModifiedBy='" + lastModifiedBy + '\'' +
             ", lastModifiedDate=" + lastModifiedDate +
             ", authorities=" + authorities +
+            ", phoneNumber='" + phoneNumber + '\'' +
             "}";
     }
 }

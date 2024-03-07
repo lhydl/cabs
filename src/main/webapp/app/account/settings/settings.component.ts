@@ -29,6 +29,10 @@ export default class SettingsComponent implements OnInit {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email],
     }),
+    phoneNumber: new FormControl(initialAccount.phoneNumber, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.pattern('^[0-9]{1,8}$')],
+    }),
     langKey: new FormControl(initialAccount.langKey, { nonNullable: true }),
 
     activated: new FormControl(initialAccount.activated, { nonNullable: true }),

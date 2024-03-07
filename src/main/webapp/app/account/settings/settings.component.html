@@ -77,6 +77,33 @@
           </div>
 
           <div class="mb-3">
+            <label class="form-label" for="phoneNumber">Phone number</label>
+            <input
+              type="phoneNumber"
+              class="form-control"
+              id="phoneNumber"
+              name="phoneNumber"
+              placeholder="Enter phone number"
+              formControlName="phoneNumber"
+              data-cy="phoneNumber"
+              maxlength="8"
+            />
+            @if (
+              settingsForm.get('phoneNumber')!.invalid &&
+              (settingsForm.get('phoneNumber')!.dirty || settingsForm.get('phoneNumber')!.touched)
+            ) {
+              <div>
+                @if (settingsForm.get('phoneNumber')?.errors?.required) {
+                  <small class="form-text text-danger">Phone number is required.</small>
+                }
+                @if (settingsForm.get('phoneNumber')?.errors?.pattern) {
+                  <small class="form-text text-danger">Your phone number is invalid.</small>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="mb-3">
             <label class="form-label" for="email">Email</label>
             <input
               type="email"

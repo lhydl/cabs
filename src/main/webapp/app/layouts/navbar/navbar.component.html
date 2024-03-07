@@ -139,7 +139,8 @@
             @if (!account?.imageUrl) {
               <span>
                 <fa-icon icon="user"></fa-icon>
-                <span>Account</span>
+                <span *ngIf="!account?.login">Account</span>
+                <span *ngIf="account?.login">{{ account?.login }}</span>
               </span>
             } @else {
               <span>
