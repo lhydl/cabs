@@ -7,6 +7,10 @@ export interface IAppointment {
   remarks?: string | null;
   patient_id?: number | null;
   doctor_id?: number | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  email?: string | null;
+  phoneNumber?: string | null;
 }
 
 export type NewAppointment = Omit<IAppointment, 'id'> & { id: null };

@@ -35,7 +35,11 @@ type AppointmentFormGroupContent = {
   appt_datetime: FormControl<AppointmentFormRawValue['appt_datetime']>;
   remarks: FormControl<AppointmentFormRawValue['remarks']>;
   patient_id: FormControl<AppointmentFormRawValue['patient_id']>;
-  doctor_id: FormControl<AppointmentFormRawValue['doctor_id']>;
+  firstName: FormControl<AppointmentFormRawValue['firstName']>;
+  lastName: FormControl<AppointmentFormRawValue['lastName']>;
+  email: FormControl<AppointmentFormRawValue['email']>;
+  phoneNumber: FormControl<AppointmentFormRawValue['phoneNumber']>;
+  // doctor_id: FormControl<AppointmentFormRawValue['doctor_id']>;
 };
 
 export type AppointmentFormGroup = FormGroup<AppointmentFormGroupContent>;
@@ -65,11 +69,23 @@ export class AppointmentFormService {
         validators: [Validators.maxLength(200)],
       }),
       patient_id: new FormControl(appointmentRawValue.patient_id, {
-        validators: [Validators.required],
+        // validators: [Validators.required],
       }),
-      doctor_id: new FormControl(appointmentRawValue.doctor_id, {
-        validators: [Validators.required],
+      firstName: new FormControl(appointmentRawValue.firstName, {
+        // validators: [Validators.required],
       }),
+      lastName: new FormControl(appointmentRawValue.lastName, {
+        // validators: [Validators.required],
+      }),
+      email: new FormControl(appointmentRawValue.email, {
+        // validators: [Validators.required],
+      }),
+      phoneNumber: new FormControl(appointmentRawValue.phoneNumber, {
+        // validators: [Validators.required],
+      }),
+      // doctor_id: new FormControl(appointmentRawValue.doctor_id, {
+      //   validators: [Validators.required],
+      // }),
     });
   }
 
