@@ -26,11 +26,11 @@ public class Appointment implements Serializable {
     @NotNull
     @Size(max = 100)
     @Column(name = "appt_type", length = 100, nullable = false)
-    private String appt_type;
+    private String apptType;
 
     @NotNull
     @Column(name = "appt_datetime", nullable = false)
-    private ZonedDateTime appt_datetime;
+    private ZonedDateTime apptDatetime;
 
     @Size(max = 200)
     @Column(name = "remarks", length = 200)
@@ -38,10 +38,10 @@ public class Appointment implements Serializable {
 
     @NotNull
     @Column(name = "patient_id", nullable = false)
-    private Integer patient_id;
+    private Integer patientId;
 
     @Column(name = "doctor_id", nullable = true)
-    private Integer doctor_id;
+    private Integer doctorId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -58,30 +58,30 @@ public class Appointment implements Serializable {
         this.id = id;
     }
 
-    public String getAppt_type() {
-        return this.appt_type;
+    public String getApptType() {
+        return this.apptType;
     }
 
-    public Appointment appt_type(String appt_type) {
-        this.setAppt_type(appt_type);
+    public Appointment apptType(String apptType) {
+        this.setApptType(apptType);
         return this;
     }
 
-    public void setAppt_type(String appt_type) {
-        this.appt_type = appt_type;
+    public void setApptType(String apptType) {
+        this.apptType = apptType;
     }
 
-    public ZonedDateTime getAppt_datetime() {
-        return this.appt_datetime;
+    public ZonedDateTime getApptDatetime() {
+        return this.apptDatetime;
     }
 
-    public Appointment appt_datetime(ZonedDateTime appt_datetime) {
-        this.setAppt_datetime(appt_datetime);
+    public Appointment apptDatetime(ZonedDateTime apptDatetime) {
+        this.setApptDatetime(apptDatetime);
         return this;
     }
 
-    public void setAppt_datetime(ZonedDateTime appt_datetime) {
-        this.appt_datetime = appt_datetime;
+    public void setApptDatetime(ZonedDateTime apptDatetime) {
+        this.apptDatetime = apptDatetime;
     }
 
     public String getRemarks() {
@@ -97,30 +97,30 @@ public class Appointment implements Serializable {
         this.remarks = remarks;
     }
 
-    public Integer getPatient_id() {
-        return this.patient_id;
+    public Integer getPatientId() {
+        return this.patientId;
     }
 
-    public Appointment patient_id(Integer patient_id) {
-        this.setPatient_id(patient_id);
+    public Appointment patientId(Integer patientId) {
+        this.setPatientId(patientId);
         return this;
     }
 
-    public void setPatient_id(Integer patient_id) {
-        this.patient_id = patient_id;
+    public void setPatientId(Integer patientId) {
+        this.patientId = patientId;
     }
 
-    public Integer getDoctor_id() {
-        return this.doctor_id;
+    public Integer getDoctorId() {
+        return this.doctorId;
     }
 
-    public Appointment doctor_id(Integer doctor_id) {
-        this.setDoctor_id(doctor_id);
+    public Appointment doctorId(Integer doctorId) {
+        this.setDoctorId(doctorId);
         return this;
     }
 
-    public void setDoctor_id(Integer doctor_id) {
-        this.doctor_id = doctor_id;
+    public void setDoctorId(Integer doctorId) {
+        this.doctorId = doctorId;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -147,11 +147,11 @@ public class Appointment implements Serializable {
     public String toString() {
         return "Appointment{" +
             "id=" + getId() +
-            ", appt_type='" + getAppt_type() + "'" +
-            ", appt_datetime='" + getAppt_datetime() + "'" +
+            ", apptType='" + getApptType() + "'" +
+            ", apptDatetime='" + getApptDatetime() + "'" +
             ", remarks='" + getRemarks() + "'" +
-            ", patient_id=" + getPatient_id() +
-            ", doctor_id=" + getDoctor_id() +
+            ", patientId=" + getPatientId() +
+            ", doctorId=" + getDoctorId() +
             "}";
     }
 }

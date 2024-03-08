@@ -69,8 +69,8 @@ export class AppointmentUpdateComponent implements OnInit {
     if (appointment.id !== null) {
       this.subscribeToSaveResponse(this.appointmentService.update(appointment));
     } else {
-      if (appointment.patient_id === null) {
-        appointment.patient_id = this.account?.id;
+      if (appointment.patientId === null) {
+        appointment.patientId = this.account?.id;
       }
       this.subscribeToSaveResponse(this.appointmentService.create(appointment));
     }

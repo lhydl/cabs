@@ -74,11 +74,11 @@ class AppointmentResourceIT {
      */
     public static Appointment createEntity(EntityManager em) {
         Appointment appointment = new Appointment()
-            .appt_type(DEFAULT_APPT_TYPE)
-            .appt_datetime(DEFAULT_APPT_DATETIME)
+            .apptType(DEFAULT_APPT_TYPE)
+            .apptDatetime(DEFAULT_APPT_DATETIME)
             .remarks(DEFAULT_REMARKS)
-            .patient_id(DEFAULT_PATIENT_ID)
-            .doctor_id(DEFAULT_DOCTOR_ID);
+            .patientId(DEFAULT_PATIENT_ID)
+            .doctorId(DEFAULT_DOCTOR_ID);
         return appointment;
     }
 
@@ -90,11 +90,11 @@ class AppointmentResourceIT {
      */
     public static Appointment createUpdatedEntity(EntityManager em) {
         Appointment appointment = new Appointment()
-            .appt_type(UPDATED_APPT_TYPE)
-            .appt_datetime(UPDATED_APPT_DATETIME)
+            .apptType(UPDATED_APPT_TYPE)
+            .apptDatetime(UPDATED_APPT_DATETIME)
             .remarks(UPDATED_REMARKS)
-            .patient_id(UPDATED_PATIENT_ID)
-            .doctor_id(UPDATED_DOCTOR_ID);
+            .patientId(UPDATED_PATIENT_ID)
+            .doctorId(UPDATED_DOCTOR_ID);
         return appointment;
     }
 
@@ -116,11 +116,11 @@ class AppointmentResourceIT {
         List<Appointment> appointmentList = appointmentRepository.findAll();
         assertThat(appointmentList).hasSize(databaseSizeBeforeCreate + 1);
         Appointment testAppointment = appointmentList.get(appointmentList.size() - 1);
-        assertThat(testAppointment.getAppt_type()).isEqualTo(DEFAULT_APPT_TYPE);
-        assertThat(testAppointment.getAppt_datetime()).isEqualTo(DEFAULT_APPT_DATETIME);
+        assertThat(testAppointment.getApptType()).isEqualTo(DEFAULT_APPT_TYPE);
+        assertThat(testAppointment.getApptDatetime()).isEqualTo(DEFAULT_APPT_DATETIME);
         assertThat(testAppointment.getRemarks()).isEqualTo(DEFAULT_REMARKS);
-        assertThat(testAppointment.getPatient_id()).isEqualTo(DEFAULT_PATIENT_ID);
-        assertThat(testAppointment.getDoctor_id()).isEqualTo(DEFAULT_DOCTOR_ID);
+        assertThat(testAppointment.getPatientId()).isEqualTo(DEFAULT_PATIENT_ID);
+        assertThat(testAppointment.getDoctorId()).isEqualTo(DEFAULT_DOCTOR_ID);
     }
 
     @Test
@@ -146,7 +146,7 @@ class AppointmentResourceIT {
     void checkAppt_typeIsRequired() throws Exception {
         int databaseSizeBeforeTest = appointmentRepository.findAll().size();
         // set the field null
-        appointment.setAppt_type(null);
+        appointment.setApptType(null);
 
         // Create the Appointment, which fails.
 
@@ -163,7 +163,7 @@ class AppointmentResourceIT {
     void checkAppt_datetimeIsRequired() throws Exception {
         int databaseSizeBeforeTest = appointmentRepository.findAll().size();
         // set the field null
-        appointment.setAppt_datetime(null);
+        appointment.setApptDatetime(null);
 
         // Create the Appointment, which fails.
 
@@ -180,7 +180,7 @@ class AppointmentResourceIT {
     void checkPatient_idIsRequired() throws Exception {
         int databaseSizeBeforeTest = appointmentRepository.findAll().size();
         // set the field null
-        appointment.setPatient_id(null);
+        appointment.setPatientId(null);
 
         // Create the Appointment, which fails.
 
@@ -197,7 +197,7 @@ class AppointmentResourceIT {
     void checkDoctor_idIsRequired() throws Exception {
         int databaseSizeBeforeTest = appointmentRepository.findAll().size();
         // set the field null
-        appointment.setDoctor_id(null);
+        appointment.setDoctorId(null);
 
         // Create the Appointment, which fails.
 
@@ -221,11 +221,11 @@ class AppointmentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(appointment.getId().intValue())))
-            .andExpect(jsonPath("$.[*].appt_type").value(hasItem(DEFAULT_APPT_TYPE)))
-            .andExpect(jsonPath("$.[*].appt_datetime").value(hasItem(sameInstant(DEFAULT_APPT_DATETIME))))
+            .andExpect(jsonPath("$.[*].apptType").value(hasItem(DEFAULT_APPT_TYPE)))
+            .andExpect(jsonPath("$.[*].apptDatetime").value(hasItem(sameInstant(DEFAULT_APPT_DATETIME))))
             .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS)))
-            .andExpect(jsonPath("$.[*].patient_id").value(hasItem(DEFAULT_PATIENT_ID)))
-            .andExpect(jsonPath("$.[*].doctor_id").value(hasItem(DEFAULT_DOCTOR_ID)));
+            .andExpect(jsonPath("$.[*].patientId").value(hasItem(DEFAULT_PATIENT_ID)))
+            .andExpect(jsonPath("$.[*].doctorId").value(hasItem(DEFAULT_DOCTOR_ID)));
     }
 
     @Test
@@ -240,11 +240,11 @@ class AppointmentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(appointment.getId().intValue()))
-            .andExpect(jsonPath("$.appt_type").value(DEFAULT_APPT_TYPE))
-            .andExpect(jsonPath("$.appt_datetime").value(sameInstant(DEFAULT_APPT_DATETIME)))
+            .andExpect(jsonPath("$.apptType").value(DEFAULT_APPT_TYPE))
+            .andExpect(jsonPath("$.apptDatetime").value(sameInstant(DEFAULT_APPT_DATETIME)))
             .andExpect(jsonPath("$.remarks").value(DEFAULT_REMARKS))
-            .andExpect(jsonPath("$.patient_id").value(DEFAULT_PATIENT_ID))
-            .andExpect(jsonPath("$.doctor_id").value(DEFAULT_DOCTOR_ID));
+            .andExpect(jsonPath("$.patientId").value(DEFAULT_PATIENT_ID))
+            .andExpect(jsonPath("$.doctorId").value(DEFAULT_DOCTOR_ID));
     }
 
     @Test
@@ -267,11 +267,11 @@ class AppointmentResourceIT {
         // Disconnect from session so that the updates on updatedAppointment are not directly saved in db
         em.detach(updatedAppointment);
         updatedAppointment
-            .appt_type(UPDATED_APPT_TYPE)
-            .appt_datetime(UPDATED_APPT_DATETIME)
+            .apptType(UPDATED_APPT_TYPE)
+            .apptDatetime(UPDATED_APPT_DATETIME)
             .remarks(UPDATED_REMARKS)
-            .patient_id(UPDATED_PATIENT_ID)
-            .doctor_id(UPDATED_DOCTOR_ID);
+            .patientId(UPDATED_PATIENT_ID)
+            .doctorId(UPDATED_DOCTOR_ID);
 
         restAppointmentMockMvc
             .perform(
@@ -285,11 +285,11 @@ class AppointmentResourceIT {
         List<Appointment> appointmentList = appointmentRepository.findAll();
         assertThat(appointmentList).hasSize(databaseSizeBeforeUpdate);
         Appointment testAppointment = appointmentList.get(appointmentList.size() - 1);
-        assertThat(testAppointment.getAppt_type()).isEqualTo(UPDATED_APPT_TYPE);
-        assertThat(testAppointment.getAppt_datetime()).isEqualTo(UPDATED_APPT_DATETIME);
+        assertThat(testAppointment.getApptType()).isEqualTo(UPDATED_APPT_TYPE);
+        assertThat(testAppointment.getApptDatetime()).isEqualTo(UPDATED_APPT_DATETIME);
         assertThat(testAppointment.getRemarks()).isEqualTo(UPDATED_REMARKS);
-        assertThat(testAppointment.getPatient_id()).isEqualTo(UPDATED_PATIENT_ID);
-        assertThat(testAppointment.getDoctor_id()).isEqualTo(UPDATED_DOCTOR_ID);
+        assertThat(testAppointment.getPatientId()).isEqualTo(UPDATED_PATIENT_ID);
+        assertThat(testAppointment.getDoctorId()).isEqualTo(UPDATED_DOCTOR_ID);
     }
 
     @Test
@@ -360,7 +360,7 @@ class AppointmentResourceIT {
         Appointment partialUpdatedAppointment = new Appointment();
         partialUpdatedAppointment.setId(appointment.getId());
 
-        partialUpdatedAppointment.appt_type(UPDATED_APPT_TYPE).appt_datetime(UPDATED_APPT_DATETIME).doctor_id(UPDATED_DOCTOR_ID);
+        partialUpdatedAppointment.apptType(UPDATED_APPT_TYPE).apptDatetime(UPDATED_APPT_DATETIME).doctorId(UPDATED_DOCTOR_ID);
 
         restAppointmentMockMvc
             .perform(
@@ -374,11 +374,11 @@ class AppointmentResourceIT {
         List<Appointment> appointmentList = appointmentRepository.findAll();
         assertThat(appointmentList).hasSize(databaseSizeBeforeUpdate);
         Appointment testAppointment = appointmentList.get(appointmentList.size() - 1);
-        assertThat(testAppointment.getAppt_type()).isEqualTo(UPDATED_APPT_TYPE);
-        assertThat(testAppointment.getAppt_datetime()).isEqualTo(UPDATED_APPT_DATETIME);
+        assertThat(testAppointment.getApptType()).isEqualTo(UPDATED_APPT_TYPE);
+        assertThat(testAppointment.getApptDatetime()).isEqualTo(UPDATED_APPT_DATETIME);
         assertThat(testAppointment.getRemarks()).isEqualTo(DEFAULT_REMARKS);
-        assertThat(testAppointment.getPatient_id()).isEqualTo(DEFAULT_PATIENT_ID);
-        assertThat(testAppointment.getDoctor_id()).isEqualTo(UPDATED_DOCTOR_ID);
+        assertThat(testAppointment.getPatientId()).isEqualTo(DEFAULT_PATIENT_ID);
+        assertThat(testAppointment.getDoctorId()).isEqualTo(UPDATED_DOCTOR_ID);
     }
 
     @Test
@@ -394,11 +394,11 @@ class AppointmentResourceIT {
         partialUpdatedAppointment.setId(appointment.getId());
 
         partialUpdatedAppointment
-            .appt_type(UPDATED_APPT_TYPE)
-            .appt_datetime(UPDATED_APPT_DATETIME)
+            .apptType(UPDATED_APPT_TYPE)
+            .apptDatetime(UPDATED_APPT_DATETIME)
             .remarks(UPDATED_REMARKS)
-            .patient_id(UPDATED_PATIENT_ID)
-            .doctor_id(UPDATED_DOCTOR_ID);
+            .patientId(UPDATED_PATIENT_ID)
+            .doctorId(UPDATED_DOCTOR_ID);
 
         restAppointmentMockMvc
             .perform(
@@ -412,11 +412,11 @@ class AppointmentResourceIT {
         List<Appointment> appointmentList = appointmentRepository.findAll();
         assertThat(appointmentList).hasSize(databaseSizeBeforeUpdate);
         Appointment testAppointment = appointmentList.get(appointmentList.size() - 1);
-        assertThat(testAppointment.getAppt_type()).isEqualTo(UPDATED_APPT_TYPE);
-        assertThat(testAppointment.getAppt_datetime()).isEqualTo(UPDATED_APPT_DATETIME);
+        assertThat(testAppointment.getApptType()).isEqualTo(UPDATED_APPT_TYPE);
+        assertThat(testAppointment.getApptDatetime()).isEqualTo(UPDATED_APPT_DATETIME);
         assertThat(testAppointment.getRemarks()).isEqualTo(UPDATED_REMARKS);
-        assertThat(testAppointment.getPatient_id()).isEqualTo(UPDATED_PATIENT_ID);
-        assertThat(testAppointment.getDoctor_id()).isEqualTo(UPDATED_DOCTOR_ID);
+        assertThat(testAppointment.getPatientId()).isEqualTo(UPDATED_PATIENT_ID);
+        assertThat(testAppointment.getDoctorId()).isEqualTo(UPDATED_DOCTOR_ID);
     }
 
     @Test

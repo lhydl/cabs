@@ -12,19 +12,19 @@ public class AppointmentTestSamples {
     private static final AtomicInteger intCount = new AtomicInteger(random.nextInt() + (2 * Short.MAX_VALUE));
 
     public static Appointment getAppointmentSample1() {
-        return new Appointment().id(1L).appt_type("appt_type1").remarks("remarks1").patient_id(1).doctor_id(1);
+        return new Appointment().id(1L).apptType("appt_type1").remarks("remarks1").patientId(1).doctorId(1);
     }
 
     public static Appointment getAppointmentSample2() {
-        return new Appointment().id(2L).appt_type("appt_type2").remarks("remarks2").patient_id(2).doctor_id(2);
+        return new Appointment().id(2L).apptType("appt_type2").remarks("remarks2").patientId(2).doctorId(2);
     }
 
     public static Appointment getAppointmentRandomSampleGenerator() {
         return new Appointment()
             .id(longCount.incrementAndGet())
-            .appt_type(UUID.randomUUID().toString())
+            .apptType(UUID.randomUUID().toString())
             .remarks(UUID.randomUUID().toString())
-            .patient_id(intCount.incrementAndGet())
-            .doctor_id(intCount.incrementAndGet());
+            .patientId(intCount.incrementAndGet())
+            .doctorId(intCount.incrementAndGet());
     }
 }

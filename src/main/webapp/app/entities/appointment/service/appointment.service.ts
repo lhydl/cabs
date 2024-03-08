@@ -13,8 +13,8 @@ import { IAppointment, NewAppointment } from '../appointment.model';
 
 export type PartialUpdateAppointment = Partial<IAppointment> & Pick<IAppointment, 'id'>;
 
-type RestOf<T extends IAppointment | NewAppointment> = Omit<T, 'appt_datetime'> & {
-  appt_datetime?: string | null;
+type RestOf<T extends IAppointment | NewAppointment> = Omit<T, 'apptDatetime'> & {
+  apptDatetime?: string | null;
 };
 
 export type RestAppointment = RestOf<IAppointment>;
@@ -106,14 +106,14 @@ export class AppointmentService {
   protected convertDateFromClient<T extends IAppointment | NewAppointment | PartialUpdateAppointment>(appointment: T): RestOf<T> {
     return {
       ...appointment,
-      appt_datetime: appointment.appt_datetime?.toJSON() ?? null,
+      apptDatetime: appointment.apptDatetime?.toJSON() ?? null,
     };
   }
 
   protected convertDateFromServer(restAppointment: RestAppointment): IAppointment {
     return {
       ...restAppointment,
-      appt_datetime: restAppointment.appt_datetime ? dayjs(restAppointment.appt_datetime) : undefined,
+      apptDatetime: restAppointment.apptDatetime ? dayjs(restAppointment.apptDatetime) : undefined,
     };
   }
 

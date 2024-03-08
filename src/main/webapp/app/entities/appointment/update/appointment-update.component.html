@@ -18,13 +18,13 @@
 
         <div class="mb-3">
           <label class="form-label" for="field_appt_type">Select Appointment Type</label>
-          <input type="text" class="form-control" name="appt_type" id="field_appt_type" data-cy="appt_type" formControlName="appt_type" />
-          @if (editForm.get('appt_type')!.invalid && (editForm.get('appt_type')!.dirty || editForm.get('appt_type')!.touched)) {
+          <input type="text" class="form-control" name="apptType" id="field_appt_type" data-cy="apptType" formControlName="apptType" />
+          @if (editForm.get('apptType')!.invalid && (editForm.get('apptType')!.dirty || editForm.get('apptType')!.touched)) {
             <div>
-              @if (editForm.get('appt_type')?.errors?.required) {
+              @if (editForm.get('apptType')?.errors?.required) {
                 <small class="form-text text-danger">This field is required.</small>
               }
-              @if (editForm.get('appt_type')?.errors?.maxlength) {
+              @if (editForm.get('apptType')?.errors?.maxlength) {
                 <small class="form-text text-danger">This field cannot be longer than 100 characters.</small>
               }
             </div>
@@ -36,20 +36,20 @@
           <div class="d-flex">
             <input
               id="field_appt_datetime"
-              data-cy="appt_datetime"
+              data-cy="apptDatetime"
               type="datetime-local"
               class="form-control"
-              name="appt_datetime"
-              formControlName="appt_datetime"
+              name="apptDatetime"
+              formControlName="apptDatetime"
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-          @if (editForm.get('appt_datetime')!.invalid && (editForm.get('appt_datetime')!.dirty || editForm.get('appt_datetime')!.touched)) {
+          @if (editForm.get('apptDatetime')!.invalid && (editForm.get('apptDatetime')!.dirty || editForm.get('apptDatetime')!.touched)) {
             <div>
-              @if (editForm.get('appt_datetime')?.errors?.required) {
+              @if (editForm.get('apptDatetime')?.errors?.required) {
                 <small class="form-text text-danger">This field is required.</small>
               }
-              <small class="form-text text-danger" [hidden]="!editForm.get('appt_datetime')?.errors?.datetimelocal"
+              <small class="form-text text-danger" [hidden]="!editForm.get('apptDatetime')?.errors?.datetimelocal"
                 >This field should be a date and time.</small
               >
             </div>
@@ -78,17 +78,17 @@
             <input
               type="number"
               class="form-control"
-              name="patient_id"
+              name="patientId"
               id="field_patient_id"
-              data-cy="patient_id"
-              formControlName="patient_id"
+              data-cy="patientId"
+              formControlName="patientId"
             />
-            @if (editForm.get('patient_id')!.invalid && (editForm.get('patient_id')!.dirty || editForm.get('patient_id')!.touched)) {
+            @if (editForm.get('patientId')!.invalid && (editForm.get('patientId')!.dirty || editForm.get('patientId')!.touched)) {
               <div>
-                @if (editForm.get('patient_id')?.errors?.required) {
+                @if (editForm.get('patientId')?.errors?.required) {
                   <small class="form-text text-danger">This field is required.</small>
                 }
-                <small class="form-text text-danger" [hidden]="!editForm.get('patient_id')?.errors?.number"
+                <small class="form-text text-danger" [hidden]="!editForm.get('patientId')?.errors?.number"
                   >This field should be a number.</small
                 >
               </div>
@@ -198,13 +198,13 @@
         </div>
         <!-- <div class="mb-3">
           <label class="form-label" for="field_doctor_id">Doctor Id</label>
-          <input type="number" class="form-control" name="doctor_id" id="field_doctor_id" data-cy="doctor_id" formControlName="doctor_id" />
-          @if (editForm.get('doctor_id')!.invalid && (editForm.get('doctor_id')!.dirty || editForm.get('doctor_id')!.touched)) {
+          <input type="number" class="form-control" name="doctorId" id="field_doctor_id" data-cy="doctorId" formControlName="doctorId" />
+          @if (editForm.get('doctorId')!.invalid && (editForm.get('doctorId')!.dirty || editForm.get('doctorId')!.touched)) {
             <div>
-              @if (editForm.get('doctor_id')?.errors?.required) {
+              @if (editForm.get('doctorId')?.errors?.required) {
                 <small class="form-text text-danger">This field is required.</small>
               }
-              <small class="form-text text-danger" [hidden]="!editForm.get('doctor_id')?.errors?.number"
+              <small class="form-text text-danger" [hidden]="!editForm.get('doctorId')?.errors?.number"
                 >This field should be a number.</small
               >
             </div>

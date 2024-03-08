@@ -45,20 +45,20 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentRepository
             .findById(appointment.getId())
             .map(existingAppointment -> {
-                if (appointment.getAppt_type() != null) {
-                    existingAppointment.setAppt_type(appointment.getAppt_type());
+                if (appointment.getApptType() != null) {
+                    existingAppointment.setApptType(appointment.getApptType());
                 }
-                if (appointment.getAppt_datetime() != null) {
-                    existingAppointment.setAppt_datetime(appointment.getAppt_datetime());
+                if (appointment.getApptDatetime() != null) {
+                    existingAppointment.setApptDatetime(appointment.getApptDatetime());
                 }
                 if (appointment.getRemarks() != null) {
                     existingAppointment.setRemarks(appointment.getRemarks());
                 }
-                if (appointment.getPatient_id() != null) {
-                    existingAppointment.setPatient_id(appointment.getPatient_id());
+                if (appointment.getPatientId() != null) {
+                    existingAppointment.setPatientId(appointment.getPatientId());
                 }
-                // if (appointment.getDoctor_id() != null) {
-                //     existingAppointment.setDoctor_id(appointment.getDoctor_id());
+                // if (appointment.getDoctorId() != null) {
+                //     existingAppointment.setDoctorId(appointment.getDoctorId());
                 // }
 
                 return existingAppointment;

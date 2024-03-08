@@ -8,7 +8,7 @@ import { AppointmentService, RestAppointment } from './appointment.service';
 
 const requireRestSample: RestAppointment = {
   ...sampleWithRequiredData,
-  appt_datetime: sampleWithRequiredData.appt_datetime?.toJSON(),
+  apptDatetime: sampleWithRequiredData.apptDatetime?.toJSON(),
 };
 
 describe('Appointment Service', () => {

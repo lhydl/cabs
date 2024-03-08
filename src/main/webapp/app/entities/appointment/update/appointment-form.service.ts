@@ -19,27 +19,27 @@ type AppointmentFormGroupInput = IAppointment | PartialWithRequiredKeyOf<NewAppo
 /**
  * Type that converts some properties for forms.
  */
-type FormValueOf<T extends IAppointment | NewAppointment> = Omit<T, 'appt_datetime'> & {
-  appt_datetime?: string | null;
+type FormValueOf<T extends IAppointment | NewAppointment> = Omit<T, 'apptDatetime'> & {
+  apptDatetime?: string | null;
 };
 
 type AppointmentFormRawValue = FormValueOf<IAppointment>;
 
 type NewAppointmentFormRawValue = FormValueOf<NewAppointment>;
 
-type AppointmentFormDefaults = Pick<NewAppointment, 'id' | 'appt_datetime'>;
+type AppointmentFormDefaults = Pick<NewAppointment, 'id' | 'apptDatetime'>;
 
 type AppointmentFormGroupContent = {
   id: FormControl<AppointmentFormRawValue['id'] | NewAppointment['id']>;
-  appt_type: FormControl<AppointmentFormRawValue['appt_type']>;
-  appt_datetime: FormControl<AppointmentFormRawValue['appt_datetime']>;
+  apptType: FormControl<AppointmentFormRawValue['apptType']>;
+  apptDatetime: FormControl<AppointmentFormRawValue['apptDatetime']>;
   remarks: FormControl<AppointmentFormRawValue['remarks']>;
-  patient_id: FormControl<AppointmentFormRawValue['patient_id']>;
+  patientId: FormControl<AppointmentFormRawValue['patientId']>;
   firstName: FormControl<AppointmentFormRawValue['firstName']>;
   lastName: FormControl<AppointmentFormRawValue['lastName']>;
   email: FormControl<AppointmentFormRawValue['email']>;
   phoneNumber: FormControl<AppointmentFormRawValue['phoneNumber']>;
-  // doctor_id: FormControl<AppointmentFormRawValue['doctor_id']>;
+  // doctorId: FormControl<AppointmentFormRawValue['doctorId']>;
 };
 
 export type AppointmentFormGroup = FormGroup<AppointmentFormGroupContent>;
@@ -59,16 +59,16 @@ export class AppointmentFormService {
           validators: [Validators.required],
         },
       ),
-      appt_type: new FormControl(appointmentRawValue.appt_type, {
+      apptType: new FormControl(appointmentRawValue.apptType, {
         validators: [Validators.required, Validators.maxLength(100)],
       }),
-      appt_datetime: new FormControl(appointmentRawValue.appt_datetime, {
+      apptDatetime: new FormControl(appointmentRawValue.apptDatetime, {
         validators: [Validators.required],
       }),
       remarks: new FormControl(appointmentRawValue.remarks, {
         validators: [Validators.maxLength(200)],
       }),
-      patient_id: new FormControl(appointmentRawValue.patient_id, {
+      patientId: new FormControl(appointmentRawValue.patientId, {
         // validators: [Validators.required],
       }),
       firstName: new FormControl(appointmentRawValue.firstName, {
@@ -83,7 +83,7 @@ export class AppointmentFormService {
       phoneNumber: new FormControl(appointmentRawValue.phoneNumber, {
         // validators: [Validators.required],
       }),
-      // doctor_id: new FormControl(appointmentRawValue.doctor_id, {
+      // doctorId: new FormControl(appointmentRawValue.doctorId, {
       //   validators: [Validators.required],
       // }),
     });
@@ -108,7 +108,7 @@ export class AppointmentFormService {
 
     return {
       id: null,
-      appt_datetime: currentTime,
+      apptDatetime: currentTime,
     };
   }
 
@@ -117,7 +117,7 @@ export class AppointmentFormService {
   ): IAppointment | NewAppointment {
     return {
       ...rawAppointment,
-      appt_datetime: dayjs(rawAppointment.appt_datetime, DATE_TIME_FORMAT),
+      apptDatetime: dayjs(rawAppointment.apptDatetime, DATE_TIME_FORMAT),
     };
   }
 
@@ -126,7 +126,7 @@ export class AppointmentFormService {
   ): AppointmentFormRawValue | PartialWithRequiredKeyOf<NewAppointmentFormRawValue> {
     return {
       ...appointment,
-      appt_datetime: appointment.appt_datetime ? appointment.appt_datetime.format(DATE_TIME_FORMAT) : undefined,
+      apptDatetime: appointment.apptDatetime ? appointment.apptDatetime.format(DATE_TIME_FORMAT) : undefined,
     };
   }
 }

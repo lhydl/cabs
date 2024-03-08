@@ -20,11 +20,11 @@ describe('Appointment Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            appt_type: expect.any(Object),
-            appt_datetime: expect.any(Object),
+            apptType: expect.any(Object),
+            apptDatetime: expect.any(Object),
             remarks: expect.any(Object),
-            patient_id: expect.any(Object),
-            doctor_id: expect.any(Object),
+            patientId: expect.any(Object),
+            doctorId: expect.any(Object),
           }),
         );
       });
@@ -35,11 +35,11 @@ describe('Appointment Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            appt_type: expect.any(Object),
-            appt_datetime: expect.any(Object),
+            apptType: expect.any(Object),
+            apptDatetime: expect.any(Object),
             remarks: expect.any(Object),
-            patient_id: expect.any(Object),
-            doctor_id: expect.any(Object),
+            patientId: expect.any(Object),
+            doctorId: expect.any(Object),
           }),
         );
       });
