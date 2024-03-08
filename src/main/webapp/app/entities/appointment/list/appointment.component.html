@@ -35,21 +35,21 @@
       <table class="table table-striped" aria-describedby="page-heading">
         <thead>
           <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
+            <!-- <th scope="col" jhiSortBy="id">
               <div class="d-flex">
                 <span>ID</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
-            </th>
-            <th scope="col" jhiSortBy="appt_type">
+            </th> -->
+            <th scope="col" jhiSortBy="apptType">
               <div class="d-flex">
                 <span>Appointment Type</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <th scope="col" jhiSortBy="appt_datetime">
+            <th scope="col" jhiSortBy="apptDatetime">
               <div class="d-flex">
                 <span>Appointment Schedule</span>
 
@@ -64,34 +64,34 @@
               </div>
             </th>
             <!-- TODO: remove once not needed -->
-            <th scope="col" jhiSortBy="patient_id">
+            <th scope="col" jhiSortBy="patientId">
               <div class="d-flex">
                 <span>Patient Id</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <th scope="col" jhiSortBy="doctor_id">
+            <!-- <th scope="col" jhiSortBy="doctorId">
               <div class="d-flex">
                 <span>Doctor Id</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
-            </th>
+            </th> -->
             <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
           @for (appointment of appointments; track trackId) {
             <tr data-cy="entityTable">
-              <td>
+              <!-- <td>
                 <a [routerLink]="['/appointment', appointment.id, 'view']">{{ appointment.id }}</a>
-              </td>
-              <td>{{ appointment.appt_type }}</td>
-              <td>{{ appointment.appt_datetime | formatMediumDatetime }}</td>
+              </td> -->
+              <td>{{ appointment.apptType }}</td>
+              <td>{{ appointment.apptDatetime | formatMediumDatetime }}</td>
               <td>{{ appointment.remarks }}</td>
-              <td>{{ appointment.patient_id }}</td>
-              <td>{{ appointment.doctor_id }}</td>
+              <td>{{ appointment.patientId }}</td>
+              <!-- <td>{{ appointment.doctorId }}</td> -->
               <td class="text-end">
                 <div class="btn-group">
                   <a [routerLink]="['/appointment', appointment.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
