@@ -45,4 +45,8 @@ export class UserManagementService {
   getAdminDetails(params: HttpParams): Observable<number> {
     return this.http.get<number>(`${this.resourceUrl}/getadmin`, { params });
   }
+
+  getUserList(): Observable<number> {
+    return this.http.get<number>(`${this.resourceUrl}/getuserlist`);
+  }
 }
