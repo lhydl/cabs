@@ -94,6 +94,10 @@ export class AppointmentUpdateComponent implements OnInit {
     window.history.back();
   }
 
+  generateTimeSlots(): void {
+    // TODO-> on select date, get existing appt time from db based on selected date and generate time slots
+  }
+
   save(): void {
     this.isSaving = true;
     const appointment = this.appointmentFormService.getAppointment(this.editForm);
@@ -105,6 +109,8 @@ export class AppointmentUpdateComponent implements OnInit {
       }
       this.subscribeToSaveResponse(this.appointmentService.create(appointment));
     }
+
+    // TODO-> admin create for new patient
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IAppointment>>): void {
