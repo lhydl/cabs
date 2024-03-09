@@ -1,7 +1,10 @@
 package cabs.repository;
 
 import cabs.domain.Appointment;
+import cabs.domain.User;
+import java.util.List;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,4 +12,10 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AppointmentRepository extends JpaRepository<Appointment, Long> {}
+public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
+    @Query(
+        value = " SELECT " + "     * " + " FROM " + "     cabs.appointment A" + " WHERE " + "     A.patient_id = :userId ",
+        nativeQuery = true
+    )
+    List<Appointment> getUserAppt(@Param("userId") Integer userId);
+}

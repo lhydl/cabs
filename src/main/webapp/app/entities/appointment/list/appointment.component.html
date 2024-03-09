@@ -1,7 +1,7 @@
 <div>
   <h2 id="page-heading" data-cy="AppointmentHeading">
-    <span>Manage Appointments</span>
-
+    <span *jhiHasAnyAuthority="'ROLE_ADMIN'">Manage Appointments</span>
+    <span *jhiHasAnyAuthority="'ROLE_USER'">Manage Your Appointments</span>
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
@@ -64,7 +64,7 @@
               </div>
             </th>
             <!-- TODO: remove once not needed -->
-            <th scope="col" jhiSortBy="patientId">
+            <th *jhiHasAnyAuthority="'ROLE_ADMIN'" scope="col" jhiSortBy="patientId">
               <div class="d-flex">
                 <span>Patient Id</span>
 
@@ -90,7 +90,7 @@
               <td>{{ appointment.apptType }}</td>
               <td>{{ appointment.apptDatetime | formatMediumDatetime }}</td>
               <td>{{ appointment.remarks }}</td>
-              <td>{{ appointment.patientId }}</td>
+              <td *jhiHasAnyAuthority="'ROLE_ADMIN'">{{ appointment.patientId }}</td>
               <!-- <td>{{ appointment.doctorId }}</td> -->
               <td class="text-end">
                 <div class="btn-group">

@@ -3,6 +3,7 @@ package cabs.service.impl;
 import cabs.domain.Appointment;
 import cabs.repository.AppointmentRepository;
 import cabs.service.AppointmentService;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,5 +85,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     public void delete(Long id) {
         log.debug("Request to delete Appointment : {}", id);
         appointmentRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Appointment> getUserAppt(String userId) {
+        Integer id = Integer.parseInt(userId);
+        return appointmentRepository.getUserAppt(id);
     }
 }

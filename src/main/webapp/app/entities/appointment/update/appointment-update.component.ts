@@ -60,7 +60,9 @@ export class AppointmentUpdateComponent implements OnInit {
         this.updateForm(appointment);
       }
     });
-    this.getUserList();
+    if (this.isAdmin) {
+      this.getUserList();
+    }
   }
 
   ngOnDestroy(): void {

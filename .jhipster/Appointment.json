@@ -29,8 +29,7 @@
     },
     {
       "fieldName": "doctor_id",
-      "fieldType": "Integer",
-      "fieldValidateRules": [""]
+      "fieldType": "Integer"
     }
   ],
   "jpaMetamodelFiltering": false,
