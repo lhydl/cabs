@@ -48,6 +48,7 @@ export class AppointmentComponent implements OnInit {
   page = 1;
   account: Account | null = null;
   isAdmin: boolean = this.accountService.hasAnyAuthority('ROLE_ADMIN');
+  displayTitle: string | null = null;
 
   private readonly destroy$ = new Subject<void>();
 
@@ -62,6 +63,7 @@ export class AppointmentComponent implements OnInit {
   trackId = (_index: number, item: IAppointment): number => this.appointmentService.getAppointmentIdentifier(item);
 
   ngOnInit(): void {
+    this.setUserRoleContent();
     this.accountService
       .getAuthenticationState()
       .pipe(takeUntil(this.destroy$))
@@ -72,6 +74,18 @@ export class AppointmentComponent implements OnInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  setUserRoleContent(): void {
+    this.accountService.identity().subscribe(account => {
+      if (account) {
+        if (this.accountService.hasAnyAuthority(['ROLE_ADMIN'])) {
+          this.displayTitle = 'Manage Appointments';
+        } else {
+          this.displayTitle = 'Manage Your Appointments';
+        }
+      }
+    });
   }
 
   delete(appointment: IAppointment): void {

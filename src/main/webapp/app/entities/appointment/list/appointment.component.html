@@ -1,7 +1,6 @@
 <div>
   <h2 id="page-heading" data-cy="AppointmentHeading">
-    <span *jhiHasAnyAuthority="'ROLE_ADMIN'">Manage Appointments</span>
-    <span *jhiHasAnyAuthority="'ROLE_USER'">Manage Your Appointments</span>
+    <span>{{ displayTitle }}</span>
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
