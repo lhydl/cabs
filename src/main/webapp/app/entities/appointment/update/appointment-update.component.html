@@ -18,7 +18,10 @@
 
         <div class="mb-3">
           <label class="form-label" for="field_appt_type">Select Appointment Type</label>
-          <input type="text" class="form-control" name="apptType" id="field_appt_type" data-cy="apptType" formControlName="apptType" />
+          <select class="form-control" id="field_appt_type" data-cy="apptType" formControlName="apptType">
+            <!-- <option value="" disabled>Select an appointment type</option> -->
+            <option *ngFor="let apptType of apptTypeList" [value]="apptType">{{ apptType }}</option>
+          </select>
           @if (editForm.get('apptType')!.invalid && (editForm.get('apptType')!.dirty || editForm.get('apptType')!.touched)) {
             <div>
               @if (editForm.get('apptType')?.errors?.required) {
@@ -76,7 +79,7 @@
           <div class="mb-3" *ngIf="!isNewPatient">
             <label class="form-label" for="field_patient_id">Patient Name</label>
             <select class="form-control" id="field_patient_id" data-cy="patientId" formControlName="patientId">
-              <option value="" disabled>Select a patient</option>
+              <!-- <option value="" disabled>Select a patient</option> -->
               <option *ngFor="let user of userList" [value]="user.id">{{ user.firstName }} {{ user.lastName }} ({{ user.login }})</option>
             </select>
             @if (editForm.get('patientId')!.invalid && (editForm.get('patientId')!.dirty || editForm.get('patientId')!.touched)) {

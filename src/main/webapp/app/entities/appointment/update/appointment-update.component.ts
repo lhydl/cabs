@@ -33,6 +33,7 @@ export class AppointmentUpdateComponent implements OnInit {
   isAdmin: boolean = this.accountService.hasAnyAuthority('ROLE_ADMIN');
   // userList: UserListDTO[] | undefined;
   userList: User[] | null = null;
+  apptTypeList: string[] = ['Consultation', 'Urgent Care', 'Dental', 'Pharmacy'];
 
   editForm: AppointmentFormGroup = this.appointmentFormService.createAppointmentFormGroup({ id: null }, this.isNewPatient, this.isAdmin);
 
