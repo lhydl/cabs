@@ -2,43 +2,42 @@
   <div class="col-md-3">
     <span class="hipster img-fluid rounded"></span>
   </div>
-
   <div class="col-md-9">
-    <h1 class="display-4"><span>Welcome to CABS!</span></h1>
-
-    <p class="lead">Book <b>same-day</b> appointments at our clinics up to <b>an hour</b> in advance.</p>
-
-    <div>
-      <button type="submit" class="btn btn-primary" [routerLink]="['/appointment/new']">Book a new Appointment</button>
-      <button type="submit" class="btn btn-primary" [routerLink]="['/appointment']">View Appointments</button>
+    <div class="content">
+      <div class="background-box">
+        <h1 class="display-4"><span>Welcome to CABS!</span></h1>
+        <p class="lead">Book <b>same-day</b> appointments at our clinics up to <b>an hour</b> in advance.</p>
+      </div>
+      <div>
+        @if (account !== null) {
+          <div class="alert alert-success">
+            @if (account) {
+              <span id="home-logged-message">You are logged in as user &quot;{{ account.login }}&quot;.</span>
+            }
+          </div>
+        } @else {
+          <!-- <div class="alert alert-warning">
+            <span>If you want to </span>
+            <a class="alert-link" (click)="login()">sign in</a
+            ><span
+              >, you can try the default accounts:<br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;) <br />- User
+              (login=&quot;user&quot; and password=&quot;user&quot;).</span
+            >
+          </div> -->
+          <div class="alert alert-warning">
+            <span>To use the app,</span>&nbsp;
+            <a class="alert-link" routerLink="/login">Please sign in here!</a>
+          </div>
+          <div class="alert alert-warning">
+            <span>You don&apos;t have an account yet?</span>&nbsp;
+            <a class="alert-link" routerLink="/account/register">Register a new account</a>
+          </div>
+        }
+      </div>
     </div>
-    <br />
+  </div>
 
-    <div>
-      @if (account !== null) {
-        <div class="alert alert-success">
-          @if (account) {
-            <span id="home-logged-message">You are logged in as user &quot;{{ account.login }}&quot;.</span>
-          }
-        </div>
-      } @else {
-        <!-- <div class="alert alert-warning">
-          <span>If you want to </span>
-          <a class="alert-link" (click)="login()">sign in</a
-          ><span
-            >, you can try the default accounts:<br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;) <br />- User
-            (login=&quot;user&quot; and password=&quot;user&quot;).</span
-          >
-        </div> -->
-
-        <div class="alert alert-warning">
-          <span>You don&apos;t have an account yet?</span>&nbsp;
-          <a class="alert-link" routerLink="/account/register">Register a new account</a>
-        </div>
-      }
-    </div>
-
-    <!-- <p>If you have any question on JHipster:</p>
+  <!-- <p>If you have any question on JHipster:</p>
 
     <ul>
       <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer">JHipster homepage</a></li>
@@ -60,5 +59,14 @@
       <span>If you like JHipster, don&apos;t forget to give us a star on</span>
       <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">GitHub</a>!
     </p> -->
+</div>
+<div class="row2">
+  <div class="ButtonDiv">
+    <button type="submit" class="btn btn-primary custom-button book-appointment" [routerLink]="['/appointment/new']">
+      <b>Book Appointment</b>
+    </button>
+    <button type="submit" class="btn btn-primary custom-button view-appointment" [routerLink]="['/appointment']">
+      <b>View Appointments</b>
+    </button>
   </div>
 </div>
