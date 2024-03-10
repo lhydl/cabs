@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { map } from 'rxjs/operators';
@@ -79,6 +79,12 @@ export class AppointmentService {
 
   compareAppointment(o1: Pick<IAppointment, 'id'> | null, o2: Pick<IAppointment, 'id'> | null): boolean {
     return o1 && o2 ? this.getAppointmentIdentifier(o1) === this.getAppointmentIdentifier(o2) : o1 === o2;
+  }
+
+  getUserAppt(params: HttpParams): Observable<EntityArrayResponseType> {
+    return this.http
+      .get<RestAppointment[]>(`${this.resourceUrl}/getuserappt`, { params, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   addAppointmentToCollectionIfMissing<Type extends Pick<IAppointment, 'id'>>(

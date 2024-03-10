@@ -91,6 +91,20 @@ export default class UserManagementComponent implements OnInit {
     });
   }
 
+  // Demo: Step 2
+  public getAdminDetails(): void {
+    console.log('button clicked');
+    const params = new HttpParams().set('role', 'ROLE_ADMIN');
+    this.userService.getAdminDetails(params).subscribe(res => {
+      if (res) {
+        this.isSuccess = true;
+        console.log('results: ' + JSON.stringify(res));
+      } else {
+        this.isSuccess = false;
+      }
+    });
+  }
+
   private handleNavigation(): void {
     combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
       const page = params.get('page');
@@ -113,19 +127,5 @@ export default class UserManagementComponent implements OnInit {
   private onSuccess(users: User[] | null, headers: HttpHeaders): void {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.users = users;
-  }
-
-  // Demo: Step 2
-  public getAdminDetails() {
-    console.log('button clicked');
-    const params = new HttpParams().set('role', 'ROLE_ADMIN');
-    this.userService.getAdminDetails(params).subscribe(res => {
-      if (res) {
-        this.isSuccess = true;
-        console.log('results: ' + JSON.stringify(res));
-      } else {
-        this.isSuccess = false;
-      }
-    });
   }
 }

@@ -15,6 +15,8 @@ import { faAnglesDown } from '@fortawesome/free-solid-svg-icons';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
+import { UserManagementService } from 'app/admin/user-management/service/user-management.service';
+import { User } from 'app/admin/user-management/user-management.model';
 
 @Component({
   standalone: true,
@@ -27,8 +29,13 @@ export class AppointmentUpdateComponent implements OnInit {
   appointment: IAppointment | null = null;
   isNewPatient: boolean = false;
   account: Account | null = null;
+  isEdit: boolean = false;
+  isAdmin: boolean = this.accountService.hasAnyAuthority('ROLE_ADMIN');
+  // userList: UserListDTO[] | undefined;
+  userList: User[] | null = null;
+  apptTypeList: string[] = ['Consultation', 'Urgent Care', 'Dental', 'Pharmacy'];
 
-  editForm: AppointmentFormGroup = this.appointmentFormService.createAppointmentFormGroup();
+  editForm: AppointmentFormGroup = this.appointmentFormService.createAppointmentFormGroup({ id: null }, this.isNewPatient, this.isAdmin);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -39,6 +46,7 @@ export class AppointmentUpdateComponent implements OnInit {
     protected router: Router,
     protected fb: FormBuilder,
     private accountService: AccountService,
+    private userService: UserManagementService,
   ) {}
 
   ngOnInit(): void {
@@ -49,9 +57,13 @@ export class AppointmentUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ appointment }) => {
       this.appointment = appointment;
       if (appointment) {
+        this.isEdit = true;
         this.updateForm(appointment);
       }
     });
+    if (this.isAdmin) {
+      this.getUserList();
+    }
   }
 
   ngOnDestroy(): void {
@@ -59,8 +71,32 @@ export class AppointmentUpdateComponent implements OnInit {
     this.destroy$.complete();
   }
 
+  public toggleIsNewPatient(): void {
+    this.initializeForm();
+  }
+
+  public getUserList(): void {
+    console.log('button clicked');
+    this.userService.getUserList().subscribe((res: any) => {
+      if (res) {
+        console.log('res:::' + res);
+        this.userList = res;
+      } else {
+        this.userList = [];
+      }
+    });
+  }
+
+  initializeForm(): void {
+    this.editForm = this.appointmentFormService.createAppointmentFormGroup({ id: null }, this.isNewPatient, this.isAdmin);
+  }
+
   previousState(): void {
     window.history.back();
+  }
+
+  generateTimeSlots(): void {
+    // TODO-> on select date, get existing appt time from db based on selected date and generate time slots
   }
 
   save(): void {
@@ -74,6 +110,8 @@ export class AppointmentUpdateComponent implements OnInit {
       }
       this.subscribeToSaveResponse(this.appointmentService.create(appointment));
     }
+
+    // TODO-> admin create for new patient
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IAppointment>>): void {

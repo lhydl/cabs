@@ -2,7 +2,6 @@ package cabs.service;
 
 import cabs.config.Constants;
 import cabs.domain.Authority;
-import cabs.domain.Patient;
 import cabs.domain.User;
 import cabs.repository.AuthorityRepository;
 import cabs.repository.PatientRepository;
@@ -43,8 +42,6 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
-    private final PatientRepository patientRepository;
-
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
@@ -56,7 +53,6 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
-        this.patientRepository = patientRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -343,5 +339,9 @@ public class UserService {
     // Demo: Step 5
     public List<User> getAdminDetails(String role) {
         return userRepository.getAdminDetails(role);
+    }
+
+    public List<User> getUserList() {
+        return userRepository.getUserList();
     }
 }

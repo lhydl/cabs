@@ -15,6 +15,10 @@ h4 {
   font-weight: 300;
 }
 
+body {
+  background-color: #a4b8d2;
+}
+
 a:hover {
   /* make sure browsers use the pointer cursor for anchors, even with no href */
   cursor: pointer;
@@ -44,6 +48,7 @@ Generic styles
   padding: 1.5%;
   margin-top: 20px;
   border: none;
+  background: linear-gradient(to bottom, #edeff4, #4e82cc);
 }
 
 .error {

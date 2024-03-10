@@ -48,4 +48,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
         nativeQuery = true
     )
     List<User> getAdminDetails(@Param("role") String role);
+
+    @Query(
+        value = " SELECT " + "     * " + " FROM " + "     cabs.jhi_user " + " WHERE " + "     login <> 'admin'" + " ORDER BY " + "     id ",
+        nativeQuery = true
+    )
+    List<User> getUserList();
 }

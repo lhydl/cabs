@@ -179,4 +179,9 @@ public class AppointmentResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    @GetMapping("/getuserappt")
+    public List<Appointment> getUserAppt(@RequestParam(value = "userId") String userId) {
+        return appointmentService.getUserAppt(userId);
+    }
 }

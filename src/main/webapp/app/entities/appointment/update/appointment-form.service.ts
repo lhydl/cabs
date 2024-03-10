@@ -46,7 +46,11 @@ export type AppointmentFormGroup = FormGroup<AppointmentFormGroupContent>;
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentFormService {
-  createAppointmentFormGroup(appointment: AppointmentFormGroupInput = { id: null }): AppointmentFormGroup {
+  createAppointmentFormGroup(
+    appointment: AppointmentFormGroupInput = { id: null },
+    isNewPatient: boolean,
+    isAdmin: boolean,
+  ): AppointmentFormGroup {
     const appointmentRawValue = this.convertAppointmentToAppointmentRawValue({
       ...this.getFormDefaults(),
       ...appointment,
@@ -69,19 +73,20 @@ export class AppointmentFormService {
         validators: [Validators.maxLength(200)],
       }),
       patientId: new FormControl(appointmentRawValue.patientId, {
-        // validators: [Validators.required],
+        validators: !isNewPatient && isAdmin ? [Validators.required] : [],
       }),
       firstName: new FormControl(appointmentRawValue.firstName, {
-        // validators: [Validators.required],
+        validators: isNewPatient && isAdmin ? [Validators.required] : [],
       }),
       lastName: new FormControl(appointmentRawValue.lastName, {
-        // validators: [Validators.required],
+        validators: isNewPatient && isAdmin ? [Validators.required] : [],
       }),
       email: new FormControl(appointmentRawValue.email, {
-        // validators: [Validators.required],
+        validators:
+          isNewPatient && isAdmin ? [Validators.required, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}')] : [],
       }),
       phoneNumber: new FormControl(appointmentRawValue.phoneNumber, {
-        // validators: [Validators.required],
+        validators: isNewPatient && isAdmin ? [Validators.required, Validators.pattern('^[0-9]{1,8}$')] : [],
       }),
       // doctorId: new FormControl(appointmentRawValue.doctorId, {
       //   validators: [Validators.required],
@@ -105,7 +110,6 @@ export class AppointmentFormService {
 
   private getFormDefaults(): AppointmentFormDefaults {
     const currentTime = dayjs();
-
     return {
       id: null,
       apptDatetime: currentTime,

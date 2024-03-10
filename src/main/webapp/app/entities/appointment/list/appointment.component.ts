@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
-import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
+import { combineLatest, filter, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
@@ -15,6 +15,9 @@ import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/conf
 import { IAppointment } from '../appointment.model';
 import { EntityArrayResponseType, AppointmentService } from '../service/appointment.service';
 import { AppointmentDeleteDialogComponent } from '../delete/appointment-delete-dialog.component';
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/auth/account.model';
+import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
 
 @Component({
   standalone: true,
@@ -30,6 +33,7 @@ import { AppointmentDeleteDialogComponent } from '../delete/appointment-delete-d
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
     ItemCountComponent,
+    HasAnyAuthorityDirective,
   ],
 })
 export class AppointmentComponent implements OnInit {
@@ -42,18 +46,46 @@ export class AppointmentComponent implements OnInit {
   itemsPerPage = ITEMS_PER_PAGE;
   totalItems = 0;
   page = 1;
+  account: Account | null = null;
+  isAdmin: boolean = this.accountService.hasAnyAuthority('ROLE_ADMIN');
+  displayTitle: string | null = null;
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     protected appointmentService: AppointmentService,
     protected activatedRoute: ActivatedRoute,
     public router: Router,
     protected modalService: NgbModal,
+    private accountService: AccountService,
   ) {}
 
   trackId = (_index: number, item: IAppointment): number => this.appointmentService.getAppointmentIdentifier(item);
 
   ngOnInit(): void {
+    this.setUserRoleContent();
+    this.accountService
+      .getAuthenticationState()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(account => (this.account = account));
     this.load();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  setUserRoleContent(): void {
+    this.accountService.identity().subscribe(account => {
+      if (account) {
+        if (this.accountService.hasAnyAuthority(['ROLE_ADMIN'])) {
+          this.displayTitle = 'Manage Appointments';
+        } else {
+          this.displayTitle = 'Manage Your Appointments';
+        }
+      }
+    });
   }
 
   delete(appointment: IAppointment): void {
@@ -73,11 +105,15 @@ export class AppointmentComponent implements OnInit {
   }
 
   load(): void {
-    this.loadFromBackendWithRouteInformations().subscribe({
-      next: (res: EntityArrayResponseType) => {
-        this.onResponseSuccess(res);
-      },
-    });
+    if (this.isAdmin) {
+      this.loadFromBackendWithRouteInformations().subscribe({
+        next: (res: EntityArrayResponseType) => {
+          this.onResponseSuccess(res);
+        },
+      });
+    } else {
+      this.loadUserAppt();
+    }
   }
 
   navigateToWithComponentValues(): void {
@@ -86,6 +122,17 @@ export class AppointmentComponent implements OnInit {
 
   navigateToPage(page = this.page): void {
     this.handleNavigation(page, this.predicate, this.ascending);
+  }
+
+  loadUserAppt(): void {
+    const userId = this.account?.id;
+    let params = new HttpParams();
+    if (userId !== null && userId !== undefined) {
+      params = new HttpParams().set('userId', userId);
+    }
+    this.appointmentService.getUserAppt(params).subscribe(res => {
+      this.onResponseSuccess(res);
+    });
   }
 
   protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
