@@ -4,7 +4,7 @@
       @if (editForm.controls.id.value !== null) {
         <h2 id="jhi-appointment-heading" data-cy="AppointmentCreateUpdateHeading">Edit Appointment Booking</h2>
       } @else {
-        <h2 id="jhi-appointment-heading" data-cy="AppointmentCreateUpdateHeading">Book new Appointment</h2>
+        <h2 id="jhi-appointment-heading" data-cy="AppointmentCreateUpdateHeading">Book New Appointment</h2>
       }
       <div>
         <jhi-alert-error></jhi-alert-error>
@@ -16,7 +16,7 @@
           </div>
         } -->
 
-        <div class="mb-3">
+        <div class="mb-3 custom-select">
           <label class="form-label" for="field_appt_type">Select Appointment Type</label>
           <select class="form-control" id="field_appt_type" data-cy="apptType" formControlName="apptType">
             <!-- <option value="" disabled>Select an appointment type</option> -->

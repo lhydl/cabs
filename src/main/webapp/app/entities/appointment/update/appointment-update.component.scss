@@ -1,0 +1,30 @@
+.custom-select {
+  position: relative;
+  width: 100%;
+
+  select {
+    appearance: none; // Remove default styling
+    -webkit-appearance: none; // Remove default styling in webkit browsers
+    -moz-appearance: none; // Remove default styling in Firefox
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+
+    option {
+      font-size: 16px;
+    }
+  }
+
+  &::after {
+    content: '\25BC'; // Unicode for downward triangle
+    position: absolute;
+    top: 3.2rem;
+    right: 1.2rem;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 12px;
+  }
+}

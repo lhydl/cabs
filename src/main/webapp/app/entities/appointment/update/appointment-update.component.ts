@@ -22,6 +22,7 @@ import { User } from 'app/admin/user-management/user-management.model';
   standalone: true,
   selector: 'jhi-appointment-update',
   templateUrl: './appointment-update.component.html',
+  styleUrls: ['./appointment-update.component.scss'],
   imports: [SharedModule, FormsModule, ReactiveFormsModule, HasAnyAuthorityDirective],
 })
 export class AppointmentUpdateComponent implements OnInit {
