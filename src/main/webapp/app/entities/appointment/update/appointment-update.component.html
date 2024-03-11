@@ -17,11 +17,16 @@
         } -->
 
         <div class="mb-3">
-          <label class="form-label" for="field_appt_type">Select Appointment Type</label>
-          <select class="form-control" id="field_appt_type" data-cy="apptType" formControlName="apptType">
-            <!-- <option value="" disabled>Select an appointment type</option> -->
-            <option *ngFor="let apptType of apptTypeList" [value]="apptType">{{ apptType }}</option>
-          </select>
+          <label class="form-label" for="field_appt_type">Appointment Type</label>
+          <ng-select
+            class="form-control"
+            id="field_appt_type"
+            data-cy="apptType"
+            formControlName="apptType"
+            placeholder="Select appointment type"
+          >
+            <ng-option *ngFor="let apptType of apptTypeList" [value]="apptType">{{ apptType }}</ng-option>
+          </ng-select>
           @if (editForm.get('apptType')!.invalid && (editForm.get('apptType')!.dirty || editForm.get('apptType')!.touched)) {
             <div>
               @if (editForm.get('apptType')?.errors?.required) {
@@ -35,7 +40,7 @@
         </div>
         <!-- TODO-> split date and time fields -->
         <div class="mb-3">
-          <label class="form-label" for="field_appt_datetime">Select Date and Time</label>
+          <label class="form-label" for="field_appt_datetime">Date and Time</label>
           <div class="d-flex">
             <input
               id="field_appt_datetime"
@@ -61,7 +66,15 @@
 
         <div class="mb-3">
           <label class="form-label" for="field_remarks">Special Request/Remarks</label>
-          <input type="text" class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks" />
+          <input
+            type="text"
+            class="form-control"
+            name="remarks"
+            id="field_remarks"
+            data-cy="remarks"
+            formControlName="remarks"
+            placeholder="Enter special requests or remarks"
+          />
           @if (editForm.get('remarks')!.invalid && (editForm.get('remarks')!.dirty || editForm.get('remarks')!.touched)) {
             <div>
               @if (editForm.get('remarks')?.errors?.maxlength) {
@@ -78,10 +91,17 @@
 
           <div class="mb-3" *ngIf="!isNewPatient">
             <label class="form-label" for="field_patient_id">Patient Name</label>
-            <select class="form-control" id="field_patient_id" data-cy="patientId" formControlName="patientId">
-              <!-- <option value="" disabled>Select a patient</option> -->
-              <option *ngFor="let user of userList" [value]="user.id">{{ user.firstName }} {{ user.lastName }} ({{ user.login }})</option>
-            </select>
+            <ng-select
+              class="form-control"
+              id="field_patient_id"
+              data-cy="patientId"
+              formControlName="patientId"
+              placeholder="Select patient"
+            >
+              <ng-option *ngFor="let user of userList" [value]="user.id"
+                >{{ user.firstName }} {{ user.lastName }} ({{ user.login }})</ng-option
+              >
+            </ng-select>
             @if (editForm.get('patientId')!.invalid && (editForm.get('patientId')!.dirty || editForm.get('patientId')!.touched)) {
               <div>
                 @if (editForm.get('patientId')?.errors?.required) {
@@ -102,7 +122,7 @@
                 class="form-control"
                 id="firstName"
                 name="firstName"
-                placeholder="Enter first name"
+                placeholder="Enter patient's first name"
                 formControlName="firstName"
                 data-cy="firstName"
                 maxlength="100"
@@ -123,7 +143,7 @@
                 class="form-control"
                 id="lastName"
                 name="lastName"
-                placeholder="Enter last name"
+                placeholder="Enter patient's last name"
                 formControlName="lastName"
                 data-cy="lastName"
                 maxlength="100"
@@ -144,7 +164,7 @@
                 class="form-control"
                 id="phoneNumber"
                 name="phoneNumber"
-                placeholder="Enter phone number"
+                placeholder="Enter patient's phone number"
                 formControlName="phoneNumber"
                 data-cy="phoneNumber"
                 maxlength="8"
@@ -155,7 +175,7 @@
                     <small class="form-text text-danger">Phone number is required.</small>
                   }
                   @if (editForm.get('phoneNumber')?.errors?.pattern) {
-                    <small class="form-text text-danger">Your phone number is invalid.</small>
+                    <small class="form-text text-danger">The phone number is invalid.</small>
                   }
                 </div>
               }
@@ -168,7 +188,7 @@
                 class="form-control"
                 id="email"
                 name="email"
-                placeholder="Your email"
+                placeholder="Enter patient's email"
                 formControlName="email"
                 data-cy="email"
               />
@@ -176,19 +196,19 @@
               @if (editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)) {
                 <div>
                   @if (editForm.get('email')?.errors?.required) {
-                    <small class="form-text text-danger">Your email is required.</small>
+                    <small class="form-text text-danger">The email is required.</small>
                   }
 
                   @if (editForm.get('email')?.errors?.invalid) {
-                    <small class="form-text text-danger">Your email is invalid.</small>
+                    <small class="form-text text-danger">The email is invalid.</small>
                   }
 
                   @if (editForm.get('email')?.errors?.minlength) {
-                    <small class="form-text text-danger">Your email is required to be at least 5 characters.</small>
+                    <small class="form-text text-danger">The email is required to be at least 5 characters.</small>
                   }
 
                   @if (editForm.get('email')?.errors?.maxlength) {
-                    <small class="form-text text-danger">Your email cannot be longer than 50 characters.</small>
+                    <small class="form-text text-danger">The email cannot be longer than 50 characters.</small>
                   }
                 </div>
               }
