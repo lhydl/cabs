@@ -17,6 +17,8 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { UserManagementService } from 'app/admin/user-management/service/user-management.service';
 import { User } from 'app/admin/user-management/user-management.model';
+import { DATE_FORMAT, TIME_FORMAT } from 'app/config/input.constants';
+import dayjs from 'dayjs';
 
 @Component({
   standalone: true,
@@ -108,6 +110,11 @@ export class AppointmentUpdateComponent implements OnInit {
     } else {
       if (appointment.patientId === null) {
         appointment.patientId = this.account?.id;
+        if (appointment.apptDate && appointment.apptTime) {
+          const datetimeString = `${appointment.apptDate} ${appointment.apptTime}`;
+          const apptDateTime = dayjs(datetimeString, `${DATE_FORMAT} ${TIME_FORMAT}`);
+          // appointment.apptDatetime = apptDateTime;
+        }
       }
       this.subscribeToSaveResponse(this.appointmentService.create(appointment));
     }

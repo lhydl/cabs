@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import dayjs from 'dayjs/esm';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
+import { DATE_TIME_FORMAT, TIME_FORMAT, DATE_FORMAT } from 'app/config/input.constants';
 import { IAppointment, NewAppointment } from '../appointment.model';
 
 /**
@@ -20,19 +20,23 @@ type AppointmentFormGroupInput = IAppointment | PartialWithRequiredKeyOf<NewAppo
  * Type that converts some properties for forms.
  */
 type FormValueOf<T extends IAppointment | NewAppointment> = Omit<T, 'apptDatetime'> & {
-  apptDatetime?: string | null;
+  // apptDatetime?: string | null;
+  apptDate?: string | null;
+  apptTime?: string | null;
 };
 
 type AppointmentFormRawValue = FormValueOf<IAppointment>;
 
 type NewAppointmentFormRawValue = FormValueOf<NewAppointment>;
 
-type AppointmentFormDefaults = Pick<NewAppointment, 'id' | 'apptDatetime'>;
+type AppointmentFormDefaults = Pick<NewAppointment, 'id' | 'apptDate' | 'apptTime'>;
 
 type AppointmentFormGroupContent = {
   id: FormControl<AppointmentFormRawValue['id'] | NewAppointment['id']>;
   apptType: FormControl<AppointmentFormRawValue['apptType']>;
-  apptDatetime: FormControl<AppointmentFormRawValue['apptDatetime']>;
+  // apptDatetime: FormControl<AppointmentFormRawValue['apptDatetime']>;
+  apptDate: FormControl<AppointmentFormRawValue['apptDate']>;
+  apptTime: FormControl<AppointmentFormRawValue['apptTime']>;
   remarks: FormControl<AppointmentFormRawValue['remarks']>;
   patientId: FormControl<AppointmentFormRawValue['patientId']>;
   firstName: FormControl<AppointmentFormRawValue['firstName']>;
@@ -66,11 +70,17 @@ export class AppointmentFormService {
       apptType: new FormControl(appointmentRawValue.apptType, {
         validators: [Validators.required, Validators.maxLength(100)],
       }),
-      apptDatetime: new FormControl(appointmentRawValue.apptDatetime, {
+      apptDate: new FormControl(appointmentRawValue.apptDate, {
         validators: [Validators.required],
       }),
+      apptTime: new FormControl(appointmentRawValue.apptTime, {
+        validators: [Validators.required],
+      }),
+      // apptDatetime: new FormControl(appointmentRawValue.apptDatetime, {
+      //   validators: [Validators.required],
+      // }),
       remarks: new FormControl(appointmentRawValue.remarks, {
-        validators: [Validators.maxLength(200)],
+        validators: [Validators.maxLength(500)],
       }),
       patientId: new FormControl(appointmentRawValue.patientId, {
         validators: !isNewPatient && isAdmin ? [Validators.required] : [],
@@ -112,25 +122,46 @@ export class AppointmentFormService {
     const currentTime = dayjs();
     return {
       id: null,
-      apptDatetime: currentTime,
+      apptDate: currentTime.format(DATE_FORMAT),
+      apptTime: currentTime.format(TIME_FORMAT),
+      // apptDatetime: currentTime,
     };
   }
 
   private convertAppointmentRawValueToAppointment(
     rawAppointment: AppointmentFormRawValue | NewAppointmentFormRawValue,
   ): IAppointment | NewAppointment {
-    return {
-      ...rawAppointment,
-      apptDatetime: dayjs(rawAppointment.apptDatetime, DATE_TIME_FORMAT),
-    };
+    const { apptDate, apptTime } = rawAppointment;
+
+    if (apptDate && apptTime) {
+      const datetimeString = `${apptDate} ${apptTime}`;
+      // Parse the concatenated datetime string using dayjs
+      const apptDatetime = dayjs(datetimeString, `${DATE_FORMAT} ${TIME_FORMAT}`);
+
+      // Return the appointment with the parsed datetime
+      return {
+        ...rawAppointment,
+        apptDatetime,
+      };
+    }
+    // Return the rawAppointment as is if either apptDate or apptTime is null or undefined
+    return rawAppointment;
+
+    // return {
+    //   ...rawAppointment,
+    //   apptDatetime: dayjs(rawAppointment.apptDate, + ' ' + rawAppointment.apptTime, DATE_FORMAT + ' ' + TIME_FORMAT),
+    // };
   }
 
   private convertAppointmentToAppointmentRawValue(
     appointment: IAppointment | (Partial<NewAppointment> & AppointmentFormDefaults),
   ): AppointmentFormRawValue | PartialWithRequiredKeyOf<NewAppointmentFormRawValue> {
+    const apptDatetime = appointment.apptDatetime ? dayjs(appointment.apptDatetime) : null;
     return {
       ...appointment,
-      apptDatetime: appointment.apptDatetime ? appointment.apptDatetime.format(DATE_TIME_FORMAT) : undefined,
+      apptDate: apptDatetime ? apptDatetime.format(DATE_FORMAT) : undefined,
+      apptTime: apptDatetime ? apptDatetime.format(TIME_FORMAT) : undefined,
+      // apptDatetime: appointment.apptDatetime ? appointment.apptDatetime.format(DATE_TIME_FORMAT) : undefined,
     };
   }
 }
