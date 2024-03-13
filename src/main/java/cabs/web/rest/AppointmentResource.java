@@ -1,16 +1,22 @@
 package cabs.web.rest;
 
 import cabs.domain.Appointment;
+import cabs.domain.User;
 import cabs.repository.AppointmentRepository;
 import cabs.service.AppointmentService;
+import cabs.service.UserService;
+import cabs.service.dto.AdminUserDTO;
+import cabs.service.dto.AppointmentDTO;
 import cabs.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +35,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/appointments")
+@Slf4j
 public class AppointmentResource {
 
     private final Logger log = LoggerFactory.getLogger(AppointmentResource.class);
@@ -42,9 +49,16 @@ public class AppointmentResource {
 
     private final AppointmentRepository appointmentRepository;
 
-    public AppointmentResource(AppointmentService appointmentService, AppointmentRepository appointmentRepository) {
+    private final UserService userService;
+
+    public AppointmentResource(
+        AppointmentService appointmentService,
+        AppointmentRepository appointmentRepository,
+        UserService userService
+    ) {
         this.appointmentService = appointmentService;
         this.appointmentRepository = appointmentRepository;
+        this.userService = userService;
     }
 
     /**
@@ -55,10 +69,28 @@ public class AppointmentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public ResponseEntity<Appointment> createAppointment(@Valid @RequestBody Appointment appointment) throws URISyntaxException {
+    public ResponseEntity<Appointment> createAppointment(@Valid @RequestBody AppointmentDTO appointmentDTO) throws URISyntaxException {
+        Appointment appointment = new Appointment();
+        appointment.setId(appointmentDTO.getId());
+        appointment.setApptType(appointmentDTO.getApptType());
+        appointment.setApptDatetime(appointmentDTO.getApptDatetime());
+        appointment.setRemarks(appointmentDTO.getRemarks());
+        appointment.setPatientId(appointmentDTO.getPatientId());
+        appointment.setDoctorId(appointmentDTO.getDoctorId());
+
         log.debug("REST request to save Appointment : {}", appointment);
         if (appointment.getId() != null) {
             throw new BadRequestAlertException("A new appointment cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        if (appointmentDTO.getPatientId() == 1) {
+            AdminUserDTO user = new AdminUserDTO();
+            user.setFirstName(appointmentDTO.getFirstName());
+            user.setLastName(appointmentDTO.getLastName());
+            user.setPhoneNumber(appointmentDTO.getPhoneNumber());
+            user.setEmail(appointmentDTO.getEmail());
+            user.setLogin(appointmentDTO.getFirstName() + appointmentDTO.getLastName());
+            User newUser = userService.registerUser(user, "P@ssw0rd");
+            appointment.setPatientId(newUser.getId().intValue());
         }
         Appointment result = appointmentService.save(appointment);
         return ResponseEntity
