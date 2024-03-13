@@ -72,21 +72,22 @@
               name="apptDate"
               formControlName="apptDate"
               placeholder="Select date"
+              (change)="generateTimeSlots($event)"
             />
           </div>
         </div>
         <div class="mb-3">
           <label class="form-label" for="field_appt_time">Select Time</label>
           <div class="d-flex">
-            <input
+            <ng-select
+              class="form-control"
               id="field_appt_time"
               data-cy="apptTime"
-              type="time"
-              class="form-control"
-              name="apptTime"
               formControlName="apptTime"
-              placeholder="Select time"
-            />
+              placeholder="Select appointment time"
+            >
+              <ng-option *ngFor="let time of timeslots" [value]="time">{{ time }}</ng-option>
+            </ng-select>
           </div>
         </div>
 

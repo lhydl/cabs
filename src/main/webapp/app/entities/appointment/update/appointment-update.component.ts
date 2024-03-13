@@ -11,7 +11,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, UntypedFormGroup, Valida
 import { IAppointment } from '../appointment.model';
 import { AppointmentService } from '../service/appointment.service';
 import { AppointmentFormService, AppointmentFormGroup } from './appointment-form.service';
-import { faAnglesDown } from '@fortawesome/free-solid-svg-icons';
+import { faAnglesDown, faMillSign } from '@fortawesome/free-solid-svg-icons';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
@@ -19,6 +19,7 @@ import { UserManagementService } from 'app/admin/user-management/service/user-ma
 import { User } from 'app/admin/user-management/user-management.model';
 import { DATE_FORMAT, TIME_FORMAT } from 'app/config/input.constants';
 import dayjs, { Dayjs } from 'dayjs/esm';
+import { addMinutes, format } from 'date-fns';
 
 @Component({
   standalone: true,
@@ -34,9 +35,9 @@ export class AppointmentUpdateComponent implements OnInit {
   account: Account | null = null;
   isEdit: boolean = false;
   isAdmin: boolean = this.accountService.hasAnyAuthority('ROLE_ADMIN');
-  // userList: UserListDTO[] | undefined;
   userList: User[] | null = null;
   apptTypeList: string[] = ['Consultation', 'Urgent Care', 'Dental', 'Pharmacy'];
+  timeslots: string[] = [];
 
   editForm: AppointmentFormGroup = this.appointmentFormService.createAppointmentFormGroup({ id: null }, this.isNewPatient, this.isAdmin);
 
@@ -98,8 +99,18 @@ export class AppointmentUpdateComponent implements OnInit {
     window.history.back();
   }
 
-  generateTimeSlots(): void {
-    // TODO-> on select date, get existing appt time from db based on selected date and generate time slots
+  generateTimeSlots(event: Event): void {
+    // TODO-> pass selectedDate to backend to get existing appointment time based on selectedDate, then block that time
+    const input = event.target as HTMLInputElement;
+    const selectedDate = input.value;
+    let startTime = new Date('2000-01-01T08:00:00'); // 08:00 AM
+    let endTime = new Date('2000-01-01T20:00:00'); // 08:00 PM
+    let currentTime = startTime;
+    while (currentTime < endTime) {
+      const timeLabel = `${format(currentTime, 'HH:mm')}`;
+      this.timeslots?.push(timeLabel);
+      currentTime = addMinutes(currentTime, 30); // One time slot every 30 mins
+    }
   }
 
   save(): void {
@@ -117,8 +128,6 @@ export class AppointmentUpdateComponent implements OnInit {
       }
       this.subscribeToSaveResponse(this.appointmentService.create(appointment));
     }
-
-    // TODO-> admin create for new patient
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IAppointment>>): void {
