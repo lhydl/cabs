@@ -99,7 +99,7 @@ export class AppointmentComponent implements OnInit {
       )
       .subscribe({
         next: (res: EntityArrayResponseType) => {
-          this.onResponseSuccess(res);
+          this.load();
         },
       });
   }
