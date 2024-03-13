@@ -99,16 +99,21 @@ export class AppointmentUpdateComponent implements OnInit {
     window.history.back();
   }
 
-  generateTimeSlots(event: Event): void {
-    // TODO-> pass selectedDate to backend to get existing appointment time based on selectedDate, then block that time
-    const input = event.target as HTMLInputElement;
-    const selectedDate = input.value;
-    let startTime = new Date('2000-01-01T08:00:00'); // 08:00 AM
-    let endTime = new Date('2000-01-01T20:00:00'); // 08:00 PM
+  generateTimeSlots(event?: Event, patchedDate?: string): void {
+    let selectedDate = null;
+    if (event === undefined) {
+      selectedDate = patchedDate; // For edit appt
+    } else {
+      const input = event.target as HTMLInputElement;
+      selectedDate = input.value; // For create new appt
+    }
+    // TODO-> write api: pass selectedDate to backend to get existing appointment time, then block that time
+    const startTime = new Date('2000-01-01T08:00:00'); // 08:00 AM
+    const endTime = new Date('2000-01-01T20:00:00'); // 08:00 PM
     let currentTime = startTime;
     while (currentTime < endTime) {
       const timeLabel = `${format(currentTime, 'HH:mm')}`;
-      this.timeslots?.push(timeLabel);
+      this.timeslots.push(timeLabel);
       currentTime = addMinutes(currentTime, 30); // One time slot every 30 mins
     }
   }
@@ -152,6 +157,9 @@ export class AppointmentUpdateComponent implements OnInit {
 
   protected updateForm(appointment: IAppointment): void {
     this.appointment = appointment;
+    const patchedDate = appointment.apptDatetime;
+    const dateLabel = patchedDate?.format('YYYY-MM-DD');
+    this.generateTimeSlots(undefined, dateLabel?.toString());
     this.appointmentFormService.resetForm(this.editForm, appointment);
   }
 }
