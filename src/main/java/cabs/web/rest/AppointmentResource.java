@@ -216,4 +216,9 @@ public class AppointmentResource {
     public List<Appointment> getUserAppt(@RequestParam(value = "userId") String userId) {
         return appointmentService.getUserAppt(userId);
     }
+
+    @GetMapping("/getTime")
+    public List<String> getExistingTimeSlots(@RequestParam(value = "selectedDate") String selectedDate) {
+        return appointmentService.getExistingTimeSlots(selectedDate);
+    }
 }

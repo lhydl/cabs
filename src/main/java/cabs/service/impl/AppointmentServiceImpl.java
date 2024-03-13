@@ -92,4 +92,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         Integer id = Integer.parseInt(userId);
         return appointmentRepository.getUserAppt(id);
     }
+
+    @Override
+    public List<String> getExistingTimeSlots(String selectedDate) {
+        return appointmentRepository.getExistingTimeSlots(selectedDate);
+    }
 }

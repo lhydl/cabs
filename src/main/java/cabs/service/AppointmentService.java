@@ -58,4 +58,6 @@ public interface AppointmentService {
     void delete(Long id);
 
     public List<Appointment> getUserAppt(String userId);
+
+    public List<String> getExistingTimeSlots(String selectedDate);
 }

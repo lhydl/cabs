@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+import { HttpParams, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
@@ -20,6 +20,7 @@ import { User } from 'app/admin/user-management/user-management.model';
 import { DATE_FORMAT, TIME_FORMAT } from 'app/config/input.constants';
 import dayjs, { Dayjs } from 'dayjs/esm';
 import { addMinutes, format } from 'date-fns';
+import { DatePipe } from '@angular/common';
 
 @Component({
   standalone: true,
@@ -27,6 +28,7 @@ import { addMinutes, format } from 'date-fns';
   templateUrl: './appointment-update.component.html',
   styleUrls: ['./appointment-update.component.scss'],
   imports: [SharedModule, FormsModule, ReactiveFormsModule, HasAnyAuthorityDirective],
+  providers: [DatePipe],
 })
 export class AppointmentUpdateComponent implements OnInit {
   isSaving = false;
@@ -38,6 +40,8 @@ export class AppointmentUpdateComponent implements OnInit {
   userList: User[] | null = null;
   apptTypeList: string[] = ['Consultation', 'Urgent Care', 'Dental', 'Pharmacy'];
   timeslots: string[] = [];
+  existingTimeslots: string[] = [];
+  formattedExistingTimeslots: string[] = ['08:00'];
 
   editForm: AppointmentFormGroup = this.appointmentFormService.createAppointmentFormGroup({ id: null }, this.isNewPatient, this.isAdmin);
 
@@ -51,6 +55,7 @@ export class AppointmentUpdateComponent implements OnInit {
     protected fb: FormBuilder,
     private accountService: AccountService,
     private userService: UserManagementService,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
@@ -80,10 +85,8 @@ export class AppointmentUpdateComponent implements OnInit {
   }
 
   public getUserList(): void {
-    console.log('button clicked');
     this.userService.getUserList().subscribe((res: any) => {
       if (res) {
-        console.log('res:::' + res);
         this.userList = res;
       } else {
         this.userList = [];
@@ -101,22 +104,47 @@ export class AppointmentUpdateComponent implements OnInit {
 
   generateTimeSlots(event?: Event, patchedDate?: string): void {
     let selectedDate = null;
+    this.timeslots = [];
     if (event === undefined) {
       selectedDate = patchedDate; // For edit appt
     } else {
       const input = event.target as HTMLInputElement;
       selectedDate = input.value; // For create new appt
     }
-    // TODO-> write api: pass selectedDate to backend to get existing appointment time, then block that time
-    const startTime = new Date('2000-01-01T08:00:00'); // 08:00 AM
-    const endTime = new Date('2000-01-01T20:00:00'); // 08:00 PM
-    let currentTime = startTime;
-    while (currentTime < endTime) {
-      const timeLabel = `${format(currentTime, 'HH:mm')}`;
-      // TODO-> if timeLabel === existing appointment time, skip push
-      this.timeslots.push(timeLabel);
-      currentTime = addMinutes(currentTime, 30); // One time slot every 30 mins
+    if (selectedDate !== undefined) {
+      // Get booked time slots from db based on selected date
+      this.getExistingTimeSlots(selectedDate);
     }
+  }
+
+  public getExistingTimeSlots(selectedDate: string): void {
+    const params = new HttpParams().set('selectedDate', selectedDate);
+    this.appointmentService.getExistingTimeSlots(params).subscribe((res: any) => {
+      if (res) {
+        this.existingTimeslots = res;
+        this.formatTimeslots();
+        const startTime = new Date('2000-01-01T08:00:00'); // 08:00 AM
+        const endTime = new Date('2000-01-01T20:00:00'); // 08:00 PM
+        let currentTime = startTime;
+        // Generate available timeslots
+        while (currentTime < endTime) {
+          const timeLabel = `${format(currentTime, 'HH:mm')}`;
+          if (!this.formattedExistingTimeslots.includes(timeLabel)) {
+            this.timeslots.push(timeLabel);
+          }
+          currentTime = addMinutes(currentTime, 30); // One time slot every 30 mins
+        }
+      }
+    });
+  }
+
+  formatTimeslots(): void {
+    this.formattedExistingTimeslots = this.existingTimeslots
+      .map(slot => {
+        const dateObject = new Date(slot);
+        return this.datePipe.transform(dateObject, 'HH:mm');
+      })
+      .filter(formattedSlot => formattedSlot !== null) as string[];
   }
 
   save(): void {

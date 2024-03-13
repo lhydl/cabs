@@ -87,6 +87,10 @@ export class AppointmentService {
       .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
+  getExistingTimeSlots(params: HttpParams): Observable<string[]> {
+    return this.http.get<string[]>(`${this.resourceUrl}/getTime`, { params });
+  }
+
   addAppointmentToCollectionIfMissing<Type extends Pick<IAppointment, 'id'>>(
     appointmentCollection: Type[],
     ...appointmentsToCheck: (Type | null | undefined)[]

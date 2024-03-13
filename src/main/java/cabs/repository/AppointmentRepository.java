@@ -18,4 +18,15 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
         nativeQuery = true
     )
     List<Appointment> getUserAppt(@Param("userId") Integer userId);
+
+    @Query(
+        value = " SELECT " +
+        "     appt_datetime " +
+        " FROM " +
+        "     cabs.appointment " +
+        " where " +
+        "     DATE(appt_datetime) = :selectedDate ",
+        nativeQuery = true
+    )
+    List<String> getExistingTimeSlots(@Param("selectedDate") String selectedDate);
 }
