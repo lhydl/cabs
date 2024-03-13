@@ -105,17 +105,16 @@ export class AppointmentUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const appointment = this.appointmentFormService.getAppointment(this.editForm);
+    if (appointment.apptDate && appointment.apptTime) {
+      const datetimeString = `${appointment.apptDate} ${appointment.apptTime}`;
+      appointment.apptDatetime = dayjs(datetimeString);
+    }
     if (appointment.id !== null) {
       this.subscribeToSaveResponse(this.appointmentService.update(appointment));
     } else {
       if (appointment.patientId === null) {
         appointment.patientId = this.account?.id;
       }
-      if (appointment.apptDate && appointment.apptTime) {
-        const datetimeString = `${appointment.apptDate} ${appointment.apptTime}`;
-        appointment.apptDatetime = dayjs(datetimeString);
-      }
-
       this.subscribeToSaveResponse(this.appointmentService.create(appointment));
     }
 
