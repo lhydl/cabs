@@ -113,6 +113,7 @@ export class AppointmentUpdateComponent implements OnInit {
     let currentTime = startTime;
     while (currentTime < endTime) {
       const timeLabel = `${format(currentTime, 'HH:mm')}`;
+      // TODO-> if timeLabel === existing appointment time, skip push
       this.timeslots.push(timeLabel);
       currentTime = addMinutes(currentTime, 30); // One time slot every 30 mins
     }

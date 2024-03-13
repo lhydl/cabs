@@ -159,7 +159,7 @@ export class AppointmentFormService {
     const apptDatetime = appointment.apptDatetime ? dayjs(appointment.apptDatetime) : null;
     return {
       ...appointment,
-      apptDate: apptDatetime ? apptDatetime.format(DATE_FORMAT) : undefined,
+      apptDate: apptDatetime ? apptDatetime.format('YYYY-MM-DD') : undefined,
       apptTime: apptDatetime ? apptDatetime.format(TIME_FORMAT) : undefined,
       // apptDatetime: appointment.apptDatetime ? appointment.apptDatetime.format(DATE_TIME_FORMAT) : undefined,
     };
