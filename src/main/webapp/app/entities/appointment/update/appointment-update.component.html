@@ -72,7 +72,8 @@
               name="apptDate"
               formControlName="apptDate"
               placeholder="Select date"
-              (change)="generateTimeSlots($event)"
+              [(ngModel)]="selectedDate"
+              (ngModelChange)="generateTimeSlots($event)"
             />
           </div>
         </div>
