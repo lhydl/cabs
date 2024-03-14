@@ -41,7 +41,8 @@ export class AppointmentUpdateComponent implements OnInit {
   apptTypeList: string[] = ['Consultation', 'Urgent Care', 'Dental', 'Pharmacy'];
   timeslots: string[] = [];
   existingTimeslots: string[] = [];
-  formattedExistingTimeslots: string[] = ['08:00'];
+  formattedExistingTimeslots: string[] = [];
+  selectedDate: string | undefined;
 
   editForm: AppointmentFormGroup = this.appointmentFormService.createAppointmentFormGroup({ id: null }, this.isNewPatient, this.isAdmin);
 
@@ -102,17 +103,10 @@ export class AppointmentUpdateComponent implements OnInit {
     window.history.back();
   }
 
-  generateTimeSlots(event?: Event, patchedDate?: string): void {
-    let selectedDate = null;
+  generateTimeSlots(selectedDate?: string): void {
+    // console.log('selectedDate:::' + selectedDate);
     this.timeslots = [];
-    if (event === undefined) {
-      selectedDate = patchedDate; // For edit appt
-    } else {
-      const input = event.target as HTMLInputElement;
-      selectedDate = input.value; // For create new appt
-    }
     if (selectedDate !== undefined) {
-      // Get booked time slots from db based on selected date
       this.getExistingTimeSlots(selectedDate);
     }
   }
@@ -187,8 +181,8 @@ export class AppointmentUpdateComponent implements OnInit {
   protected updateForm(appointment: IAppointment): void {
     this.appointment = appointment;
     const patchedDate = appointment.apptDatetime;
-    const dateLabel = patchedDate?.format('YYYY-MM-DD');
-    this.generateTimeSlots(undefined, dateLabel?.toString());
+    this.selectedDate = patchedDate?.format('YYYY-MM-DD');
+    this.generateTimeSlots(this.selectedDate);
     this.appointmentFormService.resetForm(this.editForm, appointment);
   }
 }
