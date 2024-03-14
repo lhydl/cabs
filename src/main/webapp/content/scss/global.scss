@@ -3,6 +3,7 @@
 @import 'bootswatch/dist/zephyr/variables';
 @import 'bootstrap/scss/variables';
 @import '~@ng-select/ng-select/themes/default.theme.css';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
 /* ==============================================================
 Bootstrap tweaks
@@ -29,6 +30,14 @@ a:hover {
   color: $dropdown-link-hover-color;
 }
 
+/* Hide the checkbox icon in mat-chip-option */
+.mat-mdc-standard-chip.mdc-evolution-chip--with-primary-graphic .mdc-evolution-chip__graphic {
+  padding-left: 6px;
+  padding-right: 6px;
+  height: fit-content;
+  width: auto;
+}
+
 /* ==========================================================================
 Browser Upgrade Prompt
 ========================================================================== */
@@ -49,7 +58,8 @@ Generic styles
   padding: 1.5%;
   margin-top: 20px;
   border: none;
-  background: linear-gradient(to bottom, #edeff4, #4e82cc);
+  // background: linear-gradient(to bottom, #edeff4, #4e82cc);
+  background: white;
 }
 
 .error {

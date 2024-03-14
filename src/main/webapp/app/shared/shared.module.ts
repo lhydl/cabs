@@ -5,12 +5,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { MatChipsModule } from '@angular/material/chips';
 
 /**
  * Application wide Module
  */
 @NgModule({
-  imports: [AlertComponent, AlertErrorComponent, NgSelectModule],
-  exports: [CommonModule, NgbModule, FontAwesomeModule, AlertComponent, AlertErrorComponent, NgSelectModule],
+  imports: [AlertComponent, AlertErrorComponent, NgSelectModule, MatChipsModule],
+  exports: [CommonModule, NgbModule, FontAwesomeModule, AlertComponent, AlertErrorComponent, NgSelectModule, MatChipsModule],
 })
 export default class SharedModule {}

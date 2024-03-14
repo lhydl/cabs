@@ -9,6 +9,7 @@ import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 import { ItemCountComponent } from 'app/shared/pagination';
 import { FormsModule } from '@angular/forms';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
@@ -34,6 +35,7 @@ import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directiv
     FormatMediumDatePipe,
     ItemCountComponent,
     HasAnyAuthorityDirective,
+    MatChipsModule,
   ],
 })
 export class AppointmentComponent implements OnInit {
