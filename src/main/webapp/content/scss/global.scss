@@ -31,11 +31,16 @@ a:hover {
 }
 
 /* Hide the checkbox icon in mat-chip-option */
-.mat-mdc-standard-chip.mdc-evolution-chip--with-primary-graphic .mdc-evolution-chip__graphic {
-  padding-left: 6px;
-  padding-right: 6px;
-  height: fit-content;
-  width: auto;
+// .mat-mdc-standard-chip.mdc-evolution-chip--with-primary-graphic .mdc-evolution-chip__graphic {
+//   padding-left: 6px;
+//   padding-right: 6px;
+//   height: fit-content;
+//   width: auto;
+// }
+
+// Remove border for ng-select
+.ng-select .ng-select-container {
+  border: none;
 }
 
 /* ==========================================================================

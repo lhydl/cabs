@@ -20,8 +20,8 @@
   </h2>
   <div class="p-1 m-1">
     <mat-chip-listbox aria-label="Appointment Toggle">
-      <mat-chip-option selected>Upcoming</mat-chip-option>
-      <mat-chip-option color="accent">Past</mat-chip-option>
+      <mat-chip-option (click)="toggleState('upcoming')" [selected]="state === 'upcoming'" selected>Upcoming</mat-chip-option>
+      <mat-chip-option (click)="toggleState('past')" [selected]="state === 'past'" color="accent">Past</mat-chip-option>
     </mat-chip-listbox>
   </div>
 
@@ -35,7 +35,7 @@
     </div>
   }
 
-  @if (appointments && appointments.length > 0) {
+  @if (filteredAppointments && filteredAppointments.length > 0) {
     <div class="table-responsive table-entities" id="entities">
       <table class="table table-striped" aria-describedby="page-heading">
         <thead>
@@ -87,7 +87,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (appointment of appointments; track trackId) {
+          @for (appointment of filteredAppointments; track trackId) {
             <tr data-cy="entityTable">
               <!-- <td>
                 <a [routerLink]="['/appointment', appointment.id, 'view']">{{ appointment.id }}</a>
@@ -124,7 +124,7 @@
   @if (appointments && appointments.length > 0) {
     <div>
       <div class="d-flex justify-content-center">
-        <jhi-item-count [params]="{ page: page, totalItems: appointments.length, itemsPerPage: itemsPerPage }"></jhi-item-count>
+        <jhi-item-count [params]="{ page: page, totalItems: filteredAppointments.length, itemsPerPage: itemsPerPage }"></jhi-item-count>
       </div>
 
       <div class="d-flex justify-content-center">

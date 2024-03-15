@@ -19,6 +19,7 @@ import { AppointmentDeleteDialogComponent } from '../delete/appointment-delete-d
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
+import dayjs from 'dayjs/esm';
 
 @Component({
   standalone: true,
@@ -40,6 +41,8 @@ import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directiv
 })
 export class AppointmentComponent implements OnInit {
   appointments?: IAppointment[];
+  filteredAppointments: IAppointment[] = [];
+  state: 'upcoming' | 'past' = 'upcoming';
   isLoading = false;
 
   predicate = 'id';
@@ -88,6 +91,22 @@ export class AppointmentComponent implements OnInit {
         }
       }
     });
+  }
+
+  toggleState(state: 'upcoming' | 'past') {
+    this.state = state;
+    this.filterAppointments();
+  }
+
+  filterAppointments() {
+    const today = dayjs();
+    if (this.appointments != null) {
+      if (this.state === 'upcoming') {
+        this.filteredAppointments = this.appointments.filter(appointment => dayjs(appointment.apptDatetime).isAfter(today));
+      } else {
+        this.filteredAppointments = this.appointments.filter(appointment => dayjs(appointment.apptDatetime).isBefore(today));
+      }
+    }
   }
 
   delete(appointment: IAppointment): void {
@@ -156,6 +175,7 @@ export class AppointmentComponent implements OnInit {
     this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
     this.appointments = dataFromBody;
+    this.filterAppointments();
   }
 
   protected fillComponentAttributesFromResponseBody(data: IAppointment[] | null): IAppointment[] {
