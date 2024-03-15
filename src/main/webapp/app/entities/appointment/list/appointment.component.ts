@@ -101,6 +101,9 @@ export class AppointmentComponent implements OnInit {
   filterAppointments() {
     const today = dayjs();
     if (this.appointments != null) {
+      if (!this.isAdmin) {
+        this.appointments = this.appointments.filter(appointment => appointment.patientId === this.account?.id);
+      }
       if (this.state === 'upcoming') {
         this.filteredAppointments = this.appointments.filter(appointment => dayjs(appointment.apptDatetime).isAfter(today));
       } else {
@@ -126,15 +129,15 @@ export class AppointmentComponent implements OnInit {
   }
 
   load(): void {
-    if (this.isAdmin) {
-      this.loadFromBackendWithRouteInformations().subscribe({
-        next: (res: EntityArrayResponseType) => {
-          this.onResponseSuccess(res);
-        },
-      });
-    } else {
-      this.loadUserAppt();
-    }
+    // if (this.isAdmin) {
+    this.loadFromBackendWithRouteInformations().subscribe({
+      next: (res: EntityArrayResponseType) => {
+        this.onResponseSuccess(res);
+      },
+    });
+    // } else {
+    //   this.loadUserAppt();
+    // }
   }
 
   navigateToWithComponentValues(): void {
