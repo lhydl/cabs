@@ -44,6 +44,7 @@ export class AppointmentUpdateComponent implements OnInit {
   formattedExistingTimeslots: string[] = [];
   selectedDate: string | undefined;
   formattedSelectedDate: string | undefined;
+  today: string = dayjs().format('YYYY-MM-DD');
 
   editForm: AppointmentFormGroup = this.appointmentFormService.createAppointmentFormGroup({ id: null }, this.isNewPatient, this.isAdmin);
 
