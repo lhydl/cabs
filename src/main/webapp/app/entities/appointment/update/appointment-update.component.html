@@ -91,6 +91,7 @@
               formControlName="apptTime"
               placeholder="Select appointment time"
             >
+              <ng-option disabled *ngIf="timeslots.length === 0" [value]="null">No available timeslots</ng-option>
               <ng-option *ngFor="let time of timeslots" [value]="time">{{ time }}</ng-option>
             </ng-select>
           </div>
