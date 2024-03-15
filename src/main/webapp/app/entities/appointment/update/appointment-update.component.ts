@@ -43,6 +43,7 @@ export class AppointmentUpdateComponent implements OnInit {
   existingTimeslots: string[] = [];
   formattedExistingTimeslots: string[] = [];
   selectedDate: string | undefined;
+  formattedSelectedDate: string | undefined;
 
   editForm: AppointmentFormGroup = this.appointmentFormService.createAppointmentFormGroup({ id: null }, this.isNewPatient, this.isAdmin);
 
@@ -83,7 +84,29 @@ export class AppointmentUpdateComponent implements OnInit {
 
   public toggleIsNewPatient(): void {
     this.initializeForm();
+    // this.editForm.get('patientId')?.reset();
+    // this.editForm.get('firstName')?.reset();
+    // this.editForm.get('lastName')?.reset();
+    // this.editForm.get('phoneNumber')?.reset();
+    // this.editForm.get('email')?.reset();
+    // this.updateValidations();
   }
+
+  // public updateValidations(): void {
+  //   if (!this.isNewPatient) {
+  //     this.editForm.get('patientId')?.clearValidators();
+  //     this.editForm.get('firstName')?.addValidators([Validators.required]);
+  //     this.editForm.get('lastName')?.addValidators([Validators.required]);
+  //     this.editForm.get('phoneNumber')?.addValidators([Validators.required]);
+  //     this.editForm.get('email')?.addValidators([Validators.required]);
+  //   } else {
+  //     this.editForm.get('patientId')?.addValidators([Validators.required])
+  //     this.editForm.get('firstName')?.clearValidators();
+  //     this.editForm.get('lastName')?.clearValidators();
+  //     this.editForm.get('phoneNumber')?.clearValidators();
+  //     this.editForm.get('email')?.clearValidators();
+  //   }
+  // }
 
   public getUserList(): void {
     this.userService.getUserList().subscribe((res: any) => {
@@ -103,11 +126,19 @@ export class AppointmentUpdateComponent implements OnInit {
     window.history.back();
   }
 
-  generateTimeSlots(selectedDate?: string): void {
-    // console.log('selectedDate:::' + selectedDate);
+  generateTimeSlots(event?: Event, patchedDate?: string): void {
     this.timeslots = [];
-    if (selectedDate !== undefined) {
-      this.getExistingTimeSlots(selectedDate);
+    if (event === undefined) {
+      this.selectedDate = patchedDate; // For edit appt
+    } else {
+      const input = event.target as HTMLInputElement;
+      this.selectedDate = input.value; // For create new appt
+    }
+    if (this.selectedDate !== undefined) {
+      // Get booked time slots from db based on selected date
+      this.editForm.get('apptTime')?.reset();
+      this.formattedSelectedDate = dayjs(this.selectedDate).format('DD/MM/YYYY');
+      this.getExistingTimeSlots(this.selectedDate);
     }
   }
 
@@ -181,8 +212,8 @@ export class AppointmentUpdateComponent implements OnInit {
   protected updateForm(appointment: IAppointment): void {
     this.appointment = appointment;
     const patchedDate = appointment.apptDatetime;
-    this.selectedDate = patchedDate?.format('YYYY-MM-DD');
-    this.generateTimeSlots(this.selectedDate);
+    const dateLabel = patchedDate?.format('YYYY-MM-DD');
+    this.generateTimeSlots(undefined, dateLabel?.toString());
     this.appointmentFormService.resetForm(this.editForm, appointment);
   }
 }

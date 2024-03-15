@@ -15,6 +15,12 @@
             <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
           </div>
         } -->
+        <div *jhiHasAnyAuthority="'ROLE_ADMIN'">
+          <label class="mb-3" *ngIf="!isEdit">
+            <input type="checkbox" [(ngModel)]="isNewPatient" [ngModelOptions]="{ standalone: true }" (change)="toggleIsNewPatient()" />
+            New Patient
+          </label>
+        </div>
 
         <div class="mb-3">
           <label class="form-label" for="field_appt_type">Appointment Type</label>
@@ -35,7 +41,6 @@
             </div>
           }
         </div>
-        <!-- TODO-> split date and time fields -->
         <!-- <div class="mb-3">
           <label class="form-label" for="field_appt_datetime">Select Date and Time</label>
           <div class="d-flex">
@@ -72,13 +77,12 @@
               name="apptDate"
               formControlName="apptDate"
               placeholder="Select date"
-              [(ngModel)]="selectedDate"
-              (ngModelChange)="generateTimeSlots($event)"
+              (change)="generateTimeSlots($event)"
             />
           </div>
         </div>
-        <div class="mb-3">
-          <label class="form-label" for="field_appt_time">Select Time</label>
+        <div class="mb-3" *ngIf="selectedDate">
+          <label class="form-label" for="field_appt_time">Available Timeslots for {{ formattedSelectedDate }}</label>
           <div class="d-flex">
             <ng-select
               class="form-control"
@@ -114,10 +118,10 @@
 
         <!-- FOR ADMIN ONLY -->
         <div *jhiHasAnyAuthority="'ROLE_ADMIN'">
-          <label class="mb-3" *ngIf="!isEdit">
+          <!-- <label class="mb-3" *ngIf="!isEdit" *jhiHasAnyAuthority="'ROLE_ADMIN'">
             <input type="checkbox" [(ngModel)]="isNewPatient" [ngModelOptions]="{ standalone: true }" (change)="toggleIsNewPatient()" />
             New Patient
-          </label>
+          </label> -->
 
           <div class="mb-3" *ngIf="!isNewPatient">
             <label class="form-label" for="field_patient_id">Patient Name</label>
@@ -273,7 +277,7 @@
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
         >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>{{ isEdit ? 'Save' : 'Submit' }}</span>
         </button>
       </div>
     </form>
