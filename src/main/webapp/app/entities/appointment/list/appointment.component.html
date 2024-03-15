@@ -2,7 +2,7 @@
   <h2 id="page-heading" data-cy="AppointmentHeading">
     <span class="m-1">{{ displayTitle }}</span>
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+      <button *jhiHasAnyAuthority="'ROLE_ADMIN'" class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span>Refresh list</span>
       </button>
@@ -68,11 +68,9 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <!-- TODO: remove once not needed -->
             <th *jhiHasAnyAuthority="'ROLE_ADMIN'" scope="col" jhiSortBy="patientId">
               <div class="d-flex">
                 <span>Patient Id</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
@@ -95,16 +93,26 @@
               <td>{{ appointment.apptType }}</td>
               <td>{{ appointment.apptDatetime | formatMediumDatetime }}</td>
               <td>{{ appointment.remarks }}</td>
+              <!-- TODO-> change patient id to patient name -->
               <td *jhiHasAnyAuthority="'ROLE_ADMIN'">{{ appointment.patientId }}</td>
               <!-- <td>{{ appointment.doctorId }}</td> -->
               <td class="text-end">
                 <div class="btn-group">
-                  <a [routerLink]="['/appointment', appointment.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                  <a
+                    *jhiHasAnyAuthority="'ROLE_ADMIN'"
+                    [routerLink]="['/appointment', appointment.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
                     <fa-icon icon="eye"></fa-icon>
                     <span class="d-none d-md-inline">View</span>
                   </a>
-
-                  <a [routerLink]="['/appointment', appointment.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                  <a
+                    *ngIf="state !== 'past'"
+                    [routerLink]="['/appointment', appointment.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
                     <fa-icon icon="pencil-alt"></fa-icon>
                     <span class="d-none d-md-inline">Edit</span>
                   </a>
