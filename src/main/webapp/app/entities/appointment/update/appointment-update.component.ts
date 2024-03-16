@@ -151,6 +151,12 @@ export class AppointmentUpdateComponent implements OnInit {
         this.formatTimeslots();
         const startTime = new Date('2000-01-01T08:00:00'); // 08:00 AM
         const endTime = new Date('2000-01-01T20:00:00'); // 08:00 PM
+        // If selected today's date, available timeslots are after current time
+        if (this.selectedDate === this.today) {
+          const now = new Date();
+          startTime.setHours(now.getHours() + 1); // Move to the next hour
+          startTime.setMinutes(30);
+        }
         let currentTime = startTime;
         // Generate available timeslots
         while (currentTime < endTime) {
