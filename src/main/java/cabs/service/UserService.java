@@ -344,4 +344,8 @@ public class UserService {
     public List<User> getUserList() {
         return userRepository.getUserList();
     }
+
+    public Integer findIdByLogin(String login) {
+        return userRepository.findIdByLogin(login);
+    }
 }

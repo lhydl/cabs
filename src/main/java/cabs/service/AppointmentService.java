@@ -60,4 +60,6 @@ public interface AppointmentService {
     public List<Appointment> getUserAppt(String userId);
 
     public List<String> getExistingTimeSlots(String selectedDate);
+
+    void deleteUserAppointments(Integer userId);
 }

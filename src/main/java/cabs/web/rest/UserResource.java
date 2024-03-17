@@ -4,6 +4,7 @@ import cabs.config.Constants;
 import cabs.domain.User;
 import cabs.repository.UserRepository;
 import cabs.security.AuthoritiesConstants;
+import cabs.service.AppointmentService;
 import cabs.service.MailService;
 import cabs.service.UserService;
 import cabs.service.dto.AdminUserDTO;
@@ -86,10 +87,18 @@ public class UserResource {
 
     private final MailService mailService;
 
-    public UserResource(UserService userService, UserRepository userRepository, MailService mailService) {
+    private final AppointmentService appointmentService;
+
+    public UserResource(
+        UserService userService,
+        UserRepository userRepository,
+        MailService mailService,
+        AppointmentService appointmentService
+    ) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
+        this.appointmentService = appointmentService;
     }
 
     /**
@@ -202,6 +211,8 @@ public class UserResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteUser(@PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to delete User: {}", login);
+        Integer userId = userService.findIdByLogin(login);
+        appointmentService.deleteUserAppointments(userId);
         userService.deleteUser(login);
         return ResponseEntity
             .noContent()

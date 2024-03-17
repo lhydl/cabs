@@ -2,6 +2,9 @@ package cabs.repository;
 
 import cabs.domain.Appointment;
 import cabs.domain.User;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
@@ -29,4 +32,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
         nativeQuery = true
     )
     List<String> getExistingTimeSlots(@Param("selectedDate") String selectedDate);
+
+    @Modifying
+    @Query(value = " DELETE FROM " + "     cabs.appointment A " + " where " + "     A.patient_id = :userId ", nativeQuery = true)
+    void deleteUserAppointments(@Param("userId") Integer userId);
 }

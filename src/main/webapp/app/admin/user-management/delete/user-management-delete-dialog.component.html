@@ -8,8 +8,12 @@
 
     <div class="modal-body">
       <jhi-alert-error></jhi-alert-error>
-
-      <p>Are you sure you want to delete user {{ user.login }}?</p>
+      <p class="text-danger">Warning: This action cannot be undone.</p>
+      <p class="text-danger">Deleting a user will also delete their appointment records.</p>
+      <p>
+        Are you sure you want to delete user <b>{{ user.login }}</b
+        >?
+      </p>
     </div>
 
     <div class="modal-footer">

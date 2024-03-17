@@ -54,4 +54,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
         nativeQuery = true
     )
     List<User> getUserList();
+
+    @Query(value = " SELECT " + "     id " + " FROM " + "     cabs.jhi_user " + " WHERE " + "     login = :login", nativeQuery = true)
+    Integer findIdByLogin(@Param("login") String login);
 }

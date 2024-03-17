@@ -97,4 +97,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<String> getExistingTimeSlots(String selectedDate) {
         return appointmentRepository.getExistingTimeSlots(selectedDate);
     }
+
+    @Override
+    public void deleteUserAppointments(Integer userId) {
+        appointmentRepository.deleteUserAppointments(userId);
+    }
 }

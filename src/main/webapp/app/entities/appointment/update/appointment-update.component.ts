@@ -85,6 +85,7 @@ export class AppointmentUpdateComponent implements OnInit {
 
   public toggleIsNewPatient(): void {
     this.initializeForm();
+    this.selectedDate = undefined;
     // this.editForm.get('patientId')?.reset();
     // this.editForm.get('firstName')?.reset();
     // this.editForm.get('lastName')?.reset();
