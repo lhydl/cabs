@@ -688,11 +688,15 @@
                     <version>${maven-war-plugin.version}</version>
                     <executions>
                         <execution>
-                            <id>default-war</id>
+                            <id>war-exploded</id>
+                            <configuration>
+                                <webappDirectory>target/deploy</webappDirectory>
+                                <archiveClasses>true</archiveClasses>
+                            </configuration>
+                            <phase>prepare-package</phase>
                             <goals>
-                                <goal>war</goal>
+                                 <goal>exploded</goal>
                             </goals>
-                            <phase>package</phase>
                         </execution>
                     </executions>
                     <configuration>
