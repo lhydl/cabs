@@ -689,20 +689,25 @@
                     <executions>
                         <execution>
                             <id>default-war</id>
-                            <phase>none</phase>
-                        </execution>
-                        <execution>
-                            <id>war-exploded</id>
-                            <configuration>
-                                <webappDirectory>target/deploy</webappDirectory>
-                                <archiveClasses>true</archiveClasses>
-                            </configuration>
-                            <phase>prepare-package</phase>
                             <goals>
-                                 <goal>exploded</goal>
+                                <goal>war</goal>
                             </goals>
+                            <phase>package</phase>
                         </execution>
                     </executions>
+                    <configuration>
+                        <warSourceIncludes>WEB-INF/**,META-INF/**</warSourceIncludes>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                        <warSourceDirectory>target/classes/static/</warSourceDirectory>
+                        <webResources>
+                            <resource>
+                                <directory>src/main/webapp</directory>
+                                <includes>
+                                    <include>WEB-INF/**</include>
+                                </includes>
+                            </resource>
+                        </webResources>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
