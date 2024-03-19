@@ -688,6 +688,10 @@
                     <version>${maven-war-plugin.version}</version>
                     <executions>
                         <execution>
+                            <id>default-war</id>
+                            <phase>none</phase>
+                        </execution>
+                        <execution>
                             <id>war-exploded</id>
                             <configuration>
                                 <webappDirectory>target/deploy</webappDirectory>

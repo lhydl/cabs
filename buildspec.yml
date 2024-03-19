@@ -6,10 +6,11 @@ phases:
   build:
     commands:
       - echo "Entered build phase"
-      - mvn package
+      - mvn clean prepare-package war:exploded
   post_build:
     commands:
       - echo "Entered the post-build phase"
+      - mv target/deploy ./
 artifacts:
   files:
-    - target/cabs-0.0.1-SNAPSHOT.war
+    - deploy/**/*
