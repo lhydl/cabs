@@ -2,6 +2,7 @@ package cabs.service.impl;
 
 import cabs.domain.Appointment;
 import cabs.repository.AppointmentRepository;
+import cabs.repository.AppointmentRepository.PatientDetailsProjection;
 import cabs.service.AppointmentService;
 import cabs.service.dto.PatientDetailsDTO;
 import java.time.LocalDateTime;
@@ -117,7 +118,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public PatientDetailsDTO getPatientDetails(Long userId) {
+    public PatientDetailsProjection getPatientDetails(Long userId) {
         return appointmentRepository.getPatientDetails(userId);
     }
 }

@@ -3,6 +3,7 @@ package cabs.web.rest;
 import cabs.domain.Appointment;
 import cabs.domain.User;
 import cabs.repository.AppointmentRepository;
+import cabs.repository.AppointmentRepository.PatientDetailsProjection;
 import cabs.service.AppointmentService;
 import cabs.service.UserService;
 import cabs.service.dto.AdminUserDTO;
@@ -223,7 +224,7 @@ public class AppointmentResource {
     }
 
     @GetMapping("/getPatientDetails")
-    public PatientDetailsDTO getPatientDetails(@RequestParam(value = "userId") String userId) {
+    public PatientDetailsProjection getPatientDetails(@RequestParam(value = "userId") String userId) {
         return appointmentService.getPatientDetails(Long.parseLong(userId));
     }
 }

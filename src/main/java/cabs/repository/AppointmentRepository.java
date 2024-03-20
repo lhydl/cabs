@@ -38,8 +38,22 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = " DELETE FROM " + "     cabs.appointment A " + " where " + "     A.patient_id = :userId ", nativeQuery = true)
     void deleteUserAppointments(@Param("userId") Integer userId);
 
+    // @Query(
+    //     "SELECT new cabs.service.dto.PatientDetailsDTO(u.firstName, u.lastName, u.email, u.phoneNumber) FROM User u WHERE u.id = :userId"
+    // )
+    // PatientDetailsDTO getPatientDetails(@Param("userId") Long userId);
+
+    public interface PatientDetailsProjection {
+        String getFirstName();
+        String getLastName();
+        String getEmail();
+        String getPhoneNumber();
+    }
+
+    // In your repository
     @Query(
-        "SELECT new cabs.service.dto.PatientDetailsDTO(u.firstName, u.lastName, u.email, u.phoneNumber) FROM User u WHERE u.id = :userId"
+        value = "SELECT U.first_name AS firstName, U.last_name AS lastName, U.email AS email, U.phone_number AS phoneNumber FROM cabs.jhi_user U WHERE U.id = :userId",
+        nativeQuery = true
     )
-    PatientDetailsDTO getPatientDetails(@Param("userId") Long userId);
+    PatientDetailsProjection getPatientDetails(@Param("userId") Long userId);
 }
