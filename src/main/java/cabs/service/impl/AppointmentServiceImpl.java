@@ -4,8 +4,11 @@ import cabs.domain.Appointment;
 import cabs.repository.AppointmentRepository;
 import cabs.service.AppointmentService;
 import cabs.service.dto.PatientDetailsDTO;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -96,7 +99,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<String> getExistingTimeSlots(String selectedDate) {
-        return appointmentRepository.getExistingTimeSlots(selectedDate);
+        // Quick fix of time zone issue for prod only
+        List<String> dateTimeStrings = appointmentRepository.getExistingTimeSlots(selectedDate);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        // Convert, add hours, and collect the results
+        List<String> updatedDateTimeStrings = dateTimeStrings
+            .stream()
+            .map(dateTimeStr -> LocalDateTime.parse(dateTimeStr, formatter).plusHours(8))
+            .map(updatedDateTime -> updatedDateTime.format(formatter))
+            .collect(Collectors.toList());
+        return updatedDateTimeStrings;
     }
 
     @Override
