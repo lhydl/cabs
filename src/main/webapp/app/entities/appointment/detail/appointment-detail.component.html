@@ -35,20 +35,19 @@
           <dd>
             <span>{{ appointment.doctorId }}</span>
           </dd> -->
-          <!-- TODO-> add patient details such as email, phone number, name  -->
           <dt><h4>Patient Details</h4></dt>
           <br />
           <dt><span>Name</span></dt>
           <dd>
-            <span></span>
+            <span>{{ patientDetails?.firstName }} {{ patientDetails?.lastName }}</span>
           </dd>
           <dt><span>Phone Number</span></dt>
           <dd>
-            <span></span>
+            <span>{{ patientDetails?.phoneNumber }}</span>
           </dd>
           <dt><span>Email</span></dt>
           <dd>
-            <span></span>
+            <span>{{ patientDetails?.email }}</span>
           </dd>
         </dl>
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

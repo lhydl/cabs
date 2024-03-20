@@ -2,6 +2,7 @@ package cabs.repository;
 
 import cabs.domain.Appointment;
 import cabs.domain.User;
+import cabs.service.dto.PatientDetailsDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -36,4 +37,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Modifying
     @Query(value = " DELETE FROM " + "     cabs.appointment A " + " where " + "     A.patient_id = :userId ", nativeQuery = true)
     void deleteUserAppointments(@Param("userId") Integer userId);
+
+    @Query(
+        "SELECT new cabs.service.dto.PatientDetailsDTO(u.firstName, u.lastName, u.email, u.phoneNumber) FROM User u WHERE u.id = :userId"
+    )
+    PatientDetailsDTO getPatientDetails(@Param("userId") Long userId);
 }
