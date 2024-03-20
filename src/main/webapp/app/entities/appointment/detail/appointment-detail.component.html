@@ -11,15 +11,15 @@
         <jhi-alert></jhi-alert>
 
         <dl class="row-md jh-entity-details">
-          <dt><span>ID</span></dt>
+          <!-- <dt><span>ID</span></dt>
           <dd>
             <span>{{ appointment.id }}</span>
-          </dd>
-          <dt><span>Appt Type</span></dt>
+          </dd> -->
+          <dt><span>Appointment Type</span></dt>
           <dd>
             <span>{{ appointment.apptType }}</span>
           </dd>
-          <dt><span>Appt Datetime</span></dt>
+          <dt><span>Appointment Datetime</span></dt>
           <dd>
             <span>{{ appointment.apptDatetime | formatMediumDatetime }}</span>
           </dd>
@@ -27,17 +27,30 @@
           <dd>
             <span>{{ appointment.remarks }}</span>
           </dd>
-          <dt><span>Patient Id</span></dt>
+          <!-- <dt><span>Patient Id</span></dt>
           <dd>
             <span>{{ appointment.patientId }}</span>
-          </dd>
-          <!-- TODO-> add patient details such as email, phone number, name  -->
+          </dd> -->
           <!-- <dt><span>Doctor Id</span></dt>
           <dd>
             <span>{{ appointment.doctorId }}</span>
           </dd> -->
+          <!-- TODO-> add patient details such as email, phone number, name  -->
+          <dt><h4>Patient Details</h4></dt>
+          <br />
+          <dt><span>Name</span></dt>
+          <dd>
+            <span></span>
+          </dd>
+          <dt><span>Phone Number</span></dt>
+          <dd>
+            <span></span>
+          </dd>
+          <dt><span>Email</span></dt>
+          <dd>
+            <span></span>
+          </dd>
         </dl>
-
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
           <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
         </button>
