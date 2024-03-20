@@ -7,12 +7,12 @@ import cabs.service.AppointmentService;
 import cabs.service.UserService;
 import cabs.service.dto.AdminUserDTO;
 import cabs.service.dto.AppointmentDTO;
+import cabs.service.dto.PatientDetailsDTO;
 import cabs.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -220,5 +220,10 @@ public class AppointmentResource {
     @GetMapping("/getTime")
     public List<String> getExistingTimeSlots(@RequestParam(value = "selectedDate") String selectedDate) {
         return appointmentService.getExistingTimeSlots(selectedDate);
+    }
+
+    @GetMapping("/getPatientDetails")
+    public PatientDetailsDTO getPatientDetails(@RequestParam(value = "userId") String userId) {
+        return appointmentService.getPatientDetails(Long.parseLong(userId));
     }
 }

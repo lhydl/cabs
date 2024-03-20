@@ -3,6 +3,7 @@ package cabs.service.impl;
 import cabs.domain.Appointment;
 import cabs.repository.AppointmentRepository;
 import cabs.service.AppointmentService;
+import cabs.service.dto.PatientDetailsDTO;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -113,5 +114,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public void deleteUserAppointments(Integer userId) {
         appointmentRepository.deleteUserAppointments(userId);
+    }
+
+    @Override
+    public PatientDetailsDTO getPatientDetails(Long userId) {
+        return appointmentRepository.getPatientDetails(userId);
     }
 }

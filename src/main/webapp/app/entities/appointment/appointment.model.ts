@@ -1,3 +1,4 @@
+import { NumberValueAccessor } from '@angular/forms';
 import dayjs from 'dayjs/esm';
 
 export interface IAppointment {
@@ -13,6 +14,13 @@ export interface IAppointment {
   lastName?: string | null;
   email?: string | null;
   phoneNumber?: string | null;
+}
+
+export class PatientDetailsDTO {
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+  email?: string;
 }
 
 export type NewAppointment = Omit<IAppointment, 'id'> & { id: null };

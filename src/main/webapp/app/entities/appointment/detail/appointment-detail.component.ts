@@ -3,7 +3,10 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-import { IAppointment } from '../appointment.model';
+import { IAppointment, PatientDetailsDTO } from '../appointment.model';
+import { HttpParams } from '@angular/common/http';
+import { IUser, User } from 'app/entities/user/user.model';
+import { AppointmentService } from '../service/appointment.service';
 
 @Component({
   standalone: true,
@@ -13,8 +16,28 @@ import { IAppointment } from '../appointment.model';
 })
 export class AppointmentDetailComponent {
   @Input() appointment: IAppointment | null = null;
+  patientDetails: PatientDetailsDTO | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(
+    protected activatedRoute: ActivatedRoute,
+    protected appointmentService: AppointmentService,
+  ) {}
+
+  ngOnInit(): void {
+    this.getPatientDetails();
+  }
+
+  public getPatientDetails(): void {
+    let params = new HttpParams();
+    if (this.appointment?.patientId) {
+      params = new HttpParams().set('userId', this.appointment.patientId);
+    }
+    this.appointmentService.getPatientDetails(params).subscribe((res: any) => {
+      if (res) {
+        this.patientDetails = res;
+      }
+    });
+  }
 
   previousState(): void {
     window.history.back();

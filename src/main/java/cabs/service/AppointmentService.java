@@ -1,6 +1,7 @@
 package cabs.service;
 
 import cabs.domain.Appointment;
+import cabs.service.dto.PatientDetailsDTO;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -62,4 +63,6 @@ public interface AppointmentService {
     public List<String> getExistingTimeSlots(String selectedDate);
 
     void deleteUserAppointments(Integer userId);
+
+    public PatientDetailsDTO getPatientDetails(Long userId);
 }
