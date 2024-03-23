@@ -70,7 +70,7 @@
             </th>
             <th *jhiHasAnyAuthority="'ROLE_ADMIN'" scope="col" jhiSortBy="patientId">
               <div class="d-flex">
-                <span>Patient Id</span>
+                <span>Patient Name</span>
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
@@ -93,8 +93,7 @@
               <td>{{ appointment.apptType }}</td>
               <td>{{ appointment.apptDatetime | formatMediumDatetime }}</td>
               <td>{{ appointment.remarks }}</td>
-              <!-- TODO-> change patient id to patient name -->
-              <td *jhiHasAnyAuthority="'ROLE_ADMIN'">{{ appointment.patientId }}</td>
+              <td *jhiHasAnyAuthority="'ROLE_ADMIN'">{{ getPatientNameById(appointment.patientId) }}</td>
               <!-- <td>{{ appointment.doctorId }}</td> -->
               <td class="text-end">
                 <div class="btn-group">

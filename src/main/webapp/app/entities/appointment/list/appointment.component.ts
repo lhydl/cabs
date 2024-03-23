@@ -13,7 +13,7 @@ import { MatChipsModule } from '@angular/material/chips';
 
 import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
-import { IAppointment } from '../appointment.model';
+import { IAppointment, PatientMappingsDTO } from '../appointment.model';
 import { EntityArrayResponseType, AppointmentService } from '../service/appointment.service';
 import { AppointmentDeleteDialogComponent } from '../delete/appointment-delete-dialog.component';
 import { AccountService } from 'app/core/auth/account.service';
@@ -54,6 +54,7 @@ export class AppointmentComponent implements OnInit {
   account: Account | null = null;
   isAdmin: boolean = this.accountService.hasAnyAuthority('ROLE_ADMIN');
   displayTitle: string | null = null;
+  patientMappings: PatientMappingsDTO[] = [];
 
   private readonly destroy$ = new Subject<void>();
 
@@ -135,9 +136,27 @@ export class AppointmentComponent implements OnInit {
         this.onResponseSuccess(res);
       },
     });
+    this.getPatientMappings();
     // } else {
     //   this.loadUserAppt();
     // }
+  }
+
+  getPatientMappings(): void {
+    this.appointmentService.getPatientMappings().subscribe(res => {
+      this.patientMappings = res;
+    });
+  }
+
+  getPatientNameById(patientId: number | null | undefined): string {
+    if (patientId == null) {
+      return 'Unknown';
+    }
+    const foundMapping = this.patientMappings.find(mapping => mapping.id?.toString() === patientId.toString());
+    if (!foundMapping) {
+      return 'Unknown';
+    }
+    return foundMapping.firstName + ' ' + foundMapping.lastName;
   }
 
   navigateToWithComponentValues(): void {

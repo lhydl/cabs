@@ -4,6 +4,7 @@ import cabs.domain.Appointment;
 import cabs.domain.User;
 import cabs.repository.AppointmentRepository;
 import cabs.repository.AppointmentRepository.PatientDetailsProjection;
+import cabs.repository.AppointmentRepository.PatientMappingsProjection;
 import cabs.service.AppointmentService;
 import cabs.service.UserService;
 import cabs.service.dto.AdminUserDTO;
@@ -226,5 +227,10 @@ public class AppointmentResource {
     @GetMapping("/getPatientDetails")
     public PatientDetailsProjection getPatientDetails(@RequestParam(value = "userId") String userId) {
         return appointmentService.getPatientDetails(Long.parseLong(userId));
+    }
+
+    @GetMapping("/getPatientMappings")
+    public List<PatientMappingsProjection> getPatientMappings() {
+        return appointmentService.getPatientMappings();
     }
 }

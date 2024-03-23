@@ -2,6 +2,7 @@ package cabs.service;
 
 import cabs.domain.Appointment;
 import cabs.repository.AppointmentRepository.PatientDetailsProjection;
+import cabs.repository.AppointmentRepository.PatientMappingsProjection;
 import cabs.service.dto.PatientDetailsDTO;
 import java.util.List;
 import java.util.Optional;
@@ -66,4 +67,6 @@ public interface AppointmentService {
     void deleteUserAppointments(Integer userId);
 
     public PatientDetailsProjection getPatientDetails(Long userId);
+
+    public List<PatientMappingsProjection> getPatientMappings();
 }

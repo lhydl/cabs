@@ -23,4 +23,10 @@ export class PatientDetailsDTO {
   email?: string;
 }
 
+export class PatientMappingsDTO {
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+}
+
 export type NewAppointment = Omit<IAppointment, 'id'> & { id: null };

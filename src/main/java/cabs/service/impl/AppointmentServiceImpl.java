@@ -3,6 +3,7 @@ package cabs.service.impl;
 import cabs.domain.Appointment;
 import cabs.repository.AppointmentRepository;
 import cabs.repository.AppointmentRepository.PatientDetailsProjection;
+import cabs.repository.AppointmentRepository.PatientMappingsProjection;
 import cabs.service.AppointmentService;
 import cabs.service.dto.PatientDetailsDTO;
 import java.util.List;
@@ -108,5 +109,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public PatientDetailsProjection getPatientDetails(Long userId) {
         return appointmentRepository.getPatientDetails(userId);
+    }
+
+    @Override
+    public List<PatientMappingsProjection> getPatientMappings() {
+        return appointmentRepository.getPatientMappings();
     }
 }
