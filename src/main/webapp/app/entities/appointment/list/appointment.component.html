@@ -29,9 +29,21 @@
 
   <jhi-alert></jhi-alert>
 
-  @if (appointments?.length === 0) {
+  <!-- @if (appointments?.length === 0) {
     <div class="alert alert-warning" id="no-result">
       <span>No Appointments found</span>
+    </div>
+  } -->
+
+  @if (filteredAppointments.length === 0 && state === 'upcoming') {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Upcoming Appointments Found</span>
+    </div>
+  }
+
+  @if (filteredAppointments.length === 0 && state === 'past') {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Past Appointments Found</span>
     </div>
   }
 
