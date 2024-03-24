@@ -41,6 +41,14 @@
           <dd>
             <span>{{ patientDetails?.firstName }} {{ patientDetails?.lastName }}</span>
           </dd>
+          <dt><span>Date of Birth</span></dt>
+          <dd>
+            <span>{{ patientDetails?.dob }}</span>
+          </dd>
+          <dt><span>Gender</span></dt>
+          <dd>
+            <span>{{ patientDetails?.gender }}</span>
+          </dd>
           <dt><span>Phone Number</span></dt>
           <dd>
             <span>{{ patientDetails?.phoneNumber }}</span>
@@ -54,9 +62,9 @@
           <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
         </button>
 
-        <button type="button" [routerLink]="['/appointment', appointment.id, 'edit']" class="btn btn-primary">
+        <!-- <button type="button" [routerLink]="['/appointment', appointment.id, 'edit']" class="btn btn-primary">
           <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
-        </button>
+        </button> -->
       </div>
     }
   </div>

@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -84,6 +85,13 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @Size(max = 255)
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "dob")
+    private Date dob;
+
+    @Size(max = 20)
+    @Column(name = "gender")
+    private String gender;
 
     @JsonIgnore
     @ManyToMany
@@ -209,6 +217,22 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -240,6 +264,8 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
             ", activationKey='" + activationKey + '\'' +
             ", phoneNumber='" + phoneNumber + '\'' +
             ", id='" + id + '\'' +
+            ", dob='" + dob + '\'' +
+            ", gender='" + gender + '\'' +
             "}";
     }
 }

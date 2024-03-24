@@ -39,11 +39,31 @@ Navbar
 /* ==========================================================================
 Logo styles
 ========================================================================== */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  max-width: 80%;
+}
+
 .logo-img {
   height: 45px;
   width: 45px;
-  display: inline-block;
-  vertical-align: middle;
   background: url('/content/images/appointment.svg') no-repeat center center;
   background-size: contain;
+  flex-shrink: 0;
+}
+
+.navbar-title {
+  white-space: normal;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.nav-link-content {
+  display: flex;
+  align-items: center;
+}
+
+.nav-link-content fa-icon {
+  margin-right: 5px;
 }

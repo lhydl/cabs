@@ -45,6 +45,7 @@ export class AppointmentUpdateComponent implements OnInit {
   selectedDate: string | undefined;
   formattedSelectedDate: string | undefined;
   today: string = dayjs().format('YYYY-MM-DD');
+  genderList: string[] = ['Male', 'Female', 'Others'];
 
   editForm: AppointmentFormGroup = this.appointmentFormService.createAppointmentFormGroup({ id: null }, this.isNewPatient, this.isAdmin);
 

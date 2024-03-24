@@ -6,12 +6,22 @@ import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MatChipsModule } from '@angular/material/chips';
+import { ReactiveFormsModule } from '@angular/forms';
 
 /**
  * Application wide Module
  */
 @NgModule({
-  imports: [AlertComponent, AlertErrorComponent, NgSelectModule, MatChipsModule],
-  exports: [CommonModule, NgbModule, FontAwesomeModule, AlertComponent, AlertErrorComponent, NgSelectModule, MatChipsModule],
+  imports: [AlertComponent, AlertErrorComponent, NgSelectModule, MatChipsModule, ReactiveFormsModule],
+  exports: [
+    CommonModule,
+    NgbModule,
+    FontAwesomeModule,
+    AlertComponent,
+    AlertErrorComponent,
+    NgSelectModule,
+    MatChipsModule,
+    ReactiveFormsModule,
+  ],
 })
 export default class SharedModule {}

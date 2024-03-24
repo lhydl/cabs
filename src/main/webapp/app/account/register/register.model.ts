@@ -7,5 +7,7 @@ export class Registration {
     public firstName: string,
     public lastName: string,
     public phoneNumber: string,
+    public dob: string,
+    public gender?: string,
   ) {}
 }

@@ -25,7 +25,7 @@
         <div class="mb-3">
           <label class="form-label" for="field_appt_type">Appointment Type</label>
           <ng-select
-            class="form-control"
+            class="custom-select"
             id="field_appt_type"
             data-cy="apptType"
             formControlName="apptType"
@@ -128,7 +128,7 @@
           <div class="mb-3" *ngIf="!isNewPatient">
             <label class="form-label" for="field_patient_id">Patient Name</label>
             <ng-select
-              class="form-control"
+              class="custom-select"
               id="field_patient_id"
               data-cy="patientId"
               formControlName="patientId"
@@ -188,6 +188,32 @@
                 <div>
                   @if (editForm.get('lastName')?.errors?.required) {
                     <small class="form-text text-danger">Last name is required.</small>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="dob">Date of Birth</label>
+              <input id="dob" data-cy="dob" type="date" class="form-control" name="dob" formControlName="dob" [max]="today" />
+              @if (editForm.get('dob')!.invalid && (editForm.get('dob')!.dirty || editForm.get('dob')!.touched)) {
+                <div>
+                  @if (editForm.get('dob')?.errors?.required) {
+                    <small class="form-text text-danger">Date of birth is required.</small>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="gender">Gender</label>
+              <ng-select class="custom-select" id="gender" data-cy="gender" formControlName="gender" placeholder="Select gender">
+                <ng-option *ngFor="let gender of genderList" [value]="gender">{{ gender }}</ng-option>
+              </ng-select>
+              @if (editForm.get('gender')!.invalid && (editForm.get('gender')!.dirty || editForm.get('gender')!.touched)) {
+                <div>
+                  @if (editForm.get('gender')?.errors?.required) {
+                    <small class="form-text text-danger">Gender is required.</small>
                   }
                 </div>
               }

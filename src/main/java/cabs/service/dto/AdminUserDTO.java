@@ -6,6 +6,7 @@ import cabs.domain.User;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,10 @@ public class AdminUserDTO implements Serializable {
 
     private String phoneNumber;
 
+    private Date dob;
+
+    private String gender;
+
     public AdminUserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -72,6 +77,8 @@ public class AdminUserDTO implements Serializable {
         this.lastModifiedDate = user.getLastModifiedDate();
         this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
         this.phoneNumber = user.getPhoneNumber();
+        this.dob = user.getDob();
+        this.gender = user.getGender();
     }
 
     public Long getId() {
@@ -186,6 +193,22 @@ public class AdminUserDTO implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     // prettier-ignore
     @Override
     public String toString() {
@@ -203,6 +226,8 @@ public class AdminUserDTO implements Serializable {
             ", lastModifiedDate=" + lastModifiedDate +
             ", authorities=" + authorities +
             ", phoneNumber='" + phoneNumber + '\'' +
+            ", dob='" + dob + '\'' +
+            ", gender='" + gender + '\'' +
             "}";
     }
 }

@@ -48,12 +48,22 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
         String getLastName();
         String getEmail();
         String getPhoneNumber();
+        String getDob();
+        String getGender();
     }
 
-    // In your repository
     @Query(
-        value = "SELECT U.first_name AS firstName, U.last_name AS lastName, U.email AS email, U.phone_number AS phoneNumber FROM cabs.jhi_user U WHERE U.id = :userId",
+        value = "SELECT U.first_name AS firstName, U.last_name AS lastName, U.email AS email, U.phone_number AS phoneNumber, U.dob AS dob, U.gender AS gender FROM cabs.jhi_user U WHERE U.id = :userId",
         nativeQuery = true
     )
     PatientDetailsProjection getPatientDetails(@Param("userId") Long userId);
+
+    public interface PatientMappingsProjection {
+        String getId();
+        String getFirstName();
+        String getLastName();
+    }
+
+    @Query(value = "SELECT U.id AS id, U.first_name AS firstName, U.last_name AS lastName FROM cabs.jhi_user U", nativeQuery = true)
+    List<PatientMappingsProjection> getPatientMappings();
 }

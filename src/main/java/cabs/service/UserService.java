@@ -132,6 +132,8 @@ public class UserService {
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
+        newUser.setDob(userDTO.getDob());
+        newUser.setGender(userDTO.getGender());
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
@@ -248,7 +250,16 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, String phoneNumber) {
+    public void updateUser(
+        String firstName,
+        String lastName,
+        String email,
+        String langKey,
+        String imageUrl,
+        String phoneNumber,
+        Date dob,
+        String gender
+    ) {
         SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -261,6 +272,8 @@ public class UserService {
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
                 user.setPhoneNumber(phoneNumber);
+                user.setDob(dob);
+                user.setGender(gender);
                 userRepository.save(user);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);

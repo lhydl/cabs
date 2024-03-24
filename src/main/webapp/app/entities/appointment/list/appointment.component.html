@@ -29,9 +29,48 @@
 
   <jhi-alert></jhi-alert>
 
-  @if (appointments?.length === 0) {
+  <!-- @if (appointments?.length === 0) {
     <div class="alert alert-warning" id="no-result">
       <span>No Appointments found</span>
+    </div>
+  } -->
+
+  <form [formGroup]="searchForm" class="search-form" (ngSubmit)="filterAppointments()">
+    <div class="field-container p-1 m-1">
+      <ng-select
+        class="custom-select"
+        id="field_appt_type"
+        data-cy="apptType"
+        formControlName="apptType"
+        placeholder="Select Appointment Type"
+        [ngModel]="apptType"
+        (ngModelChange)="filterAppointments()"
+      >
+        <ng-option *ngFor="let apptType of apptTypeList" [value]="apptType">{{ apptType }}</ng-option>
+      </ng-select>
+    </div>
+    <div class="field-container">
+      <input id="apptDate" type="date" class="form-control" name="apptDate" formControlName="apptDate" />
+    </div>
+    <div class="field-container">
+      <input class="form-control" id="remarks" type="text" placeholder="Enter Remarks" formControlName="remarks" />
+    </div>
+    <div class="field-container" *jhiHasAnyAuthority="'ROLE_ADMIN'">
+      <input class="form-control" id="patientName" type="text" placeholder="Enter Patient Name" formControlName="patientName" />
+    </div>
+    <button type="button" (click)="clearSearch()" class="btn btn-light btn-md">Clear</button>
+    <button type="submit" class="btn btn-primary btn-md">Search</button>
+  </form>
+
+  @if (filteredAppointments.length === 0 && state === 'upcoming') {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Upcoming Appointments Found</span>
+    </div>
+  }
+
+  @if (filteredAppointments.length === 0 && state === 'past') {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Past Appointments Found</span>
     </div>
   }
 
@@ -50,27 +89,24 @@
             <th scope="col" jhiSortBy="apptType">
               <div class="d-flex">
                 <span>Appointment Type</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="apptDatetime">
               <div class="d-flex">
                 <span>Appointment Schedule</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="remarks">
               <div class="d-flex">
                 <span>Special Requests/Remarks</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th *jhiHasAnyAuthority="'ROLE_ADMIN'" scope="col" jhiSortBy="patientId">
               <div class="d-flex">
-                <span>Patient Id</span>
+                <span>Patient Name</span>
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
@@ -93,8 +129,7 @@
               <td>{{ appointment.apptType }}</td>
               <td>{{ appointment.apptDatetime | formatMediumDatetime }}</td>
               <td>{{ appointment.remarks }}</td>
-              <!-- TODO-> change patient id to patient name -->
-              <td *jhiHasAnyAuthority="'ROLE_ADMIN'">{{ appointment.patientId }}</td>
+              <td *jhiHasAnyAuthority="'ROLE_ADMIN'">{{ getPatientNameById(appointment.patientId) }}</td>
               <!-- <td>{{ appointment.doctorId }}</td> -->
               <td class="text-end">
                 <div class="btn-group">

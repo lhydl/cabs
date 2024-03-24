@@ -77,6 +77,32 @@
           </div>
 
           <div class="mb-3">
+            <label class="form-label" for="dob">Date of Birth</label>
+            <input id="dob" data-cy="dob" type="date" class="form-control" name="dob" formControlName="dob" [max]="today" />
+            @if (settingsForm.get('dob')!.invalid && (settingsForm.get('dob')!.dirty || settingsForm.get('dob')!.touched)) {
+              <div>
+                @if (settingsForm.get('dob')?.errors?.required) {
+                  <small class="form-text text-danger">Date of birth is required.</small>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="gender">Gender</label>
+            <ng-select class="custom-select" id="gender" data-cy="gender" formControlName="gender" placeholder="Select gender">
+              <ng-option *ngFor="let gender of genderList" [value]="gender">{{ gender }}</ng-option>
+            </ng-select>
+            @if (settingsForm.get('gender')!.invalid && (settingsForm.get('gender')!.dirty || settingsForm.get('gender')!.touched)) {
+              <div>
+                @if (settingsForm.get('gender')?.errors?.required) {
+                  <small class="form-text text-danger">Gender is required.</small>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="mb-3">
             <label class="form-label" for="phoneNumber">Phone number</label>
             <input
               type="phoneNumber"

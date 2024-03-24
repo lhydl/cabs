@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } 
 import SharedModule from 'app/shared/shared.module';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
+import dayjs from 'dayjs';
 
 const initialAccount: Account = {} as Account;
 
@@ -12,9 +13,12 @@ const initialAccount: Account = {} as Account;
   standalone: true,
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
   templateUrl: './settings.component.html',
+  styleUrls: ['./settings.component.scss'],
 })
 export default class SettingsComponent implements OnInit {
   success = false;
+  today: string = dayjs().format('YYYY-MM-DD');
+  genderList: string[] = ['Male', 'Female', 'Others'];
 
   settingsForm = new FormGroup({
     firstName: new FormControl(initialAccount.firstName, {
@@ -33,6 +37,14 @@ export default class SettingsComponent implements OnInit {
       nonNullable: true,
       validators: [Validators.required, Validators.pattern('^[0-9]{1,8}$')],
     }),
+    dob: new FormControl(initialAccount.dob, {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    gender: new FormControl(initialAccount.gender, {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
     langKey: new FormControl(initialAccount.langKey, { nonNullable: true }),
 
     activated: new FormControl(initialAccount.activated, { nonNullable: true }),
@@ -48,18 +60,22 @@ export default class SettingsComponent implements OnInit {
     this.accountService.identity().subscribe(account => {
       if (account) {
         this.settingsForm.patchValue(account);
+        this.settingsForm.patchValue({
+          dob: dayjs(account.dob).format('YYYY-MM-DD'),
+        });
       }
     });
   }
 
   save(): void {
     this.success = false;
-
     const account = this.settingsForm.getRawValue();
     this.accountService.save(account).subscribe(() => {
       this.success = true;
-
       this.accountService.authenticate(account);
+      setTimeout(() => {
+        window.location.reload();
+      }, 400);
     });
   }
 }

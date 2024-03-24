@@ -2,6 +2,7 @@ package cabs.service.dto;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 public class AppointmentDTO implements Serializable {
 
@@ -15,6 +16,8 @@ public class AppointmentDTO implements Serializable {
     private String lastName;
     private String phoneNumber;
     private String email;
+    private Date dob;
+    private String gender;
 
     public AppointmentDTO() {
         // No-args constructor
@@ -100,6 +103,22 @@ public class AppointmentDTO implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
     // Optionally, override equals(), hashCode(), and toString() methods if needed.
 }

@@ -8,23 +8,25 @@ import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 import { ItemCountComponent } from 'app/shared/pagination';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, UntypedFormGroup } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
 
 import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
-import { IAppointment } from '../appointment.model';
+import { IAppointment, PatientMappingsDTO } from '../appointment.model';
 import { EntityArrayResponseType, AppointmentService } from '../service/appointment.service';
 import { AppointmentDeleteDialogComponent } from '../delete/appointment-delete-dialog.component';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
 import dayjs from 'dayjs/esm';
+import { Dayjs } from 'dayjs';
 
 @Component({
   standalone: true,
   selector: 'jhi-appointment',
   templateUrl: './appointment.component.html',
+  styleUrls: ['./appointment.component.scss'],
   imports: [
     RouterModule,
     FormsModule,
@@ -54,6 +56,10 @@ export class AppointmentComponent implements OnInit {
   account: Account | null = null;
   isAdmin: boolean = this.accountService.hasAnyAuthority('ROLE_ADMIN');
   displayTitle: string | null = null;
+  patientMappings: PatientMappingsDTO[] = [];
+  searchForm!: UntypedFormGroup;
+  apptTypeList: string[] = ['Consultation', 'Urgent Care', 'Dental', 'Pharmacy'];
+  apptType: string | null = null;
 
   private readonly destroy$ = new Subject<void>();
 
@@ -63,11 +69,18 @@ export class AppointmentComponent implements OnInit {
     public router: Router,
     protected modalService: NgbModal,
     private accountService: AccountService,
+    private fb: FormBuilder,
   ) {}
 
   trackId = (_index: number, item: IAppointment): number => this.appointmentService.getAppointmentIdentifier(item);
 
   ngOnInit(): void {
+    this.searchForm = this.fb.group({
+      apptType: [null],
+      apptDate: [null],
+      remarks: [null],
+      patientName: [null],
+    });
     this.setUserRoleContent();
     this.accountService
       .getAuthenticationState()
@@ -94,7 +107,13 @@ export class AppointmentComponent implements OnInit {
   }
 
   toggleState(state: 'upcoming' | 'past') {
+    this.searchForm.reset();
     this.state = state;
+    this.filterAppointments();
+  }
+
+  clearSearch(): void {
+    this.searchForm.reset();
     this.filterAppointments();
   }
 
@@ -108,6 +127,28 @@ export class AppointmentComponent implements OnInit {
         this.filteredAppointments = this.appointments.filter(appointment => dayjs(appointment.apptDatetime).isAfter(today));
       } else {
         this.filteredAppointments = this.appointments.filter(appointment => dayjs(appointment.apptDatetime).isBefore(today));
+      }
+
+      this.apptType = this.searchForm.value.apptType;
+      const apptDate = this.searchForm.value.apptDate;
+      const remarks = this.searchForm.value.remarks;
+      const patientName = this.searchForm.value.patientName;
+      if (this.apptType) {
+        this.filteredAppointments = this.filteredAppointments.filter(appointment => appointment.apptType === this.apptType);
+      }
+      if (apptDate) {
+        this.filteredAppointments = this.filteredAppointments.filter(
+          appointment => appointment.apptDatetime?.format('YYYY-MM-DD') === apptDate,
+        );
+      }
+      if (remarks) {
+        this.filteredAppointments = this.filteredAppointments.filter(appointment => appointment.remarks?.includes(remarks));
+      }
+      if (patientName) {
+        const patient = this.patientMappings.find(p =>
+          (p.firstName?.toLowerCase() + ' ' + p.lastName?.toLowerCase()).includes(patientName.toLowerCase()),
+        );
+        this.filteredAppointments = this.filteredAppointments.filter(appointment => appointment.patientId?.toString() === patient?.id);
       }
     }
   }
@@ -135,9 +176,27 @@ export class AppointmentComponent implements OnInit {
         this.onResponseSuccess(res);
       },
     });
+    this.getPatientMappings();
     // } else {
     //   this.loadUserAppt();
     // }
+  }
+
+  getPatientMappings(): void {
+    this.appointmentService.getPatientMappings().subscribe(res => {
+      this.patientMappings = res;
+    });
+  }
+
+  getPatientNameById(patientId: number | null | undefined): string {
+    if (patientId == null) {
+      return 'Unknown';
+    }
+    const foundMapping = this.patientMappings.find(mapping => mapping.id?.toString() === patientId.toString());
+    if (!foundMapping) {
+      return 'Unknown';
+    }
+    return foundMapping.firstName + ' ' + foundMapping.lastName;
   }
 
   navigateToWithComponentValues(): void {
