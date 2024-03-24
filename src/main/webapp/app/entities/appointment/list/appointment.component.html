@@ -43,12 +43,14 @@
         data-cy="apptType"
         formControlName="apptType"
         placeholder="Select Appointment Type"
+        [ngModel]="apptType"
+        (ngModelChange)="filterAppointments()"
       >
         <ng-option *ngFor="let apptType of apptTypeList" [value]="apptType">{{ apptType }}</ng-option>
       </ng-select>
     </div>
     <div class="field-container">
-      <input id="apptTime" data-cy="apptDate" type="date" class="form-control" name="apptTime" formControlName="apptTime" />
+      <input id="apptDate" type="date" class="form-control" name="apptDate" formControlName="apptDate" />
     </div>
     <div class="field-container">
       <input class="form-control" id="remarks" type="text" placeholder="Enter Remarks" formControlName="remarks" />

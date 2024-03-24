@@ -20,6 +20,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
 import dayjs from 'dayjs/esm';
+import { Dayjs } from 'dayjs';
 
 @Component({
   standalone: true,
@@ -58,6 +59,7 @@ export class AppointmentComponent implements OnInit {
   patientMappings: PatientMappingsDTO[] = [];
   searchForm!: UntypedFormGroup;
   apptTypeList: string[] = ['Consultation', 'Urgent Care', 'Dental', 'Pharmacy'];
+  apptType: string | null = null;
 
   private readonly destroy$ = new Subject<void>();
 
@@ -75,7 +77,7 @@ export class AppointmentComponent implements OnInit {
   ngOnInit(): void {
     this.searchForm = this.fb.group({
       apptType: [null],
-      apptTime: [null],
+      apptDate: [null],
       remarks: [null],
       patientName: [null],
     });
@@ -127,16 +129,16 @@ export class AppointmentComponent implements OnInit {
         this.filteredAppointments = this.appointments.filter(appointment => dayjs(appointment.apptDatetime).isBefore(today));
       }
 
-      const apptType = this.searchForm.value.apptType;
-      const apptTime = this.searchForm.value.apptTime;
+      this.apptType = this.searchForm.value.apptType;
+      const apptDate = this.searchForm.value.apptDate;
       const remarks = this.searchForm.value.remarks;
       const patientName = this.searchForm.value.patientName;
-      if (apptType) {
-        this.filteredAppointments = this.filteredAppointments.filter(appointment => appointment.apptType === apptType);
+      if (this.apptType) {
+        this.filteredAppointments = this.filteredAppointments.filter(appointment => appointment.apptType === this.apptType);
       }
-      if (apptTime) {
+      if (apptDate) {
         this.filteredAppointments = this.filteredAppointments.filter(
-          appointment => appointment.apptDatetime?.format('YYYY-MM-DD') === apptTime,
+          appointment => appointment.apptDatetime?.format('YYYY-MM-DD') === apptDate,
         );
       }
       if (remarks) {
