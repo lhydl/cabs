@@ -8,7 +8,7 @@ import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 import { ItemCountComponent } from 'app/shared/pagination';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, UntypedFormGroup } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
 
 import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
@@ -25,6 +25,7 @@ import dayjs from 'dayjs/esm';
   standalone: true,
   selector: 'jhi-appointment',
   templateUrl: './appointment.component.html',
+  styleUrls: ['./appointment.component.scss'],
   imports: [
     RouterModule,
     FormsModule,
@@ -55,6 +56,8 @@ export class AppointmentComponent implements OnInit {
   isAdmin: boolean = this.accountService.hasAnyAuthority('ROLE_ADMIN');
   displayTitle: string | null = null;
   patientMappings: PatientMappingsDTO[] = [];
+  searchForm!: UntypedFormGroup;
+  apptTypeList: string[] = ['Consultation', 'Urgent Care', 'Dental', 'Pharmacy'];
 
   private readonly destroy$ = new Subject<void>();
 
@@ -64,11 +67,18 @@ export class AppointmentComponent implements OnInit {
     public router: Router,
     protected modalService: NgbModal,
     private accountService: AccountService,
+    private fb: FormBuilder,
   ) {}
 
   trackId = (_index: number, item: IAppointment): number => this.appointmentService.getAppointmentIdentifier(item);
 
   ngOnInit(): void {
+    this.searchForm = this.fb.group({
+      apptType: [null],
+      apptTime: [null],
+      remarks: [null],
+      patientName: [null],
+    });
     this.setUserRoleContent();
     this.accountService
       .getAuthenticationState()
@@ -95,7 +105,13 @@ export class AppointmentComponent implements OnInit {
   }
 
   toggleState(state: 'upcoming' | 'past') {
+    this.searchForm.reset();
     this.state = state;
+    this.filterAppointments();
+  }
+
+  clearSearch(): void {
+    this.searchForm.reset();
     this.filterAppointments();
   }
 
@@ -109,6 +125,28 @@ export class AppointmentComponent implements OnInit {
         this.filteredAppointments = this.appointments.filter(appointment => dayjs(appointment.apptDatetime).isAfter(today));
       } else {
         this.filteredAppointments = this.appointments.filter(appointment => dayjs(appointment.apptDatetime).isBefore(today));
+      }
+
+      const apptType = this.searchForm.value.apptType;
+      const apptTime = this.searchForm.value.apptTime;
+      const remarks = this.searchForm.value.remarks;
+      const patientName = this.searchForm.value.patientName;
+      if (apptType) {
+        this.filteredAppointments = this.filteredAppointments.filter(appointment => appointment.apptType === apptType);
+      }
+      if (apptTime) {
+        this.filteredAppointments = this.filteredAppointments.filter(
+          appointment => appointment.apptDatetime?.format('YYYY-MM-DD') === apptTime,
+        );
+      }
+      if (remarks) {
+        this.filteredAppointments = this.filteredAppointments.filter(appointment => appointment.remarks?.includes(remarks));
+      }
+      if (patientName) {
+        const patient = this.patientMappings.find(p =>
+          (p.firstName?.toLowerCase() + ' ' + p.lastName?.toLowerCase()).includes(patientName.toLowerCase()),
+        );
+        this.filteredAppointments = this.filteredAppointments.filter(appointment => appointment.patientId?.toString() === patient?.id);
       }
     }
   }

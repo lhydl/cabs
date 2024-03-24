@@ -35,6 +35,31 @@
     </div>
   } -->
 
+  <form [formGroup]="searchForm" class="search-form" (ngSubmit)="filterAppointments()">
+    <div class="field-container p-1 m-1">
+      <ng-select
+        class="custom-select"
+        id="field_appt_type"
+        data-cy="apptType"
+        formControlName="apptType"
+        placeholder="Select Appointment Type"
+      >
+        <ng-option *ngFor="let apptType of apptTypeList" [value]="apptType">{{ apptType }}</ng-option>
+      </ng-select>
+    </div>
+    <div class="field-container">
+      <input id="apptTime" data-cy="apptDate" type="date" class="form-control" name="apptTime" formControlName="apptTime" />
+    </div>
+    <div class="field-container">
+      <input class="form-control" id="remarks" type="text" placeholder="Enter Remarks" formControlName="remarks" />
+    </div>
+    <div class="field-container" *jhiHasAnyAuthority="'ROLE_ADMIN'">
+      <input class="form-control" id="patientName" type="text" placeholder="Enter Patient Name" formControlName="patientName" />
+    </div>
+    <button type="button" (click)="clearSearch()" class="btn btn-light btn-md">Clear</button>
+    <button type="submit" class="btn btn-primary btn-md">Search</button>
+  </form>
+
   @if (filteredAppointments.length === 0 && state === 'upcoming') {
     <div class="alert alert-warning" id="no-result">
       <span>No Upcoming Appointments Found</span>
@@ -62,21 +87,18 @@
             <th scope="col" jhiSortBy="apptType">
               <div class="d-flex">
                 <span>Appointment Type</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="apptDatetime">
               <div class="d-flex">
                 <span>Appointment Schedule</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="remarks">
               <div class="d-flex">
                 <span>Special Requests/Remarks</span>
-
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>

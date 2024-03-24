@@ -1,0 +1,47 @@
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.field-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.custom-select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 205px;
+  font-size: 14px;
+  height: 38px;
+}
+
+.custom-input {
+  height: 38px;
+  /* Standardize height */
+  padding: 6px 12px;
+  /* Standardize padding */
+  font-size: 14px;
+  /* Standardize font size */
+  line-height: 1.42857143;
+  /* Standardize line height for alignment */
+  border: 1px solid #ccc;
+  /* Standardize border */
+  border-radius: 4px;
+  /* Add border-radius for a rounded look */
+  width: 100%;
+  /* Ensure full width within its container */
+}
+
+.custom-select .ng-select-container,
+.custom-select .ng-value-container {
+  height: 100%;
+  /* Ensure the ng-select internal components fill the height */
+}
+
+.btn-sm {
+  margin-left: 5px;
+  /* Add some space before buttons if needed */
+}
