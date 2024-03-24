@@ -118,7 +118,9 @@ public class AccountResource {
             userDTO.getEmail(),
             userDTO.getLangKey(),
             userDTO.getImageUrl(),
-            userDTO.getPhoneNumber()
+            userDTO.getPhoneNumber(),
+            userDTO.getDob(),
+            userDTO.getGender()
         );
     }
 

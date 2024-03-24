@@ -10,5 +10,7 @@ export class Account {
     public imageUrl: string | null,
     public phoneNumber: string,
     public id: number | null,
+    public dob: string,
+    public gender?: string,
   ) {}
 }

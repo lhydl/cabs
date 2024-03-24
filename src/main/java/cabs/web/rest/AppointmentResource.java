@@ -91,6 +91,8 @@ public class AppointmentResource {
             user.setPhoneNumber(appointmentDTO.getPhoneNumber());
             user.setEmail(appointmentDTO.getEmail());
             user.setLogin(appointmentDTO.getFirstName().replaceAll("\\s+", "") + appointmentDTO.getLastName().replaceAll("\\s+", ""));
+            user.setDob(appointmentDTO.getDob());
+            user.setGender(appointmentDTO.getGender());
             User newUser = userService.registerUser(user, "P@ssw0rd");
             appointment.setPatientId(newUser.getId().intValue());
         }

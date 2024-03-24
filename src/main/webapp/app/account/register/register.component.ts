@@ -7,12 +7,14 @@ import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/err
 import SharedModule from 'app/shared/shared.module';
 import PasswordStrengthBarComponent from '../password/password-strength-bar/password-strength-bar.component';
 import { RegisterService } from './register.service';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'jhi-register',
   standalone: true,
   imports: [SharedModule, RouterModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
   templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss'],
 })
 export default class RegisterComponent implements AfterViewInit {
   @ViewChild('login', { static: false })
@@ -23,6 +25,9 @@ export default class RegisterComponent implements AfterViewInit {
   errorEmailExists = false;
   errorUserExists = false;
   success = false;
+  currentPage = 1;
+  today: string = dayjs().format('YYYY-MM-DD');
+  genderList: string[] = ['Male', 'Female', 'Others'];
 
   registerForm = new FormGroup({
     login: new FormControl('', {
@@ -58,6 +63,14 @@ export default class RegisterComponent implements AfterViewInit {
       nonNullable: true,
       validators: [Validators.required, Validators.pattern('^[0-9]{1,8}$')],
     }),
+    dob: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    gender: new FormControl(undefined, {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
   });
 
   constructor(private registerService: RegisterService) {}
@@ -78,11 +91,15 @@ export default class RegisterComponent implements AfterViewInit {
     if (password !== confirmPassword) {
       this.doNotMatch = true;
     } else {
-      const { login, email, firstName, lastName, phoneNumber } = this.registerForm.getRawValue();
+      const { login, email, firstName, lastName, phoneNumber, dob, gender } = this.registerForm.getRawValue();
       this.registerService
-        .save({ login, email, password, langKey: 'en', firstName, lastName, phoneNumber })
+        .save({ login, email, password, langKey: 'en', firstName, lastName, phoneNumber, dob, gender })
         .subscribe({ next: () => (this.success = true), error: response => this.processError(response) });
     }
+  }
+
+  previousState(): void {
+    window.history.back();
   }
 
   private processError(response: HttpErrorResponse): void {

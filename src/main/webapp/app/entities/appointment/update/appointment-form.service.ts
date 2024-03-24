@@ -44,6 +44,8 @@ type AppointmentFormGroupContent = {
   email: FormControl<AppointmentFormRawValue['email']>;
   phoneNumber: FormControl<AppointmentFormRawValue['phoneNumber']>;
   // doctorId: FormControl<AppointmentFormRawValue['doctorId']>;
+  dob: FormControl<AppointmentFormRawValue['dob']>;
+  gender: FormControl<AppointmentFormRawValue['gender']>;
 };
 
 export type AppointmentFormGroup = FormGroup<AppointmentFormGroupContent>;
@@ -101,6 +103,12 @@ export class AppointmentFormService {
       // doctorId: new FormControl(appointmentRawValue.doctorId, {
       //   validators: [Validators.required],
       // }),
+      dob: new FormControl(appointmentRawValue.dob, {
+        validators: isNewPatient && isAdmin ? [Validators.required] : [],
+      }),
+      gender: new FormControl(appointmentRawValue.gender, {
+        validators: isNewPatient && isAdmin ? [Validators.required] : [],
+      }),
     });
   }
 
