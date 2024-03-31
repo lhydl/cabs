@@ -52,7 +52,7 @@ export class AppointmentComponent implements OnInit {
   ascending = true;
 
   allItems = 100000;
-  itemsPerPage = 10;
+  itemsPerPage = ITEMS_PER_PAGE;
   totalItems = 0;
   page = 1;
   account: Account | null = null;
@@ -284,7 +284,7 @@ export class AppointmentComponent implements OnInit {
 
   protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean): void {
     const queryParamsObj = {
-      page,
+      page: 1,
       size: this.allItems,
       sort: this.getSortQueryParam(predicate, ascending),
     };
