@@ -44,13 +44,15 @@ import { Dayjs } from 'dayjs';
 export class AppointmentComponent implements OnInit {
   appointments?: IAppointment[];
   filteredAppointments: IAppointment[] = [];
+  displayedAppointments: IAppointment[] = [];
   state: 'upcoming' | 'past' = 'upcoming';
   isLoading = false;
 
   predicate = 'id';
   ascending = true;
 
-  itemsPerPage = ITEMS_PER_PAGE;
+  allItems = 100000;
+  itemsPerPage = 10;
   totalItems = 0;
   page = 1;
   account: Account | null = null;
@@ -119,14 +121,15 @@ export class AppointmentComponent implements OnInit {
 
   filterAppointments() {
     const today = dayjs();
+    this.page = 1;
     if (this.appointments != null) {
-      if (!this.isAdmin) {
-        this.appointments = this.appointments.filter(appointment => appointment.patientId === this.account?.id);
-      }
+      // console.log('all:::' + this.appointments.length);
       if (this.state === 'upcoming') {
         this.filteredAppointments = this.appointments.filter(appointment => dayjs(appointment.apptDatetime).isAfter(today));
+        // console.log('upcoming:::' + this.filteredAppointments.length);
       } else {
         this.filteredAppointments = this.appointments.filter(appointment => dayjs(appointment.apptDatetime).isBefore(today));
+        // console.log('past:::' + this.filteredAppointments.length);
       }
 
       this.apptType = this.searchForm.value.apptType;
@@ -151,6 +154,8 @@ export class AppointmentComponent implements OnInit {
         this.filteredAppointments = this.filteredAppointments.filter(appointment => appointment.patientId?.toString() === patient?.id);
       }
     }
+
+    this.updatePagination();
   }
 
   delete(appointment: IAppointment): void {
@@ -170,16 +175,16 @@ export class AppointmentComponent implements OnInit {
   }
 
   load(): void {
-    // if (this.isAdmin) {
-    this.loadFromBackendWithRouteInformations().subscribe({
-      next: (res: EntityArrayResponseType) => {
-        this.onResponseSuccess(res);
-      },
-    });
-    this.getPatientMappings();
-    // } else {
-    //   this.loadUserAppt();
-    // }
+    if (this.isAdmin) {
+      this.loadFromBackendWithRouteInformations().subscribe({
+        next: (res: EntityArrayResponseType) => {
+          this.onResponseSuccess(res);
+        },
+      });
+      this.getPatientMappings();
+    } else {
+      this.loadUserAppt();
+    }
   }
 
   getPatientMappings(): void {
@@ -203,8 +208,22 @@ export class AppointmentComponent implements OnInit {
     this.handleNavigation(this.page, this.predicate, this.ascending);
   }
 
-  navigateToPage(page = this.page): void {
-    this.handleNavigation(page, this.predicate, this.ascending);
+  // navigateToPage(page = this.page): void {
+  //   this.handleNavigation(page, this.predicate, this.ascending);
+  // }
+
+  navigateToPage(page: number): void {
+    this.page = page;
+    // console.log('page:::' + this.page);
+    this.updatePagination();
+  }
+
+  updatePagination(): void {
+    this.totalItems = this.filteredAppointments.length;
+    const startIndex = (this.page - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.displayedAppointments = this.filteredAppointments.slice(startIndex, endIndex);
+    // console.log('display:::' + this.displayedAppointments.length);
   }
 
   loadUserAppt(): void {
@@ -237,6 +256,7 @@ export class AppointmentComponent implements OnInit {
     this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
     this.appointments = dataFromBody;
+    // console.log('appt::::' + this.appointments.length);
     this.filterAppointments();
   }
 
@@ -253,7 +273,7 @@ export class AppointmentComponent implements OnInit {
     const pageToLoad: number = page ?? 1;
     const queryObject: any = {
       page: pageToLoad - 1,
-      size: this.itemsPerPage,
+      size: this.allItems,
       sort: this.getSortQueryParam(predicate, ascending),
     };
     return this.appointmentService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
@@ -262,7 +282,7 @@ export class AppointmentComponent implements OnInit {
   protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean): void {
     const queryParamsObj = {
       page,
-      size: this.itemsPerPage,
+      size: this.allItems,
       sort: this.getSortQueryParam(predicate, ascending),
     };
 

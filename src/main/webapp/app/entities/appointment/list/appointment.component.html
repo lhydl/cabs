@@ -62,19 +62,19 @@
     <button type="submit" class="btn btn-primary btn-md">Search</button>
   </form>
 
-  @if (filteredAppointments.length === 0 && state === 'upcoming') {
+  @if (displayedAppointments.length === 0 && state === 'upcoming') {
     <div class="alert alert-warning" id="no-result">
       <span>No Upcoming Appointments Found</span>
     </div>
   }
 
-  @if (filteredAppointments.length === 0 && state === 'past') {
+  @if (displayedAppointments.length === 0 && state === 'past') {
     <div class="alert alert-warning" id="no-result">
       <span>No Past Appointments Found</span>
     </div>
   }
 
-  @if (filteredAppointments && filteredAppointments.length > 0) {
+  @if (displayedAppointments && displayedAppointments.length > 0) {
     <div class="table-responsive table-entities" id="entities">
       <table class="table table-striped" aria-describedby="page-heading">
         <thead>
@@ -121,7 +121,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (appointment of filteredAppointments; track trackId) {
+          @for (appointment of displayedAppointments; track trackId) {
             <tr data-cy="entityTable">
               <!-- <td>
                 <a [routerLink]="['/appointment', appointment.id, 'view']">{{ appointment.id }}</a>
