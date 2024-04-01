@@ -52,7 +52,7 @@ export class AppointmentComponent implements OnInit {
   ascending = true;
 
   allItems = 100000;
-  itemsPerPage = 10;
+  itemsPerPage = ITEMS_PER_PAGE;
   totalItems = 0;
   page = 1;
   account: Account | null = null;
@@ -123,6 +123,9 @@ export class AppointmentComponent implements OnInit {
     const today = dayjs();
     this.page = 1;
     if (this.appointments != null) {
+      if (!this.isAdmin) {
+        this.appointments = this.appointments.filter(appointment => appointment.patientId === this.account?.id);
+      }
       // console.log('all:::' + this.appointments.length);
       if (this.state === 'upcoming') {
         this.filteredAppointments = this.appointments.filter(appointment => dayjs(appointment.apptDatetime).isAfter(today));
@@ -175,16 +178,16 @@ export class AppointmentComponent implements OnInit {
   }
 
   load(): void {
-    if (this.isAdmin) {
-      this.loadFromBackendWithRouteInformations().subscribe({
-        next: (res: EntityArrayResponseType) => {
-          this.onResponseSuccess(res);
-        },
-      });
-      this.getPatientMappings();
-    } else {
-      this.loadUserAppt();
-    }
+    // if (this.isAdmin) {
+    this.loadFromBackendWithRouteInformations().subscribe({
+      next: (res: EntityArrayResponseType) => {
+        this.onResponseSuccess(res);
+      },
+    });
+    this.getPatientMappings();
+    // } else {
+    //   this.loadUserAppt();
+    // }
   }
 
   getPatientMappings(): void {
@@ -281,7 +284,7 @@ export class AppointmentComponent implements OnInit {
 
   protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean): void {
     const queryParamsObj = {
-      page,
+      page: 1,
       size: this.allItems,
       sort: this.getSortQueryParam(predicate, ascending),
     };

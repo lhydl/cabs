@@ -1149,6 +1149,15 @@
                                 </goals>
                             </execution>
                             <execution>
+                                <id>ng test</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>test</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
                                 <id>webapp build dev</id>
                                 <goals>
                                     <goal>npm</goal>
