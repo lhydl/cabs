@@ -26,4 +26,19 @@ module.exports = {
   testEnvironmentOptions: {
     url: 'https://jhipster.tech',
   },
+  testPathIgnorePatterns: [
+    // patient entity not used
+    '<rootDir>/src/main/webapp/app/entities/patient/list/patient.component.spec.ts',
+    '<rootDir>/src/main/webapp/app/entities/patient/delete/patient-delete-dialog.component.spec.ts',
+    '<rootDir>/src/main/webapp/app/entities/patient/detail/patient-detail.component.spec.ts',
+    '<rootDir>/src/main/webapp/app/entities/patient/route/patient-routing-resolve.service.spec.ts',
+    '<rootDir>/src/main/webapp/app/entities/patient/service/patient.service.spec.ts',
+    '<rootDir>/src/main/webapp/app/entities/patient/update/patient-update.component.spec.ts',
+    '<rootDir>/src/main/webapp/app/entities/patient/update/patient-form.service.spec.ts',
+    // page-ribbon not used
+    '<rootDir>/src/main/webapp/app/layouts/profiles/page-ribbon.component.spec.ts',
+
+    '<rootDir>/src/main/webapp/app/entities/appointment/update/appointment-form.service.spec.ts',
+    '<rootDir>/src/main/webapp/app/entities/appointment/detail/appointment-detail.component.spec.ts',
+  ],
 };
