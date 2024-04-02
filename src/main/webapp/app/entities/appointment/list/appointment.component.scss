@@ -45,3 +45,28 @@
   margin-left: 5px;
   /* Add some space before buttons if needed */
 }
+
+.btn-icon {
+  background-color: transparent; /* Transparent background */
+  display: flex; /* To center the icon */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  border: none; /* No border */
+}
+
+.btn-icon:focus {
+  outline: none; /* Remove focus outline */
+  box-shadow: none; /* Remove box-shadow */
+}
+
+.view-icon:hover {
+  color: teal;
+}
+
+.edit-icon:hover {
+  color: blue;
+}
+
+.delete-icon:hover {
+  color: red;
+}
