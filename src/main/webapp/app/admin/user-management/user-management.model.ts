@@ -12,7 +12,7 @@ export interface IUser {
   lastModifiedBy?: string;
   lastModifiedDate?: Date;
   phoneNumber?: string;
-  dob?: Date;
+  dob?: string;
   gender?: string;
 }
 
@@ -31,7 +31,7 @@ export class User implements IUser {
     public lastModifiedBy?: string,
     public lastModifiedDate?: Date,
     public phoneNumber?: string,
-    public dob?: Date,
+    public dob?: string,
     public gender?: string,
   ) {}
 }
