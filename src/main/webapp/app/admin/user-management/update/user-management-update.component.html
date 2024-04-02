@@ -1,17 +1,18 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="myUserLabel">Create or edit a user</h2>
+      <h2 id="myUserLabel" *ngIf="!editForm.value.id">Create New User</h2>
+      <h2 id="myUserLabel" *ngIf="editForm.value.id">Edit User</h2>
 
       <jhi-alert-error></jhi-alert-error>
 
-      <div class="mb-3" [hidden]="!editForm.value.id">
+      <!-- <div class="mb-3" [hidden]="!editForm.value.id">
         <label>ID</label>
         <input type="text" class="form-control" name="id" formControlName="id" readonly />
-      </div>
+      </div> -->
 
       <div class="mb-3">
-        <label class="form-label">Login</label>
+        <label class="form-label">Username</label>
         <input type="text" class="form-control" name="login" formControlName="login" />
 
         @if (editForm.get('login')!.invalid && (editForm.get('login')!.dirty || editForm.get('login')!.touched)) {
