@@ -70,3 +70,18 @@
 .delete-icon:hover {
   color: red;
 }
+
+.circle-ball {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px; /* Adjust as needed */
+}
+
+.green {
+  background-color: green;
+}
+.red {
+  background-color: red;
+}

@@ -18,6 +18,7 @@ public class AppointmentDTO implements Serializable {
     private String email;
     private Date dob;
     private String gender;
+    private Integer status;
 
     public AppointmentDTO() {
         // No-args constructor
@@ -119,6 +120,14 @@ public class AppointmentDTO implements Serializable {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
     // Optionally, override equals(), hashCode(), and toString() methods if needed.
 }

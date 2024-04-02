@@ -116,6 +116,12 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="status">
+              <div class="d-flex">
+                <span>Status</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <!-- <th scope="col" jhiSortBy="doctorId">
               <div class="d-flex">
                 <span>Doctor Id</span>
@@ -136,6 +142,7 @@
               <td>{{ appointment.apptDatetime | formatMediumDatetime }}</td>
               <td>{{ appointment.remarks }}</td>
               <td *jhiHasAnyAuthority="'ROLE_ADMIN'">{{ getPatientNameById(appointment.patientId) }}</td>
+              <td><div class="circle-ball" [ngClass]="getStatusColorClass(appointment.status)"></div></td>
               <!-- <td>{{ appointment.doctorId }}</td> -->
               <td class="text-end">
                 <!-- <div class="btn-group">

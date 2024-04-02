@@ -16,6 +16,7 @@ export interface IAppointment {
   phoneNumber?: string | null;
   dob?: Date | null;
   gender?: string | null;
+  status?: number | null;
 }
 
 export class PatientDetailsDTO {
