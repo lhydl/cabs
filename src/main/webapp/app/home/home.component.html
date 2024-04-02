@@ -12,7 +12,7 @@
         @if (account !== null) {
           <div class="alert alert-success">
             @if (account) {
-              <span id="home-logged-message">You are logged in as user &quot;{{ account.login }}&quot;.</span>
+              <span id="home-logged-message">Hi {{ account.firstName }}!</span>
             }
           </div>
         } @else {

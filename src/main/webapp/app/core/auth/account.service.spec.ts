@@ -22,6 +22,10 @@ function accountWithAuthorities(authorities: string[]): Account {
     lastName: '',
     login: '',
     imageUrl: '',
+    phoneNumber: '',
+    id: null,
+    dob: 'InvalidDate',
+    gender: '',
   };
 }
 

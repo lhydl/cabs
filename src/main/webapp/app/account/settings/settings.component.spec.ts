@@ -23,6 +23,10 @@ describe('SettingsComponent', () => {
     login: 'john',
     authorities: [],
     imageUrl: '',
+    phoneNumber: '',
+    id: null,
+    dob: 'Invalid Date',
+    gender: '',
   };
 
   beforeEach(waitForAsync(() => {

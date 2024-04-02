@@ -15,7 +15,7 @@ describe('Appointment Form Service', () => {
   describe('Service methods', () => {
     describe('createAppointmentFormGroup', () => {
       it('should create a new form with FormControl', () => {
-        const formGroup = service.createAppointmentFormGroup();
+        const formGroup = service.createAppointmentFormGroup(undefined, false, false);
 
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
@@ -30,7 +30,7 @@ describe('Appointment Form Service', () => {
       });
 
       it('passing IAppointment should create a new form with FormGroup', () => {
-        const formGroup = service.createAppointmentFormGroup(sampleWithRequiredData);
+        const formGroup = service.createAppointmentFormGroup(sampleWithRequiredData, false, false);
 
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
@@ -47,7 +47,7 @@ describe('Appointment Form Service', () => {
 
     describe('getAppointment', () => {
       it('should return NewAppointment for default Appointment initial value', () => {
-        const formGroup = service.createAppointmentFormGroup(sampleWithNewData);
+        const formGroup = service.createAppointmentFormGroup(sampleWithNewData, false, false);
 
         const appointment = service.getAppointment(formGroup) as any;
 
@@ -55,7 +55,7 @@ describe('Appointment Form Service', () => {
       });
 
       it('should return NewAppointment for empty Appointment initial value', () => {
-        const formGroup = service.createAppointmentFormGroup();
+        const formGroup = service.createAppointmentFormGroup(undefined, false, false);
 
         const appointment = service.getAppointment(formGroup) as any;
 
@@ -63,7 +63,7 @@ describe('Appointment Form Service', () => {
       });
 
       it('should return IAppointment', () => {
-        const formGroup = service.createAppointmentFormGroup(sampleWithRequiredData);
+        const formGroup = service.createAppointmentFormGroup(sampleWithRequiredData, false, false);
 
         const appointment = service.getAppointment(formGroup) as any;
 
@@ -73,7 +73,7 @@ describe('Appointment Form Service', () => {
 
     describe('resetForm', () => {
       it('passing IAppointment should not enable id FormControl', () => {
-        const formGroup = service.createAppointmentFormGroup();
+        const formGroup = service.createAppointmentFormGroup(undefined, false, false);
         expect(formGroup.controls.id.disabled).toBe(true);
 
         service.resetForm(formGroup, sampleWithRequiredData);
@@ -82,7 +82,7 @@ describe('Appointment Form Service', () => {
       });
 
       it('passing NewAppointment should disable id FormControl', () => {
-        const formGroup = service.createAppointmentFormGroup(sampleWithRequiredData);
+        const formGroup = service.createAppointmentFormGroup(sampleWithRequiredData, false, false);
         expect(formGroup.controls.id.disabled).toBe(true);
 
         service.resetForm(formGroup, { id: null });

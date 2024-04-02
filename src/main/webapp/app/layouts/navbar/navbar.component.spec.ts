@@ -27,6 +27,9 @@ describe('Navbar Component', () => {
     lastName: 'Doe',
     login: 'john.doe',
     imageUrl: '',
+    phoneNumber: '',
+    id: null,
+    dob: '',
   };
 
   beforeEach(waitForAsync(() => {

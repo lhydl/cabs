@@ -9,7 +9,7 @@ import dayjs from 'dayjs/esm';
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { IAppointment, NewAppointment } from '../appointment.model';
+import { IAppointment, NewAppointment, PatientDetailsDTO, PatientMappingsDTO } from '../appointment.model';
 
 export type PartialUpdateAppointment = Partial<IAppointment> & Pick<IAppointment, 'id'>;
 
@@ -89,6 +89,14 @@ export class AppointmentService {
 
   getExistingTimeSlots(params: HttpParams): Observable<string[]> {
     return this.http.get<string[]>(`${this.resourceUrl}/getTime`, { params });
+  }
+
+  getPatientDetails(params: HttpParams): Observable<PatientDetailsDTO> {
+    return this.http.get<PatientDetailsDTO>(`${this.resourceUrl}/getPatientDetails`, { params });
+  }
+
+  getPatientMappings(): Observable<PatientMappingsDTO[]> {
+    return this.http.get<PatientMappingsDTO[]>(`${this.resourceUrl}/getPatientMappings`);
   }
 
   addAppointmentToCollectionIfMissing<Type extends Pick<IAppointment, 'id'>>(

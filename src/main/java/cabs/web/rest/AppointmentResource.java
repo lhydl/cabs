@@ -3,16 +3,18 @@ package cabs.web.rest;
 import cabs.domain.Appointment;
 import cabs.domain.User;
 import cabs.repository.AppointmentRepository;
+import cabs.repository.AppointmentRepository.PatientDetailsProjection;
+import cabs.repository.AppointmentRepository.PatientMappingsProjection;
 import cabs.service.AppointmentService;
 import cabs.service.UserService;
 import cabs.service.dto.AdminUserDTO;
 import cabs.service.dto.AppointmentDTO;
+import cabs.service.dto.PatientDetailsDTO;
 import cabs.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -89,6 +91,8 @@ public class AppointmentResource {
             user.setPhoneNumber(appointmentDTO.getPhoneNumber());
             user.setEmail(appointmentDTO.getEmail());
             user.setLogin(appointmentDTO.getFirstName().replaceAll("\\s+", "") + appointmentDTO.getLastName().replaceAll("\\s+", ""));
+            user.setDob(appointmentDTO.getDob());
+            user.setGender(appointmentDTO.getGender());
             User newUser = userService.registerUser(user, "P@ssw0rd");
             appointment.setPatientId(newUser.getId().intValue());
         }
@@ -220,5 +224,15 @@ public class AppointmentResource {
     @GetMapping("/getTime")
     public List<String> getExistingTimeSlots(@RequestParam(value = "selectedDate") String selectedDate) {
         return appointmentService.getExistingTimeSlots(selectedDate);
+    }
+
+    @GetMapping("/getPatientDetails")
+    public PatientDetailsProjection getPatientDetails(@RequestParam(value = "userId") String userId) {
+        return appointmentService.getPatientDetails(Long.parseLong(userId));
+    }
+
+    @GetMapping("/getPatientMappings")
+    public List<PatientMappingsProjection> getPatientMappings() {
+        return appointmentService.getPatientMappings();
     }
 }

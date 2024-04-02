@@ -31,7 +31,12 @@ describe('RegisterService Service', () => {
       const email = 'test@test.com';
       const password = 'pass';
       const langKey = 'FR';
-      const registration = new Registration(login, email, password, langKey);
+      const firstName = 'test';
+      const lastName = 'test';
+      const phoneNumber = '88888888';
+      const dob = '2000-01-01';
+      const gender = 'Others';
+      const registration = new Registration(login, email, password, langKey, firstName, lastName, phoneNumber, dob, gender);
 
       // WHEN
       service.save(registration).subscribe();
@@ -42,7 +47,7 @@ describe('RegisterService Service', () => {
       });
 
       // THEN
-      expect(testRequest.request.body).toEqual({ email, langKey, login, password });
+      expect(testRequest.request.body).toEqual({ email, langKey, login, password, firstName, lastName, phoneNumber, dob, gender });
     });
   });
 });

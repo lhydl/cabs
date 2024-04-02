@@ -2,6 +2,7 @@ package cabs.repository;
 
 import cabs.domain.Appointment;
 import cabs.domain.User;
+import cabs.service.dto.PatientDetailsDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -36,4 +37,33 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Modifying
     @Query(value = " DELETE FROM " + "     cabs.appointment A " + " where " + "     A.patient_id = :userId ", nativeQuery = true)
     void deleteUserAppointments(@Param("userId") Integer userId);
+
+    // @Query(
+    //     "SELECT new cabs.service.dto.PatientDetailsDTO(u.firstName, u.lastName, u.email, u.phoneNumber) FROM User u WHERE u.id = :userId"
+    // )
+    // PatientDetailsDTO getPatientDetails(@Param("userId") Long userId);
+
+    public interface PatientDetailsProjection {
+        String getFirstName();
+        String getLastName();
+        String getEmail();
+        String getPhoneNumber();
+        String getDob();
+        String getGender();
+    }
+
+    @Query(
+        value = "SELECT U.first_name AS firstName, U.last_name AS lastName, U.email AS email, U.phone_number AS phoneNumber, U.dob AS dob, U.gender AS gender FROM cabs.jhi_user U WHERE U.id = :userId",
+        nativeQuery = true
+    )
+    PatientDetailsProjection getPatientDetails(@Param("userId") Long userId);
+
+    public interface PatientMappingsProjection {
+        String getId();
+        String getFirstName();
+        String getLastName();
+    }
+
+    @Query(value = "SELECT U.id AS id, U.first_name AS firstName, U.last_name AS lastName FROM cabs.jhi_user U", nativeQuery = true)
+    List<PatientMappingsProjection> getPatientMappings();
 }
