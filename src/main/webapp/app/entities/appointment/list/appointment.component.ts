@@ -62,6 +62,10 @@ export class AppointmentComponent implements OnInit {
   searchForm!: UntypedFormGroup;
   apptTypeList: string[] = ['Consultation', 'Urgent Care', 'Dental', 'Pharmacy'];
   apptType: string | null = null;
+  statusColors: { [key: number]: string } = {
+    0: 'green',
+    1: 'red',
+  };
 
   private readonly destroy$ = new Subject<void>();
 
@@ -123,9 +127,9 @@ export class AppointmentComponent implements OnInit {
     const today = dayjs();
     this.page = 1;
     if (this.appointments != null) {
-      if (!this.isAdmin) {
-        this.appointments = this.appointments.filter(appointment => appointment.patientId === this.account?.id);
-      }
+      // if (!this.isAdmin) {
+      //   this.appointments = this.appointments.filter(appointment => appointment.patientId === this.account?.id);
+      // }
       // console.log('all:::' + this.appointments.length);
       if (this.state === 'upcoming') {
         this.filteredAppointments = this.appointments.filter(appointment => dayjs(appointment.apptDatetime).isAfter(today));
@@ -178,16 +182,16 @@ export class AppointmentComponent implements OnInit {
   }
 
   load(): void {
-    // if (this.isAdmin) {
-    this.loadFromBackendWithRouteInformations().subscribe({
-      next: (res: EntityArrayResponseType) => {
-        this.onResponseSuccess(res);
-      },
-    });
-    this.getPatientMappings();
-    // } else {
-    //   this.loadUserAppt();
-    // }
+    if (this.isAdmin) {
+      this.loadFromBackendWithRouteInformations().subscribe({
+        next: (res: EntityArrayResponseType) => {
+          this.onResponseSuccess(res);
+        },
+      });
+      this.getPatientMappings();
+    } else {
+      this.loadUserAppt('appt_datetime', 'ASC');
+    }
   }
 
   getPatientMappings(): void {
@@ -229,15 +233,22 @@ export class AppointmentComponent implements OnInit {
     // console.log('display:::' + this.displayedAppointments.length);
   }
 
-  loadUserAppt(): void {
+  loadUserAppt(predicate: string, sort: string): void {
     const userId = this.account?.id;
     let params = new HttpParams();
     if (userId !== null && userId !== undefined) {
-      params = new HttpParams().set('userId', userId);
+      params = new HttpParams().set('userId', userId).set('predicate', predicate).set('sort', sort);
     }
     this.appointmentService.getUserAppt(params).subscribe(res => {
       this.onResponseSuccess(res);
     });
+  }
+
+  getStatusColorClass(status: number | null | undefined): string {
+    if (status === null || status === undefined) {
+      return '';
+    }
+    return this.statusColors[status] || '';
   }
 
   protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
@@ -289,10 +300,28 @@ export class AppointmentComponent implements OnInit {
       sort: this.getSortQueryParam(predicate, ascending),
     };
 
-    this.router.navigate(['./'], {
-      relativeTo: this.activatedRoute,
-      queryParams: queryParamsObj,
-    });
+    if (this.isAdmin) {
+      this.router.navigate(['./'], {
+        relativeTo: this.activatedRoute,
+        queryParams: queryParamsObj,
+      });
+    } else {
+      let sort = 'ASC';
+      let pred = 'appt_datetime';
+      if (ascending === false) {
+        sort = 'DESC';
+      }
+      if (predicate === 'apptType') {
+        pred = 'appt_type';
+      } else if (predicate === 'apptDatetime') {
+        pred = 'appt_datetime';
+      } else if (predicate === 'remarks') {
+        pred = 'remarks';
+      } else if (predicate === 'status') {
+        pred = 'status';
+      }
+      this.loadUserAppt(pred, sort);
+    }
   }
 
   protected getSortQueryParam(predicate = this.predicate, ascending = this.ascending): string[] {

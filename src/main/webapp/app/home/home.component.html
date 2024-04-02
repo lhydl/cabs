@@ -1,30 +1,49 @@
 <div class="row">
-  <div class="col-md-3">
-    <span class="hipster img-fluid rounded"></span>
-  </div>
-  <div class="col-md-9">
+  @if (account !== null) {
+    @if (account) {
+      <div class="col-md-2">
+        <span class="hipster img-fluid rounded"></span>
+      </div>
+    }
+  } @else {
+    <div class="col-md-3">
+      <span class="hipster img-fluid rounded"></span>
+    </div>
+  }
+
+  <div class="col-md-6">
     <div class="content">
       <div class="background-box">
-        <h1 class="display-4"><span>Welcome to CABS!</span></h1>
+        @if (account !== null) {
+          @if (account) {
+            <h1 id="home-logged-message" class="display-4">
+              Welcome, <span class="fw-bold text-primary">{{ account.firstName }}</span
+              >!
+            </h1>
+          }
+        } @else {
+          <h1 class="display-4 pl-5"><span>Welcome to CABS!</span></h1>
+        }
         <p class="lead">Book <b>same-day</b> appointments at our clinics up to <b>an hour</b> in advance.</p>
       </div>
-      <div>
+
+      <!-- <div>
         @if (account !== null) {
-          <div class="alert alert-success">
-            @if (account) {
-              <span id="home-logged-message">Hi {{ account.firstName }}!</span>
-            }
-          </div>
+        <div class="alert alert-success">
+          @if (account) {
+          <span id="home-logged-message">Hi {{ account.firstName }}!</span>
+          }
+        </div>
         } @else {
-          <!-- <div class="alert alert-warning">
+        <div class="alert alert-warning">
             <span>If you want to </span>
             <a class="alert-link" (click)="login()">sign in</a
             ><span
               >, you can try the default accounts:<br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;) <br />- User
               (login=&quot;user&quot; and password=&quot;user&quot;).</span
             >
-          </div> -->
-          <div class="alert alert-warning">
+          </div>
+        <div class="alert alert-warning">
             <span>To use the app,</span>&nbsp;
             <a class="alert-link" routerLink="/login">Please sign in here!</a>
           </div>
@@ -33,9 +52,51 @@
             <a class="alert-link" routerLink="/account/register">Register a new account</a>
           </div>
         }
+      </div> -->
+      <div class="actions-div">
+        <button type="submit" [routerLink]="['/appointment/new']" class="book-appointment custom-button px-5">
+          <!-- <img src="content/images/appointment.svg" class="book-appointment" alt="book-appointment"/> -->
+          <span class="pt-3">Book Appointment</span>
+        </button>
+        <button [routerLink]="['/appointment']" class="view-appointment custom-button px-5">
+          <span class="pt-3">View Appointments</span>
+        </button>
+
+        <!-- <button type="submit" class="btn btn-primary custom-button book-appointment" [routerLink]="['/appointment/new']">
+          <span class="fw-bold text-dark">Book Appointment</span>
+        </button>
+        <button type="submit" class="btn btn-primary custom-button view-appointment" [routerLink]="['/appointment']">
+          <span class="fw-bold text-dark">View Appointments</span>
+        </button> -->
       </div>
     </div>
   </div>
+
+  @if (account != null) {
+    @if (account) {
+      <div class="col-md-3 queue-section">
+        <h2 class="fw-bold">Queue</h2>
+        <br />
+        <div class="current-queue">
+          <span>Currently Serving: </span>
+          <h3 class="q-number">1234</h3>
+        </div>
+        <br />
+        <div class="next-queue">
+          <span>Next Queue No: </span>
+          <h3 class="q-number">2345</h3>
+        </div>
+        <br />
+        <div class="your-queue">
+          <span>Your Q No.: </span>
+          <h3 class="q-number">3333</h3>
+          <span>People before you: </span>
+          <h4 class="text-danger fw-bold">2</h4>
+        </div>
+        <div class="p-2 fst-italic">Last updated at 2/4/2024 5:30:45 pm</div>
+      </div>
+    }
+  }
 
   <!-- <p>If you have any question on JHipster:</p>
 
@@ -60,13 +121,13 @@
       <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">GitHub</a>!
     </p> -->
 </div>
-<div class="row2">
+<!-- <div class="row2">
   <div class="ButtonDiv">
     <button type="submit" class="btn btn-primary custom-button book-appointment" [routerLink]="['/appointment/new']">
-      <b>Book Appointment</b>
+      <span class="fw-bold text-dark">Book Appointment</span>
     </button>
     <button type="submit" class="btn btn-primary custom-button view-appointment" [routerLink]="['/appointment']">
-      <b>View Appointments</b>
+      <span class="fw-bold text-dark">View Appointments</span>
     </button>
   </div>
-</div>
+</div> -->

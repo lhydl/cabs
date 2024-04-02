@@ -43,6 +43,9 @@ public class Appointment implements Serializable {
     @Column(name = "doctor_id", nullable = true)
     private Integer doctorId;
 
+    @Column(name = "status", nullable = true)
+    private Integer status = 0;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -123,6 +126,19 @@ public class Appointment implements Serializable {
         this.doctorId = doctorId;
     }
 
+    public Integer getStatus() {
+        return this.status;
+    }
+
+    public Appointment status(Integer status) {
+        this.setStatus(status);
+        return this;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -152,6 +168,7 @@ public class Appointment implements Serializable {
             ", remarks='" + getRemarks() + "'" +
             ", patientId=" + getPatientId() +
             ", doctorId=" + getDoctorId() +
+            ", status=" + getStatus() +
             "}";
     }
 }

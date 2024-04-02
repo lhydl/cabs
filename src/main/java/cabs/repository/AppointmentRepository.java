@@ -18,12 +18,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
     @Query(
-        value = " SELECT " + "     * " + " FROM " + "     cabs.appointment A" + " WHERE " + "     A.patient_id = :userId ",
-        nativeQuery = true
-    )
-    List<Appointment> getUserAppt(@Param("userId") Integer userId);
-
-    @Query(
         value = " SELECT " +
         "     appt_datetime " +
         " FROM " +

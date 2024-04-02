@@ -1,17 +1,18 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="myUserLabel">Create or edit a user</h2>
+      <h2 id="myUserLabel" *ngIf="!editForm.value.id">Create New User</h2>
+      <h2 id="myUserLabel" *ngIf="editForm.value.id">Edit User</h2>
 
       <jhi-alert-error></jhi-alert-error>
 
-      <div class="mb-3" [hidden]="!editForm.value.id">
+      <!-- <div class="mb-3" [hidden]="!editForm.value.id">
         <label>ID</label>
         <input type="text" class="form-control" name="id" formControlName="id" readonly />
-      </div>
+      </div> -->
 
       <div class="mb-3">
-        <label class="form-label">Login</label>
+        <label class="form-label">Username</label>
         <input type="text" class="form-control" name="login" formControlName="login" />
 
         @if (editForm.get('login')!.invalid && (editForm.get('login')!.dirty || editForm.get('login')!.touched)) {
@@ -52,6 +53,56 @@
           <div>
             @if (editForm.get('lastName')?.errors?.maxlength) {
               <small class="form-text text-danger">This field cannot be longer than 50 characters.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="dob">Date of Birth</label>
+        <input id="dob" data-cy="dob" type="date" class="form-control" name="dob" formControlName="dob" [max]="today" />
+        @if (editForm.get('dob')!.invalid && (editForm.get('dob')!.dirty || editForm.get('dob')!.touched)) {
+          <div>
+            @if (editForm.get('dob')?.errors?.required) {
+              <small class="form-text text-danger">Date of birth is required.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="gender">Gender</label>
+        <ng-select class="custom-select" id="gender" data-cy="gender" formControlName="gender" placeholder="Select gender">
+          <ng-option *ngFor="let gender of genderList" [value]="gender">{{ gender }}</ng-option>
+        </ng-select>
+        @if (editForm.get('gender')!.invalid && (editForm.get('gender')!.dirty || editForm.get('gender')!.touched)) {
+          <div>
+            @if (editForm.get('gender')?.errors?.required) {
+              <small class="form-text text-danger">Gender is required.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="phoneNumber">Phone number</label>
+        <input
+          type="phoneNumber"
+          class="form-control"
+          id="phoneNumber"
+          name="phoneNumber"
+          placeholder="Enter phone number"
+          formControlName="phoneNumber"
+          data-cy="phoneNumber"
+          maxlength="8"
+        />
+        @if (editForm.get('phoneNumber')!.invalid && (editForm.get('phoneNumber')!.dirty || editForm.get('phoneNumber')!.touched)) {
+          <div>
+            @if (editForm.get('phoneNumber')?.errors?.required) {
+              <small class="form-text text-danger">Phone number is required.</small>
+            }
+            @if (editForm.get('phoneNumber')?.errors?.pattern) {
+              <small class="form-text text-danger">Your phone number is invalid.</small>
             }
           </div>
         }

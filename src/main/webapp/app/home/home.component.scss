@@ -25,6 +25,7 @@ Main page styles
   flex-direction: column;
   justify-content: center;
   height: 100%;
+  min-height: 550px;
 }
 
 @media (min-width: 768px) {
@@ -43,50 +44,106 @@ Main page styles
   justify-content: center;
   align-items: center;
 }
-.ButtonDiv {
+.actions-div {
   padding: 10px;
   position: relative;
   display: flex;
-  justify-content: space-around;
-  background-color: none;
-  height: 100%;
-  width: 50%;
-  min-width: 500px;
+  justify-content: space-evenly;
+  // align-items: center;
+  // height: 60%;
+  width: 100%;
+  // min-width: 500px;
 }
 button {
-  background-color: #616d7c;
+  // background-color: white;
+  height: 200px;
+  width: fit-content;
   border: none;
-  outline: 2px solid black;
+  border-radius: 15px;
+  padding: 10px;
+  // outline: 2px solid black;
 }
+
 button:hover {
-  background-color: #41454b;
+  background-color: #dfdfdf;
 }
+
 .custom-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-repeat: no-repeat;
+  // background-repeat: no-repeat;
   background-position: center;
-  padding-left: 40px;
-  width: 20%;
-  min-width: 200px;
-  min-height: 10vh;
-  padding: 10px 30px;
-  padding-top: 15vh;
-  margin: 0 auto;
+  // padding-left: 40px;
+  // width: 20%;
+  // min-width: 200px;
+  // min-height: 10vh;
+  // padding: 10px 30px;
+  padding-top: 8em;
+  // margin: 0 auto;
+  background: none;
 }
 .custom-button b {
   white-space: nowrap;
 }
+
 .book-appointment {
-  background-image: url('../../content/images/bookAppointment.png');
-  background-size: 10vh;
+  background-image: url('../../content/images/calendar-svg.svg');
+  background-size: 100px;
   background-repeat: no-repeat;
   background-position: center;
+  // background-position-y: 8px;
+  // cursor: pointer;
+  // width: 200px;
+  // height: 150px;
 }
 .view-appointment {
-  background-image: url('../../content/images/listIcon.png');
-  background-size: 10vh;
+  background-image: url('../../content/images/view-svg.svg');
+  background-size: 120px;
   background-repeat: no-repeat;
-  background-position: center 45%;
+  background-position: center;
+  // cursor: pointer;
+  // width: 200px;
+  // height: 150px;
+}
+
+.queue-section {
+  // padding-top: 10px;
+  padding-left: 40px;
+  border-left: 1px solid #ccc; // vertical divider
+  height: 550px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.q-number {
+  font-weight: bold;
+  color: blue;
+}
+
+.current-queue {
+  height: 100px;
+  width: 350px;
+  padding-top: 1em;
+  padding-left: 1em;
+  border: 3px solid #ccc;
+  border-radius: 10px;
+}
+
+.next-queue {
+  height: 100px;
+  width: 350px;
+  padding-top: 1em;
+  padding-left: 1em;
+  border: 3px solid #ccc;
+  border-radius: 10px;
+}
+
+.your-queue {
+  height: 150px;
+  width: 350px;
+  padding-top: 1em;
+  padding-left: 1em;
+  border: 3px solid #ccc;
+  border-radius: 10px;
 }

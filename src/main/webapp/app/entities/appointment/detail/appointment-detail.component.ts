@@ -7,6 +7,7 @@ import { IAppointment, PatientDetailsDTO } from '../appointment.model';
 import { HttpParams } from '@angular/common/http';
 import { IUser, User } from 'app/entities/user/user.model';
 import { AppointmentService } from '../service/appointment.service';
+import dayjs from 'dayjs';
 
 @Component({
   standalone: true,
@@ -17,6 +18,7 @@ import { AppointmentService } from '../service/appointment.service';
 export class AppointmentDetailComponent {
   @Input() appointment: IAppointment | null = null;
   patientDetails: PatientDetailsDTO | null = null;
+  formattedDob: string | null = null;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -35,6 +37,7 @@ export class AppointmentDetailComponent {
     this.appointmentService.getPatientDetails(params).subscribe((res: any) => {
       if (res) {
         this.patientDetails = res;
+        this.formattedDob = dayjs(this.patientDetails?.dob).format('DD MMM YYYY');
       }
     });
   }

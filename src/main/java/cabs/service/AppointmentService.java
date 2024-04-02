@@ -60,7 +60,7 @@ public interface AppointmentService {
      */
     void delete(Long id);
 
-    public List<Appointment> getUserAppt(String userId);
+    public List<Appointment> getUserAppt(String userId, String predicate, String sort);
 
     public List<String> getExistingTimeSlots(String selectedDate);
 

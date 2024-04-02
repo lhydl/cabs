@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import SharedModule from 'app/shared/shared.module';
 import { IUser } from '../user-management.model';
 import { UserManagementService } from '../service/user-management.service';
+import dayjs from 'dayjs';
 
 const userTemplate = {} as IUser;
 
@@ -16,11 +17,14 @@ const newUser: IUser = {
   standalone: true,
   selector: 'jhi-user-mgmt-update',
   templateUrl: './user-management-update.component.html',
+  styleUrl: './user-management-update.component.scss',
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export default class UserManagementUpdateComponent implements OnInit {
   authorities: string[] = [];
   isSaving = false;
+  today: string = dayjs().format('YYYY-MM-DD');
+  genderList: string[] = ['Male', 'Female', 'Others'];
 
   editForm = new FormGroup({
     id: new FormControl(userTemplate.id),
@@ -35,6 +39,18 @@ export default class UserManagementUpdateComponent implements OnInit {
     }),
     firstName: new FormControl(userTemplate.firstName, { validators: [Validators.maxLength(50)] }),
     lastName: new FormControl(userTemplate.lastName, { validators: [Validators.maxLength(50)] }),
+    phoneNumber: new FormControl(userTemplate.phoneNumber, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.pattern('^[0-9]{1,8}$')],
+    }),
+    dob: new FormControl(userTemplate.dob, {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    gender: new FormControl(userTemplate.gender, {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
     email: new FormControl(userTemplate.email, {
       nonNullable: true,
       validators: [Validators.minLength(5), Validators.maxLength(254), Validators.email],
@@ -52,6 +68,9 @@ export default class UserManagementUpdateComponent implements OnInit {
     this.route.data.subscribe(({ user }) => {
       if (user) {
         this.editForm.reset(user);
+        this.editForm.patchValue({
+          dob: dayjs(user.dob).format('YYYY-MM-DD'),
+        });
       } else {
         this.editForm.reset(newUser);
       }
