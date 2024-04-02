@@ -4,7 +4,7 @@
     <div class="d-flex justify-content-end">
       <button *jhiHasAnyAuthority="'ROLE_ADMIN'" class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span>Refresh list</span>
+        <span>Refresh List</span>
       </button>
 
       <button
@@ -14,7 +14,7 @@
         [routerLink]="['/appointment/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span>Book a new Appointment</span>
+        <span>Book New Appointment</span>
       </button>
     </div>
   </h2>
@@ -58,8 +58,14 @@
     <div class="field-container" *jhiHasAnyAuthority="'ROLE_ADMIN'">
       <input class="form-control" id="patientName" type="text" placeholder="Enter Patient Name" formControlName="patientName" />
     </div>
-    <button type="button" (click)="clearSearch()" class="btn btn-light btn-md">Clear</button>
-    <button type="submit" class="btn btn-primary btn-md">Search</button>
+    <button type="button" (click)="clearSearch()" class="btn btn-light btn-md">
+      <!-- <fa-icon icon="times" class="p-1"></fa-icon> -->
+      <span>Clear</span>
+    </button>
+    <button type="submit" class="btn btn-primary btn-md">
+      <!-- <fa-icon icon="search" class="p-1"></fa-icon> -->
+      <span>Search</span>
+    </button>
   </form>
 
   @if (displayedAppointments.length === 0 && state === 'upcoming') {
@@ -132,7 +138,7 @@
               <td *jhiHasAnyAuthority="'ROLE_ADMIN'">{{ getPatientNameById(appointment.patientId) }}</td>
               <!-- <td>{{ appointment.doctorId }}</td> -->
               <td class="text-end">
-                <div class="btn-group">
+                <!-- <div class="btn-group">
                   <a
                     *jhiHasAnyAuthority="'ROLE_ADMIN'"
                     [routerLink]="['/appointment', appointment.id, 'view']"
@@ -155,6 +161,36 @@
                   <button type="submit" (click)="delete(appointment)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                     <fa-icon icon="times"></fa-icon>
                     <span class="d-none d-md-inline">Delete</span>
+                  </button>
+                </div> -->
+                <div class="btn-group">
+                  <a
+                    *jhiHasAnyAuthority="'ROLE_ADMIN'"
+                    [routerLink]="['/appointment', appointment.id, 'view']"
+                    class="btn btn-icon btn-sm view-icon"
+                    data-cy="entityDetailsButton"
+                    [ngbTooltip]="'View Details'"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                  </a>
+                  <a
+                    *ngIf="state !== 'past'"
+                    [routerLink]="['/appointment', appointment.id, 'edit']"
+                    class="btn btn-icon btn-sm edit-icon"
+                    data-cy="entityEditButton"
+                    [ngbTooltip]="'Edit'"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                  </a>
+
+                  <button
+                    type="submit"
+                    (click)="delete(appointment)"
+                    class="btn btn-icon btn-sm delete-icon"
+                    data-cy="entityDeleteButton"
+                    [ngbTooltip]="'Delete'"
+                  >
+                    <fa-icon icon="trash-alt"></fa-icon>
                   </button>
                 </div>
               </td>
