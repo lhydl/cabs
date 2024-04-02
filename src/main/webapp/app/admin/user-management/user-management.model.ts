@@ -11,6 +11,9 @@ export interface IUser {
   createdDate?: Date;
   lastModifiedBy?: string;
   lastModifiedDate?: Date;
+  phoneNumber?: string;
+  dob?: Date;
+  gender?: string;
 }
 
 export class User implements IUser {
@@ -27,5 +30,8 @@ export class User implements IUser {
     public createdDate?: Date,
     public lastModifiedBy?: string,
     public lastModifiedDate?: Date,
+    public phoneNumber?: string,
+    public dob?: Date,
+    public gender?: string,
   ) {}
 }
