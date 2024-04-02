@@ -108,8 +108,42 @@ button:hover {
 }
 
 .queue-section {
-  padding: 20px;
+  // padding-top: 10px;
+  padding-left: 40px;
   border-left: 1px solid #ccc; // vertical divider
-  height: fit-content;
+  height: 550px;
   align-items: flex-start;
+  justify-content: center;
+}
+
+.q-number {
+  font-weight: bold;
+  color: blue;
+}
+
+.current-queue {
+  height: 100px;
+  width: 350px;
+  padding-top: 1em;
+  padding-left: 1em;
+  border: 3px solid #ccc;
+  border-radius: 10px;
+}
+
+.next-queue {
+  height: 100px;
+  width: 350px;
+  padding-top: 1em;
+  padding-left: 1em;
+  border: 3px solid #ccc;
+  border-radius: 10px;
+}
+
+.your-queue {
+  height: 150px;
+  width: 350px;
+  padding-top: 1em;
+  padding-left: 1em;
+  border: 3px solid #ccc;
+  border-radius: 10px;
 }

@@ -75,17 +75,23 @@
   @if (account != null) {
     @if (account) {
       <div class="col-md-3 queue-section">
-        <h2>Queue</h2>
+        <h2 class="fw-bold">Queue</h2>
+        <br />
         <div class="current-queue">
-          <span>Queue No: 1</span>
-          <span>Progress</span>
+          <span>Currently Serving: </span>
+          <h3 class="q-number">1234</h3>
         </div>
+        <br />
         <div class="next-queue">
-          <span>Queue No: 1</span>
+          <span>Next Queue No: </span>
+          <h3 class="q-number">2345</h3>
         </div>
-        <mat-divider></mat-divider>
+        <br />
         <div class="your-queue">
-          <span>People before you: 3</span>
+          <span>Your Q No.: </span>
+          <h3 class="q-number">3333</h3>
+          <span>People before you: </span>
+          <h4 class="text-danger fw-bold">2</h4>
         </div>
       </div>
     }
