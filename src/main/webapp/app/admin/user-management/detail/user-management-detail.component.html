@@ -3,12 +3,35 @@
     @if (user) {
       <div>
         <h2>
-          <span>User</span> [<strong>{{ user.login }}</strong
-          >]
+          <span>User: </span> <strong>{{ user.login }}</strong>
         </h2>
 
         <dl class="row-md jh-entity-details">
-          <dt><span>Login</span></dt>
+          <dt><h4>Personal Details</h4></dt>
+          <br />
+
+          <dt><span>First name</span></dt>
+          <dd>{{ user.firstName }}</dd>
+
+          <dt><span>Last name</span></dt>
+          <dd>{{ user.lastName }}</dd>
+
+          <dt><span>Date of Birth</span></dt>
+          <dd>{{ formattedDob }}</dd>
+
+          <dt><span>Gender</span></dt>
+          <dd>{{ user.gender }}</dd>
+
+          <dt><span>Phone Number</span></dt>
+          <dd>{{ user.phoneNumber }}</dd>
+
+          <dt><span>Email</span></dt>
+          <dd>{{ user.email }}</dd>
+
+          <dt><h4>Account Details</h4></dt>
+          <br />
+
+          <dt><span>Username</span></dt>
           <dd>
             <span>{{ user.login }}</span>
             @if (user.activated) {
@@ -17,15 +40,6 @@
               <span class="badge bg-danger">Deactivated</span>
             }
           </dd>
-
-          <dt><span>First name</span></dt>
-          <dd>{{ user.firstName }}</dd>
-
-          <dt><span>Last name</span></dt>
-          <dd>{{ user.lastName }}</dd>
-
-          <dt><span>Email</span></dt>
-          <dd>{{ user.email }}</dd>
 
           <dt><span>Created by</span></dt>
           <dd>{{ user.createdBy }}</dd>
