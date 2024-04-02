@@ -4,6 +4,7 @@ import cabs.domain.Appointment;
 import cabs.repository.AppointmentRepository;
 import cabs.repository.AppointmentRepository.PatientDetailsProjection;
 import cabs.repository.AppointmentRepository.PatientMappingsProjection;
+import cabs.repository.AppointmentRepositoryCustom;
 import cabs.service.AppointmentService;
 import cabs.service.dto.PatientDetailsDTO;
 import java.util.List;
@@ -26,8 +27,11 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
 
-    public AppointmentServiceImpl(AppointmentRepository appointmentRepository) {
+    private final AppointmentRepositoryCustom appointmentRepositoryCustom;
+
+    public AppointmentServiceImpl(AppointmentRepository appointmentRepository, AppointmentRepositoryCustom appointmentRepositoryCustom) {
         this.appointmentRepository = appointmentRepository;
+        this.appointmentRepositoryCustom = appointmentRepositoryCustom;
     }
 
     @Override
@@ -91,9 +95,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> getUserAppt(String userId) {
+    public List<Appointment> getUserAppt(String userId, String predicate, String sort) {
         Integer id = Integer.parseInt(userId);
-        return appointmentRepository.getUserAppt(id);
+        return appointmentRepositoryCustom.getUserAppt(id, predicate, sort);
     }
 
     @Override

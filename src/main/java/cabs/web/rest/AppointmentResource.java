@@ -217,8 +217,12 @@ public class AppointmentResource {
     }
 
     @GetMapping("/getuserappt")
-    public List<Appointment> getUserAppt(@RequestParam(value = "userId") String userId) {
-        return appointmentService.getUserAppt(userId);
+    public List<Appointment> getUserAppt(
+        @RequestParam(value = "userId") String userId,
+        @RequestParam(value = "predicate") String predicate,
+        @RequestParam(value = "sort") String sort
+    ) {
+        return appointmentService.getUserAppt(userId, predicate, sort);
     }
 
     @GetMapping("/getTime")
