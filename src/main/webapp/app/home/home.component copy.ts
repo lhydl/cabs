@@ -1,32 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
-import { combineLatest, filter, Observable, Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, Subject, combineLatest } from 'rxjs';
+import { filter, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
-import { SortDirective, SortByDirective } from 'app/shared/sort';
-import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-import { ItemCountComponent } from 'app/shared/pagination';
-import { FormBuilder, FormsModule, UntypedFormGroup } from '@angular/forms';
-import { MatChipsModule } from '@angular/material/chips';
-
-import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
-import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
-import { IAppointment, PatientMappingsDTO } from '../appointment.model';
-import { EntityArrayResponseType, AppointmentService } from '../service/appointment.service';
-import { AppointmentDeleteDialogComponent } from '../delete/appointment-delete-dialog.component';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
+import { AppointmentService, EntityArrayResponseType } from 'app/entities/appointment/service/appointment.service';
+import { IAppointment, PatientMappingsDTO } from 'app/entities/appointment/appointment.model';
+import { FormBuilder, FormsModule, UntypedFormGroup } from '@angular/forms';
+import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { ASC, DEFAULT_SORT_DATA, DESC, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
+import dayjs from 'dayjs';
+import { SortByDirective, SortDirective } from 'app/shared/sort';
+import { DurationPipe, FormatMediumDatePipe, FormatMediumDatetimePipe } from 'app/shared/date';
+import { ItemCountComponent } from 'app/shared/pagination';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
-import dayjs from 'dayjs/esm';
-import { Dayjs } from 'dayjs';
+import { MatChipsModule } from '@angular/material/chips';
+import { AppointmentDeleteDialogComponent } from 'app/entities/appointment/delete/appointment-delete-dialog.component';
+
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   standalone: true,
-  selector: 'jhi-appointment',
-  templateUrl: './appointment.component.html',
-  styleUrls: ['./appointment.component.scss'],
+  selector: 'jhi-home',
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.scss',
   imports: [
     RouterModule,
     FormsModule,
@@ -41,21 +42,20 @@ import { Dayjs } from 'dayjs';
     MatChipsModule,
   ],
 })
-export class AppointmentComponent implements OnInit {
+export default class HomeComponent implements OnInit, OnDestroy {
+  account: Account | null = null;
+
   appointments?: IAppointment[];
   filteredAppointments: IAppointment[] = [];
-  displayedAppointments: IAppointment[] = [];
   state: 'upcoming' | 'past' = 'upcoming';
   isLoading = false;
 
   predicate = 'id';
   ascending = true;
 
-  allItems = 100000;
   itemsPerPage = ITEMS_PER_PAGE;
   totalItems = 0;
   page = 1;
-  account: Account | null = null;
   isAdmin: boolean = this.accountService.hasAnyAuthority('ROLE_ADMIN');
   displayTitle: string | null = null;
   patientMappings: PatientMappingsDTO[] = [];
@@ -64,19 +64,26 @@ export class AppointmentComponent implements OnInit {
   apptType: string | null = null;
 
   private readonly destroy$ = new Subject<void>();
+  allAppointments?: IAppointment[];
+  onlyFirstFive: string | undefined;
 
   constructor(
     protected appointmentService: AppointmentService,
-    protected activatedRoute: ActivatedRoute,
-    public router: Router,
-    protected modalService: NgbModal,
     private accountService: AccountService,
+    private router: Router,
+
+    protected activatedRoute: ActivatedRoute,
+    protected modalService: NgbModal,
     private fb: FormBuilder,
   ) {}
 
   trackId = (_index: number, item: IAppointment): number => this.appointmentService.getAppointmentIdentifier(item);
 
   ngOnInit(): void {
+    this.accountService
+      .getAuthenticationState()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(account => (this.account = account));
     this.searchForm = this.fb.group({
       apptType: [null],
       apptDate: [null],
@@ -91,74 +98,13 @@ export class AppointmentComponent implements OnInit {
     this.load();
   }
 
+  login(): void {
+    this.router.navigate(['/login']);
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  setUserRoleContent(): void {
-    this.accountService.identity().subscribe(account => {
-      if (account) {
-        if (this.accountService.hasAnyAuthority(['ROLE_ADMIN'])) {
-          this.displayTitle = 'Manage Appointments';
-        } else {
-          this.displayTitle = 'Manage Your Appointments';
-        }
-      }
-    });
-  }
-
-  toggleState(state: 'upcoming' | 'past') {
-    this.searchForm.reset();
-    this.state = state;
-    this.filterAppointments();
-  }
-
-  clearSearch(): void {
-    this.searchForm.reset();
-    this.filterAppointments();
-  }
-
-  filterAppointments() {
-    const today = dayjs();
-    this.page = 1;
-    if (this.appointments != null) {
-      if (!this.isAdmin) {
-        this.appointments = this.appointments.filter(appointment => appointment.patientId === this.account?.id);
-      }
-      // console.log('all:::' + this.appointments.length);
-      if (this.state === 'upcoming') {
-        this.filteredAppointments = this.appointments.filter(appointment => dayjs(appointment.apptDatetime).isAfter(today));
-        // console.log('upcoming:::' + this.filteredAppointments.length);
-      } else {
-        this.filteredAppointments = this.appointments.filter(appointment => dayjs(appointment.apptDatetime).isBefore(today));
-        // console.log('past:::' + this.filteredAppointments.length);
-      }
-
-      this.apptType = this.searchForm.value.apptType;
-      const apptDate = this.searchForm.value.apptDate;
-      const remarks = this.searchForm.value.remarks;
-      const patientName = this.searchForm.value.patientName;
-      if (this.apptType) {
-        this.filteredAppointments = this.filteredAppointments.filter(appointment => appointment.apptType === this.apptType);
-      }
-      if (apptDate) {
-        this.filteredAppointments = this.filteredAppointments.filter(
-          appointment => appointment.apptDatetime?.format('YYYY-MM-DD') === apptDate,
-        );
-      }
-      if (remarks) {
-        this.filteredAppointments = this.filteredAppointments.filter(appointment => appointment.remarks?.includes(remarks));
-      }
-      if (patientName) {
-        const patient = this.patientMappings.find(p =>
-          (p.firstName?.toLowerCase() + ' ' + p.lastName?.toLowerCase()).includes(patientName.toLowerCase()),
-        );
-        this.filteredAppointments = this.filteredAppointments.filter(appointment => appointment.patientId?.toString() === patient?.id);
-      }
-    }
-
-    this.updatePagination();
   }
 
   delete(appointment: IAppointment): void {
@@ -175,6 +121,71 @@ export class AppointmentComponent implements OnInit {
           this.load();
         },
       });
+  }
+
+  complete(appointment: IAppointment): void {
+    // Update the appointment status to 2 (completed)
+    appointment.status = 1;
+
+    // Call the appointment service to update the appointment
+    this.appointmentService.update(appointment).subscribe({
+      next: () => {
+        // After updating, reload the data
+        this.load();
+      },
+      error: error => {
+        // Handle error if needed
+        console.error('Error updating appointment:', error);
+      },
+    });
+  }
+
+  refreshList(): void {
+    this.load();
+  }
+
+  setUserRoleContent(): void {
+    this.accountService.identity().subscribe(account => {
+      if (account) {
+        if (this.accountService.hasAnyAuthority(['ROLE_ADMIN'])) {
+          this.displayTitle = 'Manage Current Queue';
+          this.onlyFirstFive = '';
+        } else {
+          this.displayTitle = 'Your Today Appointment';
+          this.onlyFirstFive = '(Only first 5 appointment is shown)';
+        }
+      }
+    });
+  }
+
+  clearSearch(): void {
+    this.searchForm.reset();
+    this.filterAppointments();
+  }
+
+  filterAppointments(): void {
+    const today = dayjs().startOf('day');
+    if (this.appointments) {
+      this.allAppointments = this.appointments.slice();
+
+      this.allAppointments = this.allAppointments.filter(appointment => appointment.status !== 1);
+
+      this.allAppointments = this.allAppointments.filter(appointment => {
+        const appointmentDate = dayjs(appointment.apptDatetime, 'DD MMM YYYY HH:mm:ss');
+        return appointmentDate.isSame(today, 'day');
+      });
+
+      this.allAppointments.sort((a, b) => {
+        const dateA = dayjs(a.apptDatetime, 'DD MMM YYYY HH:mm:ss');
+        const dateB = dayjs(b.apptDatetime, 'DD MMM YYYY HH:mm:ss');
+        return dateA.diff(dateB);
+      });
+      if (!this.accountService.hasAnyAuthority('ROLE_ADMIN')) {
+        this.filteredAppointments = this.allAppointments.filter(appointment => appointment.patientId === this.account?.id);
+      } else {
+        this.filteredAppointments = this.allAppointments || [];
+      }
+    }
   }
 
   load(): void {
@@ -211,22 +222,8 @@ export class AppointmentComponent implements OnInit {
     this.handleNavigation(this.page, this.predicate, this.ascending);
   }
 
-  // navigateToPage(page = this.page): void {
-  //   this.handleNavigation(page, this.predicate, this.ascending);
-  // }
-
-  navigateToPage(page: number): void {
-    this.page = page;
-    // console.log('page:::' + this.page);
-    this.updatePagination();
-  }
-
-  updatePagination(): void {
-    this.totalItems = this.filteredAppointments.length;
-    const startIndex = (this.page - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    this.displayedAppointments = this.filteredAppointments.slice(startIndex, endIndex);
-    // console.log('display:::' + this.displayedAppointments.length);
+  navigateToPage(page = this.page): void {
+    this.handleNavigation(page, this.predicate, this.ascending);
   }
 
   loadUserAppt(): void {
@@ -262,8 +259,13 @@ export class AppointmentComponent implements OnInit {
   protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
     const page = params.get(PAGE_HEADER);
     this.page = +(page ?? 1);
-    const sort = (params.get(SORT) ?? data[DEFAULT_SORT_DATA]).split(',');
-    this.predicate = sort[0];
+
+    // Ensure that sort is a valid string before splitting it
+    const sortValue = params.get(SORT) ?? data[DEFAULT_SORT_DATA];
+    const sort = typeof sortValue === 'string' ? sortValue.split(',') : [this.predicate, ASC];
+
+    // Ensure that sort has at least two elements before accessing them
+    this.predicate = sort[0] || this.predicate;
     this.ascending = sort[1] === ASC;
   }
 
@@ -271,7 +273,6 @@ export class AppointmentComponent implements OnInit {
     this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
     this.appointments = dataFromBody;
-    // console.log('appt::::' + this.appointments.length);
     this.filterAppointments();
   }
 
@@ -288,7 +289,7 @@ export class AppointmentComponent implements OnInit {
     const pageToLoad: number = page ?? 1;
     const queryObject: any = {
       page: pageToLoad - 1,
-      size: this.allItems,
+      size: this.itemsPerPage,
       sort: this.getSortQueryParam(predicate, ascending),
     };
     return this.appointmentService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
@@ -296,8 +297,8 @@ export class AppointmentComponent implements OnInit {
 
   protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean): void {
     const queryParamsObj = {
-      page: 1,
-      size: this.allItems,
+      page,
+      size: this.itemsPerPage,
       sort: this.getSortQueryParam(predicate, ascending),
     };
 
