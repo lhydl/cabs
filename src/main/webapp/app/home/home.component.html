@@ -24,15 +24,31 @@
               (login=&quot;user&quot; and password=&quot;user&quot;).</span
             >
           </div> -->
-          <div class="alert alert-warning">
+          <!-- <div class="alert alert-warning">
             <span>To use the app,</span>&nbsp;
             <a class="alert-link" routerLink="/login">Please sign in here!</a>
           </div>
           <div class="alert alert-warning">
             <span>You don&apos;t have an account yet?</span>&nbsp;
             <a class="alert-link" routerLink="/account/register">Register a new account</a>
-          </div>
+          </div> -->
         }
+      </div>
+      <div class="actions-div">
+        <img src="content/images/appointment.svg" class="book-appointment" alt="book-appointment" [routerLink]="['/appointment/new']" />Book
+        appointment
+        <img
+          src="content/images/view-appointment.svg"
+          class="view-appointment"
+          alt="view-appointment"
+          [routerLink]="['/appointment']"
+        />View appointments
+        <!-- <button type="submit" class="btn btn-primary custom-button book-appointment" [routerLink]="['/appointment/new']">
+          <span class="fw-bold text-dark">Book Appointment</span>
+        </button>
+        <button type="submit" class="btn btn-primary custom-button view-appointment" [routerLink]="['/appointment']">
+          <span class="fw-bold text-dark">View Appointments</span>
+        </button> -->
       </div>
     </div>
   </div>
@@ -60,13 +76,13 @@
       <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">GitHub</a>!
     </p> -->
 </div>
-<div class="row2">
+<!-- <div class="row2">
   <div class="ButtonDiv">
     <button type="submit" class="btn btn-primary custom-button book-appointment" [routerLink]="['/appointment/new']">
-      <b>Book Appointment</b>
+      <span class="fw-bold text-dark">Book Appointment</span>
     </button>
     <button type="submit" class="btn btn-primary custom-button view-appointment" [routerLink]="['/appointment']">
-      <b>View Appointments</b>
+      <span class="fw-bold text-dark">View Appointments</span>
     </button>
   </div>
-</div>
+</div> -->

@@ -25,6 +25,7 @@ Main page styles
   flex-direction: column;
   justify-content: center;
   height: 100%;
+  min-height: 550px;
 }
 
 @media (min-width: 768px) {
@@ -43,23 +44,24 @@ Main page styles
   justify-content: center;
   align-items: center;
 }
-.ButtonDiv {
+.actions-div {
   padding: 10px;
   position: relative;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  align-items: center;
   background-color: none;
   height: 100%;
-  width: 50%;
+  width: 90%;
   min-width: 500px;
 }
 button {
-  background-color: #616d7c;
+  background-color: none;
   border: none;
-  outline: 2px solid black;
+  // outline: 2px solid black;
 }
 button:hover {
-  background-color: #41454b;
+  background-color: none;
 }
 .custom-button {
   display: flex;
@@ -74,19 +76,27 @@ button:hover {
   padding: 10px 30px;
   padding-top: 15vh;
   margin: 0 auto;
+  background: none;
 }
 .custom-button b {
   white-space: nowrap;
 }
+
 .book-appointment {
-  background-image: url('../../content/images/bookAppointment.png');
-  background-size: 10vh;
-  background-repeat: no-repeat;
-  background-position: center;
+  // background-image: url('../../content/images/appointment.svg');
+  // background-size: 16vh;
+  // background-repeat: no-repeat;
+  // background-position: center;
+  cursor: pointer;
+  width: 200px;
+  height: 200px;
 }
 .view-appointment {
-  background-image: url('../../content/images/listIcon.png');
-  background-size: 10vh;
-  background-repeat: no-repeat;
-  background-position: center 45%;
+  // background-image: url('../../content/images/view-appointment.svg');
+  // background-size: 10vh;
+  // background-repeat: no-repeat;
+  // background-position: center 45%;
+  cursor: pointer;
+  width: 200px;
+  height: 150px;
 }
