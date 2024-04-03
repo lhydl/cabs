@@ -35,8 +35,8 @@
     </div>
   } -->
 
-  <form [formGroup]="searchForm" class="search-form" (ngSubmit)="filterAppointments()">
-    <div class="field-container p-1 m-1">
+  <form [formGroup]="searchForm" class="search-form mb-2" (ngSubmit)="filterAppointments()">
+    <div class="field-container">
       <ng-select
         class="custom-select"
         id="field_appt_type"
@@ -59,12 +59,16 @@
       <input class="form-control" id="patientName" type="text" placeholder="Enter Patient Name" formControlName="patientName" />
     </div>
     <button type="button" (click)="clearSearch()" class="btn btn-light btn-md">
-      <!-- <fa-icon icon="times" class="p-1"></fa-icon> -->
-      <span>Clear</span>
+      <div class="btn-content">
+        <fa-icon icon="times" class="p-1"></fa-icon>
+        <span>Clear</span>
+      </div>
     </button>
     <button type="submit" class="btn btn-primary btn-md">
-      <!-- <fa-icon icon="search" class="p-1"></fa-icon> -->
-      <span>Search</span>
+      <div class="btn-content">
+        <fa-icon icon="search" class="p-1"></fa-icon>
+        <span>Search</span>
+      </div>
     </button>
   </form>
 
@@ -116,7 +120,7 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <th scope="col" jhiSortBy="status">
+            <th scope="col" jhiSortBy="status" *ngIf="state === 'past'">
               <div class="d-flex">
                 <span>Status</span>
                 <fa-icon class="p-1" icon="sort"></fa-icon>
@@ -142,7 +146,13 @@
               <td>{{ appointment.apptDatetime | formatMediumDatetime }}</td>
               <td>{{ appointment.remarks }}</td>
               <td *jhiHasAnyAuthority="'ROLE_ADMIN'">{{ getPatientNameById(appointment.patientId) }}</td>
-              <td><div class="circle-ball" [ngClass]="getStatusColorClass(appointment.status)"></div></td>
+              <td *ngIf="state === 'past'">
+                <a
+                  class="circle-ball"
+                  [ngbTooltip]="appointment.status === 0 ? 'Missed' : 'Completed'"
+                  [ngClass]="getStatusColorClass(appointment.status)"
+                ></a>
+              </td>
               <!-- <td>{{ appointment.doctorId }}</td> -->
               <td class="text-end">
                 <!-- <div class="btn-group">

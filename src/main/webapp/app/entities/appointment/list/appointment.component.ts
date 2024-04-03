@@ -63,8 +63,8 @@ export class AppointmentComponent implements OnInit {
   apptTypeList: string[] = ['Consultation', 'Urgent Care', 'Dental', 'Pharmacy'];
   apptType: string | null = null;
   statusColors: { [key: number]: string } = {
-    0: 'green',
-    1: 'red',
+    0: 'red',
+    1: 'green',
   };
 
   private readonly destroy$ = new Subject<void>();
