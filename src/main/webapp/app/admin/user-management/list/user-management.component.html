@@ -31,12 +31,16 @@
       <input class="form-control" id="email" type="text" placeholder="Enter Email" formControlName="email" />
     </div>
     <button type="button" (click)="clearSearch()" class="btn btn-light btn-md">
-      <!-- <fa-icon icon="times" class="p-1"></fa-icon> -->
-      <span>Clear</span>
+      <div class="btn-content">
+        <fa-icon icon="times" class="p-1"></fa-icon>
+        <span>Clear</span>
+      </div>
     </button>
     <button type="submit" class="btn btn-primary btn-md">
-      <!-- <fa-icon icon="search" class="p-1"></fa-icon> -->
-      <span>Search</span>
+      <div class="btn-content">
+        <fa-icon icon="search" class="p-1"></fa-icon>
+        <span>Search</span>
+      </div>
     </button>
   </form>
 
