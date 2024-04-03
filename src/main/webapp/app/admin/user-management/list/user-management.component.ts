@@ -6,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
-import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
+import { ALL_ITEMS, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { ASC, DESC, SORT } from 'app/config/navigation.constants';
 import { ItemCountComponent } from 'app/shared/pagination';
 import { AccountService } from 'app/core/auth/account.service';
@@ -14,6 +14,7 @@ import { Account } from 'app/core/auth/account.model';
 import { UserManagementService } from '../service/user-management.service';
 import { User } from '../user-management.model';
 import UserManagementDeleteDialogComponent from '../delete/user-management-delete-dialog.component';
+import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   standalone: true,
@@ -28,10 +29,14 @@ export default class UserManagementComponent implements OnInit {
   isLoading = false;
   totalItems = 0;
   itemsPerPage = ITEMS_PER_PAGE;
+  allItems = ALL_ITEMS;
   page!: number;
   predicate!: string;
   ascending!: boolean;
   isSuccess: boolean = false;
+  searchForm!: UntypedFormGroup;
+  filteredUsers: User[] = [];
+  displayedUsers: User[] = [];
 
   constructor(
     private userService: UserManagementService,
@@ -39,11 +44,49 @@ export default class UserManagementComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit(): void {
+    this.searchForm = this.fb.group({
+      firstName: [null],
+      lastName: [null],
+      login: [null],
+      email: [null],
+    });
     this.accountService.identity().subscribe(account => (this.currentAccount = account));
     this.handleNavigation();
+  }
+
+  clearSearch(): void {
+    this.searchForm.reset();
+    this.page = 0;
+    this.loadAll();
+  }
+
+  filterUsers() {
+    this.page = 1;
+    const firstName = this.searchForm.value.firstName;
+    const lastName = this.searchForm.value.lastName;
+    const login = this.searchForm.value.login;
+    const email = this.searchForm.value.email;
+    if (this.users !== null) {
+      this.filteredUsers = this.users;
+      this.displayedUsers = this.users;
+      if (firstName) {
+        this.filteredUsers = this.filteredUsers.filter(user => user.firstName?.toLowerCase()?.includes(firstName.toLowerCase()));
+      }
+      if (lastName) {
+        this.filteredUsers = this.filteredUsers.filter(user => user.lastName?.toLowerCase()?.includes(lastName.toLowerCase()));
+      }
+      if (login) {
+        this.filteredUsers = this.filteredUsers.filter(user => user.login?.toLowerCase()?.includes(login.toLowerCase()));
+      }
+      if (email) {
+        this.filteredUsers = this.filteredUsers.filter(user => user.email?.toLowerCase()?.includes(email.toLowerCase()));
+      }
+    }
+    this.updatePagination();
   }
 
   setActive(user: User, isActivated: boolean): void {
@@ -70,7 +113,7 @@ export default class UserManagementComponent implements OnInit {
     this.userService
       .query({
         page: this.page - 1,
-        size: this.itemsPerPage,
+        size: this.allItems,
         sort: this.sort(),
       })
       .subscribe({
@@ -86,10 +129,23 @@ export default class UserManagementComponent implements OnInit {
     this.router.navigate(['./'], {
       relativeTo: this.activatedRoute.parent,
       queryParams: {
-        page: this.page,
+        page: 1,
         sort: `${this.predicate},${this.ascending ? ASC : DESC}`,
       },
     });
+    this.filterUsers();
+  }
+
+  navigateToPage(page: number): void {
+    this.page = page;
+    this.updatePagination();
+  }
+
+  updatePagination(): void {
+    this.totalItems = this.filteredUsers.length;
+    const startIndex = (this.page - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.displayedUsers = this.filteredUsers.slice(startIndex, endIndex);
   }
 
   // Demo: Step 2
@@ -128,5 +184,6 @@ export default class UserManagementComponent implements OnInit {
   private onSuccess(users: User[] | null, headers: HttpHeaders): void {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.users = users;
+    this.filterUsers();
   }
 }
