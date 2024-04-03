@@ -3,7 +3,7 @@
     <span id="user-management-page-heading" data-cy="userManagementPageHeading">Manage Patients Accounts</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
+      <button class="btn btn-info me-2" (click)="clearSearch()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span>Refresh List</span>
       </button>
@@ -17,7 +17,40 @@
 
   <jhi-alert></jhi-alert>
 
-  @if (users) {
+  <form [formGroup]="searchForm" class="search-form mt-4 mb-2" (ngSubmit)="filterUsers()">
+    <div class="field-container">
+      <input class="form-control" id="firstName" type="text" placeholder="Enter First Name" formControlName="firstName" />
+    </div>
+    <div class="field-container">
+      <input class="form-control" id="lastName" type="text" placeholder="Enter Last Name" formControlName="lastName" />
+    </div>
+    <div class="field-container">
+      <input class="form-control" id="login" type="text" placeholder="Enter Username" formControlName="login" />
+    </div>
+    <div class="field-container">
+      <input class="form-control" id="email" type="text" placeholder="Enter Email" formControlName="email" />
+    </div>
+    <button type="button" (click)="clearSearch()" class="btn btn-light btn-md">
+      <div class="btn-content">
+        <fa-icon icon="times" class="p-1"></fa-icon>
+        <span>Clear</span>
+      </div>
+    </button>
+    <button type="submit" class="btn btn-primary btn-md">
+      <div class="btn-content">
+        <fa-icon icon="search" class="p-1"></fa-icon>
+        <span>Search</span>
+      </div>
+    </button>
+  </form>
+
+  @if (displayedUsers.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Patients Found</span>
+    </div>
+  }
+
+  @if (displayedUsers.length !== 0) {
     <div class="table-responsive">
       <table class="table table-striped" aria-describedby="user-management-page-heading">
         <thead>
@@ -37,7 +70,7 @@
         </thead>
         @if (users) {
           <tbody>
-            @for (user of users; track trackIdentity) {
+            @for (user of displayedUsers; track trackIdentity) {
               <tr>
                 <!-- <td>
                   <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
@@ -131,7 +164,7 @@
   @if (users) {
     <div>
       <div class="d-flex justify-content-center">
-        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+        <jhi-item-count [params]="{ page: page, totalItems: filteredUsers.length, itemsPerPage: itemsPerPage }"></jhi-item-count>
       </div>
 
       <div class="d-flex justify-content-center">
@@ -142,7 +175,7 @@
           [maxSize]="5"
           [rotate]="true"
           [boundaryLinks]="true"
-          (pageChange)="transition()"
+          (pageChange)="navigateToPage($event)"
         ></ngb-pagination>
       </div>
     </div>
