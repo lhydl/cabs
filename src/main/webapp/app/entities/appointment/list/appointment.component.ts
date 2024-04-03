@@ -11,7 +11,7 @@ import { ItemCountComponent } from 'app/shared/pagination';
 import { FormBuilder, FormsModule, UntypedFormGroup } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
 
-import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
+import { ALL_ITEMS, ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { IAppointment, PatientMappingsDTO } from '../appointment.model';
 import { EntityArrayResponseType, AppointmentService } from '../service/appointment.service';
@@ -51,7 +51,7 @@ export class AppointmentComponent implements OnInit {
   predicate = 'id';
   ascending = true;
 
-  allItems = 100000;
+  allItems = ALL_ITEMS;
   itemsPerPage = ITEMS_PER_PAGE;
   totalItems = 0;
   page = 1;
@@ -152,7 +152,9 @@ export class AppointmentComponent implements OnInit {
         );
       }
       if (remarks) {
-        this.filteredAppointments = this.filteredAppointments.filter(appointment => appointment.remarks?.includes(remarks));
+        this.filteredAppointments = this.filteredAppointments.filter(
+          appointment => appointment.remarks?.toLowerCase()?.includes(remarks.toLowerCase()),
+        );
       }
       if (patientName) {
         const patient = this.patientMappings.find(p =>
