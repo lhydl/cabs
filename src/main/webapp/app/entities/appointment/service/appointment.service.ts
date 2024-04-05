@@ -99,6 +99,10 @@ export class AppointmentService {
     return this.http.get<PatientMappingsDTO[]>(`${this.resourceUrl}/getPatientMappings`);
   }
 
+  getTodaysAppointments(params: HttpParams): Observable<IAppointment[]> {
+    return this.http.get<IAppointment[]>(`${this.resourceUrl}/getTodayAppt`, { params });
+  }
+
   addAppointmentToCollectionIfMissing<Type extends Pick<IAppointment, 'id'>>(
     appointmentCollection: Type[],
     ...appointmentsToCheck: (Type | null | undefined)[]

@@ -25,9 +25,9 @@ export default class HomeComponent implements OnInit, OnDestroy {
   account: Account | null = null;
   isAdmin: boolean = this.accountService.hasAnyAuthority('ROLE_ADMIN');
   isUser: boolean = this.accountService.hasAnyAuthority('ROLE_USER');
-  appointments?: IAppointment[];
-  allAppointments?: IAppointment[];
-  filteredAppointments: IAppointment[] = [];
+  today: string = dayjs().format('YYYY-MM-DD');
+  appointments?: IAppointment[] = [];
+  userTodaysAppointments?: IAppointment[] = [];
 
   private readonly destroy$ = new Subject<void>();
 
@@ -43,57 +43,33 @@ export default class HomeComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(account => (this.account = account));
 
-    this.loadUserAppt('appt_datetime', 'ASC');
+    this.getTodaysAppointments();
   }
 
   login(): void {
     this.router.navigate(['/login']);
   }
 
-  loadUserAppt(predicate: string, sort: string): void {
-    const userId = this.account?.id;
-    let params = new HttpParams();
-    if (userId !== null && userId !== undefined) {
-      params = new HttpParams().set('userId', userId).set('predicate', predicate).set('sort', sort);
-    }
-    this.appointmentService.getUserAppt(params).subscribe(res => {
-      this.onResponseSuccess(res);
+  getTodaysAppointments(userId?: number): void {
+    const params = new HttpParams().set('today', this.today);
+    this.appointmentService.getTodaysAppointments(params).subscribe((res: any) => {
+      this.appointments = res;
+      if (this.appointments && !this.isAdmin) {
+        this.userTodaysAppointments = this.appointments.filter(appointment => appointment.patientId === this.account?.id);
+      }
     });
   }
 
-  protected onResponseSuccess(response: EntityArrayResponseType): void {
-    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.appointments = dataFromBody;
-    this.filterAppointments();
+  getCurrentQueue(): void {
+    // TODO -> get current appt in the queue
   }
 
-  protected fillComponentAttributesFromResponseBody(data: IAppointment[] | null): IAppointment[] {
-    return data ?? [];
+  onClickSkip(): void {
+    // TODO -> write api to skip queue (user missed appt)
   }
 
-  filterAppointments(): void {
-    const today = dayjs().startOf('day');
-    if (this.appointments) {
-      this.allAppointments = this.appointments.slice();
-
-      this.allAppointments = this.allAppointments.filter(appointment => appointment.status !== 1);
-
-      this.allAppointments = this.allAppointments.filter(appointment => {
-        const appointmentDate = dayjs(appointment.apptDatetime, 'DD MMM YYYY HH:mm:ss');
-        return appointmentDate.isSame(today, 'day');
-      });
-
-      this.allAppointments.sort((a, b) => {
-        const dateA = dayjs(a.apptDatetime, 'DD MMM YYYY HH:mm:ss');
-        const dateB = dayjs(b.apptDatetime, 'DD MMM YYYY HH:mm:ss');
-        return dateA.diff(dateB);
-      });
-      if (!this.accountService.hasAnyAuthority('ROLE_ADMIN')) {
-        this.filteredAppointments = this.allAppointments.filter(appointment => appointment.patientId === this.account?.id);
-      } else {
-        this.filteredAppointments = this.allAppointments || [];
-      }
-    }
+  onClickNext(): void {
+    // TODO -> write api to next (user completed appt)
   }
 
   ngOnDestroy(): void {
