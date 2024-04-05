@@ -79,13 +79,16 @@
       <div class="col-md-3 today-appt" *ngIf="!isAdmin">
         <h2 class="fw-bold">Appointments Today</h2>
 
-        @if (filteredAppointments.length === 0) {
+        @if (userTodaysAppointments?.length === 0) {
           <div class="alert alert-warning" id="no-result">
             <span>No appointments today</span>
           </div>
         }
-        @if (filteredAppointments.length !== 0) {
+        @if (userTodaysAppointments?.length !== 0) {
           <span>I have appointments</span>
+          <div *ngFor="let appt of userTodaysAppointments">
+            <span>{{ appt.apptDatetime }}</span>
+          </div>
         }
       </div>
 

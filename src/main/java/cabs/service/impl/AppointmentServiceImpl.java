@@ -6,7 +6,6 @@ import cabs.repository.AppointmentRepository.PatientDetailsProjection;
 import cabs.repository.AppointmentRepository.PatientMappingsProjection;
 import cabs.repository.AppointmentRepositoryCustom;
 import cabs.service.AppointmentService;
-import cabs.service.dto.PatientDetailsDTO;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -118,5 +117,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<PatientMappingsProjection> getPatientMappings() {
         return appointmentRepository.getPatientMappings();
+    }
+
+    @Override
+    public List<Appointment> getTodaysAppointments(String today) {
+        return appointmentRepositoryCustom.getTodaysAppointments(today);
     }
 }
