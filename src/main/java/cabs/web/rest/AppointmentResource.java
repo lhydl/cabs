@@ -240,7 +240,7 @@ public class AppointmentResource {
     }
 
     @GetMapping("/getTodayAppt")
-    public List<Appointment> getTodaysAppointments(@RequestParam(value = "today") String today) {
-        return appointmentService.getTodaysAppointments(today);
+    public List<Appointment> getTodaysAppointments() {
+        return appointmentService.getTodaysAppointments();
     }
 }
