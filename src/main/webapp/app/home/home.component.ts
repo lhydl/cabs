@@ -44,6 +44,11 @@ export default class HomeComponent implements OnInit, OnDestroy {
       .subscribe(account => (this.account = account));
 
     this.getTodaysAppointments();
+
+    if (!this.isAdmin) {
+      // TODO -> poll backend every 10 sec for real time q status
+      /* if is user, poll backend to get real time q for users */
+    }
   }
 
   login(): void {
@@ -53,6 +58,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
   getTodaysAppointments(userId?: number): void {
     const params = new HttpParams().set('today', this.today);
     this.appointmentService.getTodaysAppointments(params).subscribe((res: any) => {
+      /* can use appt id as q number, then disclaimer q number may not be called in sequence */
       this.appointments = res;
       if (this.appointments && !this.isAdmin) {
         this.userTodaysAppointments = this.appointments.filter(appointment => appointment.patientId === this.account?.id);
@@ -61,15 +67,12 @@ export default class HomeComponent implements OnInit, OnDestroy {
   }
 
   getCurrentQueue(): void {
-    // TODO -> get current appt in the queue
+    // TODO -> get current appt in the queue, and check how many ppl in front of q
   }
 
-  onClickSkip(): void {
-    // TODO -> write api to skip queue (user missed appt)
-  }
-
-  onClickNext(): void {
-    // TODO -> write api to next (user completed appt)
+  onClickNext(isMissed?: boolean): void {
+    // TODO -> write api for admin to next (user completed or missed appt)
+    /* make two buttons, "skip" and "next" that calls this with diff params */
   }
 
   ngOnDestroy(): void {
