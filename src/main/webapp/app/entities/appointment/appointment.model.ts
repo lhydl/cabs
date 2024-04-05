@@ -26,12 +26,14 @@ export class PatientDetailsDTO {
   email?: string;
   dob?: Date;
   gender?: string;
+  login?: string;
 }
 
 export class PatientMappingsDTO {
   id?: number;
   firstName?: string;
   lastName?: string;
+  login?: string;
 }
 
 export type NewAppointment = Omit<IAppointment, 'id'> & { id: null };

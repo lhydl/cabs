@@ -158,7 +158,7 @@ export class AppointmentComponent implements OnInit {
       }
       if (patientName) {
         const patient = this.patientMappings.find(p =>
-          (p.firstName?.toLowerCase() + ' ' + p.lastName?.toLowerCase()).includes(patientName.toLowerCase()),
+          (p.firstName?.toLowerCase() + ' ' + p.lastName?.toLowerCase() + ' ' + p.login?.toLowerCase()).includes(patientName.toLowerCase()),
         );
         this.filteredAppointments = this.filteredAppointments.filter(appointment => appointment.patientId?.toString() === patient?.id);
       }
@@ -210,7 +210,7 @@ export class AppointmentComponent implements OnInit {
     if (!foundMapping) {
       return 'Unknown';
     }
-    return foundMapping.firstName + ' ' + foundMapping.lastName;
+    return foundMapping.firstName + ' ' + foundMapping.lastName + ' ' + '(' + foundMapping.login + ')';
   }
 
   navigateToWithComponentValues(): void {
