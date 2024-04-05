@@ -46,6 +46,7 @@ export class AppointmentUpdateComponent implements OnInit {
   formattedSelectedDate: string | undefined;
   today: string = dayjs().format('YYYY-MM-DD');
   genderList: string[] = ['Male', 'Female', 'Others'];
+  isValidDate: boolean = true;
 
   editForm: AppointmentFormGroup = this.appointmentFormService.createAppointmentFormGroup({ id: null }, this.isNewPatient, this.isAdmin);
 
@@ -138,10 +139,15 @@ export class AppointmentUpdateComponent implements OnInit {
       this.selectedDate = input.value; // For create new appt
     }
     if (this.selectedDate !== undefined) {
-      // Get booked time slots from db based on selected date
-      this.editForm.get('apptTime')?.reset();
-      this.formattedSelectedDate = dayjs(this.selectedDate).format('DD/MM/YYYY');
-      this.getExistingTimeSlots(this.selectedDate);
+      if (this.selectedDate < this.today) {
+        this.isValidDate = false;
+      } else {
+        this.isValidDate = true;
+        // Get booked time slots from db based on selected date
+        this.editForm.get('apptTime')?.reset();
+        this.formattedSelectedDate = dayjs(this.selectedDate).format('DD/MM/YYYY');
+        this.getExistingTimeSlots(this.selectedDate);
+      }
     }
   }
 

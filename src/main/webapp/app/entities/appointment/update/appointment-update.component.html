@@ -81,8 +81,18 @@
               (change)="generateTimeSlots($event)"
             />
           </div>
+          @if (editForm.get('apptDate')!.invalid && (editForm.get('apptDate')!.dirty || editForm.get('apptDate')!.touched)) {
+            <div>
+              @if (editForm.get('apptDate')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+              @if (!isValidDate) {
+                <small class="form-text text-danger">Cannot select past date.</small>
+              }
+            </div>
+          }
         </div>
-        <div class="mb-3" *ngIf="selectedDate">
+        <div class="mb-3" *ngIf="selectedDate && isValidDate">
           <label class="form-label" for="field_appt_time">Available Timeslots for {{ formattedSelectedDate }}</label>
           <div class="d-flex">
             <ng-select
@@ -96,6 +106,13 @@
               <ng-option *ngFor="let time of timeslots" [value]="time">{{ time }}</ng-option>
             </ng-select>
           </div>
+          @if (editForm.get('apptTime')!.invalid && (editForm.get('apptTime')!.dirty || editForm.get('apptTime')!.touched)) {
+            <div>
+              @if (editForm.get('apptTime')?.errors?.required) {
+                <small class="form-text text-danger">This field is required.</small>
+              }
+            </div>
+          }
         </div>
 
         <div class="mb-3">
