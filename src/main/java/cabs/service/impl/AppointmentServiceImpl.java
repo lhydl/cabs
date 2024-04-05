@@ -120,7 +120,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> getTodaysAppointments(String today) {
-        return appointmentRepositoryCustom.getTodaysAppointments(today);
+    public List<Appointment> getTodaysAppointments() {
+        return appointmentRepositoryCustom.getTodaysAppointments();
     }
 }

@@ -69,5 +69,5 @@ public interface AppointmentService {
 
     public List<PatientMappingsProjection> getPatientMappings();
 
-    public List<Appointment> getTodaysAppointments(String today);
+    public List<Appointment> getTodaysAppointments();
 }

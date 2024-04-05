@@ -25,7 +25,6 @@ export default class HomeComponent implements OnInit, OnDestroy {
   account: Account | null = null;
   isAdmin: boolean = this.accountService.hasAnyAuthority('ROLE_ADMIN');
   isUser: boolean = this.accountService.hasAnyAuthority('ROLE_USER');
-  today: string = dayjs().format('YYYY-MM-DD');
   appointments?: IAppointment[] = [];
   userTodaysAppointments?: IAppointment[] = [];
   currentAppointment?: IAppointment;
@@ -58,8 +57,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
   }
 
   getTodaysAppointments(userId?: number): void {
-    const params = new HttpParams().set('today', this.today);
-    this.appointmentService.getTodaysAppointments(params).subscribe((res: any) => {
+    this.appointmentService.getTodaysAppointments().subscribe((res: any) => {
       /* can use appt id as q number, then disclaimer q number may not be called in sequence */
       this.appointments = res;
       if (this.appointments && !this.isAdmin) {

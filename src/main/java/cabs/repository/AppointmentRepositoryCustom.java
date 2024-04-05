@@ -24,18 +24,17 @@ public class AppointmentRepositoryCustom {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Appointment> getTodaysAppointments(String today) {
+    public List<Appointment> getTodaysAppointments() {
         String sql =
             " SELECT * " +
             " FROM " +
             "     cabs.appointment " +
             " WHERE " +
-            "     DATE(appt_datetime) = :today " +
+            "     DATE(appt_datetime) = CURDATE() " +
             " ORDER BY " +
             "     appt_datetime ASC ";
 
         Query query = entityManager.createNativeQuery(sql, Appointment.class);
-        query.setParameter("today", today);
 
         return query.getResultList();
     }
