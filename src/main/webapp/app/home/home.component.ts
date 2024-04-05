@@ -28,6 +28,8 @@ export default class HomeComponent implements OnInit, OnDestroy {
   today: string = dayjs().format('YYYY-MM-DD');
   appointments?: IAppointment[] = [];
   userTodaysAppointments?: IAppointment[] = [];
+  currentAppointment?: IAppointment;
+  nextAppointment?: IAppointment;
 
   private readonly destroy$ = new Subject<void>();
 
@@ -46,8 +48,8 @@ export default class HomeComponent implements OnInit, OnDestroy {
     this.getTodaysAppointments();
 
     if (!this.isAdmin) {
-      // TODO -> poll backend every 10 sec for real time q status
-      /* if is user, poll backend to get real time q for users */
+      // TODO -> poll backend every 5 sec for real time q status
+      /* if is user, poll backend to get real time q updates for users */
     }
   }
 
@@ -68,6 +70,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
 
   getCurrentQueue(): void {
     // TODO -> get current appt in the queue, and check how many ppl in front of q
+    /* to implement appt status: 0 = new, 1 = completed, 2 = missed*/
   }
 
   onClickNext(isMissed?: boolean): void {
