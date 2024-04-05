@@ -6,7 +6,7 @@ import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MatChipsModule } from '@angular/material/chips';
-import { ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 
 /**
  * Application wide Module
@@ -25,3 +25,13 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
 })
 export default class SharedModule {}
+
+export function notAfterTodayValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const selectedDate = new Date(control.value);
+    selectedDate.setHours(0, 0, 0, 0);
+    return selectedDate > today ? { notAfterToday: { value: control.value } } : null;
+  };
+}

@@ -36,7 +36,7 @@
           @if (editForm.get('apptType')!.invalid && (editForm.get('apptType')!.dirty || editForm.get('apptType')!.touched)) {
             <div>
               @if (editForm.get('apptType')?.errors?.required) {
-                <small class="form-text text-danger">This field is required.</small>
+                <small class="form-text text-danger">Appointment type is required.</small>
               }
             </div>
           }
@@ -84,10 +84,10 @@
           @if (editForm.get('apptDate')!.invalid && (editForm.get('apptDate')!.dirty || editForm.get('apptDate')!.touched)) {
             <div>
               @if (editForm.get('apptDate')?.errors?.required) {
-                <small class="form-text text-danger">This field is required.</small>
+                <small class="form-text text-danger">Appointment date is required.</small>
               }
               @if (!isValidDate) {
-                <small class="form-text text-danger">Cannot select past date.</small>
+                <small class="form-text text-danger">Cannot select past date for appointment.</small>
               }
             </div>
           }
@@ -109,7 +109,7 @@
           @if (editForm.get('apptTime')!.invalid && (editForm.get('apptTime')!.dirty || editForm.get('apptTime')!.touched)) {
             <div>
               @if (editForm.get('apptTime')?.errors?.required) {
-                <small class="form-text text-danger">This field is required.</small>
+                <small class="form-text text-danger">Appointment time is required.</small>
               }
             </div>
           }
@@ -158,7 +158,7 @@
             @if (editForm.get('patientId')!.invalid && (editForm.get('patientId')!.dirty || editForm.get('patientId')!.touched)) {
               <div>
                 @if (editForm.get('patientId')?.errors?.required) {
-                  <small class="form-text text-danger">This field is required.</small>
+                  <small class="form-text text-danger">Patient is required.</small>
                 }
                 <small class="form-text text-danger" [hidden]="!editForm.get('patientId')?.errors?.number"
                   >This field should be a number.</small
@@ -169,7 +169,7 @@
 
           <div *ngIf="isNewPatient">
             <div class="mb-3">
-              <label class="form-label" for="firstName">First name</label>
+              <label class="form-label" for="firstName">First Name</label>
               <input
                 type="firstName"
                 class="form-control"
@@ -190,7 +190,7 @@
             </div>
 
             <div class="mb-3">
-              <label class="form-label" for="lastName">Last name</label>
+              <label class="form-label" for="lastName">Last Name</label>
               <input
                 type="lastName"
                 class="form-control"
@@ -218,6 +218,9 @@
                   @if (editForm.get('dob')?.errors?.required) {
                     <small class="form-text text-danger">Date of birth is required.</small>
                   }
+                  @if (editForm.get('dob')?.errors?.notAfterToday) {
+                    <small class="form-text text-danger">Date of birth cannot be future date.</small>
+                  }
                 </div>
               }
             </div>
@@ -237,7 +240,7 @@
             </div>
 
             <div class="mb-3">
-              <label class="form-label" for="phoneNumber">Phone number</label>
+              <label class="form-label" for="phoneNumber">Phone Number</label>
               <input
                 type="phoneNumber"
                 class="form-control"

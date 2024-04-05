@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import SharedModule from 'app/shared/shared.module';
+import SharedModule, { notAfterTodayValidator } from 'app/shared/shared.module';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import dayjs from 'dayjs';
@@ -39,7 +39,7 @@ export default class SettingsComponent implements OnInit {
     }),
     dob: new FormControl(initialAccount.dob, {
       nonNullable: true,
-      validators: [Validators.required],
+      validators: [Validators.required, notAfterTodayValidator()],
     }),
     gender: new FormControl(initialAccount.gender, {
       nonNullable: true,
