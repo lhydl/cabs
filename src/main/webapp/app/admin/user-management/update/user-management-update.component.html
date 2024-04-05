@@ -18,7 +18,7 @@
         @if (editForm.get('login')!.invalid && (editForm.get('login')!.dirty || editForm.get('login')!.touched)) {
           <div>
             @if (editForm.get('login')?.errors?.required) {
-              <small class="form-text text-danger">This field is required.</small>
+              <small class="form-text text-danger">Username is required.</small>
             }
 
             @if (editForm.get('login')?.errors?.maxlength) {
@@ -33,7 +33,7 @@
       </div>
 
       <div class="mb-3">
-        <label class="form-label">First name</label>
+        <label class="form-label">First Name</label>
         <input type="text" class="form-control" name="firstName" formControlName="firstName" />
 
         @if (editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)) {
@@ -41,18 +41,26 @@
             @if (editForm.get('firstName')?.errors?.maxlength) {
               <small class="form-text text-danger">This field cannot be longer than 50 characters.</small>
             }
+
+            @if (editForm.get('firstName')?.errors?.required) {
+              <small class="form-text text-danger">First name is required.</small>
+            }
           </div>
         }
       </div>
 
       <div class="mb-3">
-        <label>Last name</label>
+        <label class="form-label">Last Name</label>
         <input type="text" class="form-control" name="lastName" formControlName="lastName" />
 
         @if (editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)) {
           <div>
             @if (editForm.get('lastName')?.errors?.maxlength) {
               <small class="form-text text-danger">This field cannot be longer than 50 characters.</small>
+            }
+
+            @if (editForm.get('lastName')?.errors?.required) {
+              <small class="form-text text-danger">Last name is required.</small>
             }
           </div>
         }
@@ -65,6 +73,9 @@
           <div>
             @if (editForm.get('dob')?.errors?.required) {
               <small class="form-text text-danger">Date of birth is required.</small>
+            }
+            @if (editForm.get('dob')?.errors?.notAfterToday) {
+              <small class="form-text text-danger">Date of birth cannot be future date.</small>
             }
           </div>
         }
@@ -85,7 +96,7 @@
       </div>
 
       <div class="mb-3">
-        <label class="form-label" for="phoneNumber">Phone number</label>
+        <label class="form-label" for="phoneNumber">Phone Number</label>
         <input
           type="phoneNumber"
           class="form-control"
@@ -115,7 +126,7 @@
         @if (editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)) {
           <div>
             @if (editForm.get('email')?.errors?.required) {
-              <small class="form-text text-danger">This field is required.</small>
+              <small class="form-text text-danger">Email is required.</small>
             }
 
             @if (editForm.get('email')?.errors?.maxlength) {

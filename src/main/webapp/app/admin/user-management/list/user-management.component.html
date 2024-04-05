@@ -56,6 +56,7 @@
         <thead>
           <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()">
             <!-- <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th> -->
+            <th></th>
             <th scope="col" jhiSortBy="firstName"><span>First Name</span> <fa-icon icon="sort"></fa-icon></th>
             <th scope="col" jhiSortBy="lastName"><span>Last Name</span> <fa-icon icon="sort"></fa-icon></th>
             <th scope="col" jhiSortBy="login"><span>Username</span> <fa-icon icon="sort"></fa-icon></th>
@@ -70,91 +71,92 @@
         </thead>
         @if (users) {
           <tbody>
-            @for (user of displayedUsers; track trackIdentity) {
-              <tr>
-                <!-- <td>
-                  <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
-                </td> -->
-                <td>{{ user.firstName }}</td>
-                <td>{{ user.lastName }}</td>
-                <td>{{ user.login }}</td>
-                <td>{{ user.email }}</td>
-                <td>
-                  @if (!user.activated) {
-                    <button class="btn btn-danger btn-sm" (click)="setActive(user, true)">Deactivated</button>
-                  } @else {
-                    <button
-                      class="btn btn-success btn-sm"
-                      (click)="setActive(user, false)"
-                      [disabled]="!currentAccount || currentAccount.login === user.login"
-                    >
-                      Activated
-                    </button>
-                  }
-                </td>
-                <!-- <td>
-                  @for (authority of user.authorities; track $index) {
-                    <div>
-                      <span class="badge bg-info">{{ authority }}</span>
-                    </div>
-                  }
-                </td>
-                <td>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
-                <td>{{ user.lastModifiedBy }}</td>
-                <td>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td> -->
-                <td class="text-end">
-                  <!-- <div class="btn-group">
-                    <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm">
-                      <fa-icon icon="eye"></fa-icon>
-                      <span class="d-none d-md-inline">View</span>
-                    </button>
+            <tr *ngFor="let user of displayedUsers; let i = index">
+              <!-- <td>
+                            <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
+                          </td> -->
+              <td>
+                <strong>{{ (page - 1) * itemsPerPage + i + 1 }}</strong>
+              </td>
+              <td>{{ user.firstName }}</td>
+              <td>{{ user.lastName }}</td>
+              <td>{{ user.login }}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                @if (!user.activated) {
+                  <button class="btn btn-danger btn-sm" (click)="setActive(user, true)">Deactivated</button>
+                } @else {
+                  <button
+                    class="btn btn-success btn-sm"
+                    (click)="setActive(user, false)"
+                    [disabled]="!currentAccount || currentAccount.login === user.login"
+                  >
+                    Activated
+                  </button>
+                }
+              </td>
+              <!-- <td>
+                            @for (authority of user.authorities; track $index) {
+                              <div>
+                                <span class="badge bg-info">{{ authority }}</span>
+                              </div>
+                            }
+                          </td>
+                          <td>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
+                          <td>{{ user.lastModifiedBy }}</td>
+                          <td>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td> -->
+              <td class="text-end">
+                <!-- <div class="btn-group">
+                              <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline">View</span>
+                              </button>
+          
+                              <button
+                                type="submit"
+                                [routerLink]="['./', user.login, 'edit']"
+                                queryParamsHandling="merge"
+                                class="btn btn-primary btn-sm"
+                              >
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Edit</span>
+                              </button>
+          
+                              <button
+                                type="button"
+                                (click)="deleteUser(user)"
+                                class="btn btn-danger btn-sm"
+                                [disabled]="!currentAccount || currentAccount.login === user.login"
+                              >
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline">Delete</span>
+                              </button>
+                            </div> -->
+                <div class="btn-group">
+                  <a [routerLink]="['./', user.login, 'view']" class="btn btn-icon btn-sm view-icon" [ngbTooltip]="'View Details'">
+                    <fa-icon icon="eye"></fa-icon>
+                  </a>
+                  <a
+                    [routerLink]="['./', user.login, 'edit']"
+                    queryParamsHandling="merge"
+                    class="btn btn-icon btn-sm edit-icon"
+                    [ngbTooltip]="'Edit'"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                  </a>
 
-                    <button
-                      type="submit"
-                      [routerLink]="['./', user.login, 'edit']"
-                      queryParamsHandling="merge"
-                      class="btn btn-primary btn-sm"
-                    >
-                      <fa-icon icon="pencil-alt"></fa-icon>
-                      <span class="d-none d-md-inline">Edit</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      (click)="deleteUser(user)"
-                      class="btn btn-danger btn-sm"
-                      [disabled]="!currentAccount || currentAccount.login === user.login"
-                    >
-                      <fa-icon icon="times"></fa-icon>
-                      <span class="d-none d-md-inline">Delete</span>
-                    </button>
-                  </div> -->
-                  <div class="btn-group">
-                    <a [routerLink]="['./', user.login, 'view']" class="btn btn-icon btn-sm view-icon" [ngbTooltip]="'View Details'">
-                      <fa-icon icon="eye"></fa-icon>
-                    </a>
-                    <a
-                      [routerLink]="['./', user.login, 'edit']"
-                      queryParamsHandling="merge"
-                      class="btn btn-icon btn-sm edit-icon"
-                      [ngbTooltip]="'Edit'"
-                    >
-                      <fa-icon icon="pencil-alt"></fa-icon>
-                    </a>
-
-                    <button
-                      type="submit"
-                      (click)="deleteUser(user)"
-                      class="btn btn-icon btn-sm delete-icon"
-                      [disabled]="!currentAccount || currentAccount.login === user.login"
-                      [ngbTooltip]="'Delete'"
-                    >
-                      <fa-icon icon="trash-alt"></fa-icon>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            }
+                  <button
+                    type="submit"
+                    (click)="deleteUser(user)"
+                    class="btn btn-icon btn-sm delete-icon"
+                    [disabled]="!currentAccount || currentAccount.login === user.login"
+                    [ngbTooltip]="'Delete'"
+                  >
+                    <fa-icon icon="trash-alt"></fa-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
           </tbody>
         }
       </table>

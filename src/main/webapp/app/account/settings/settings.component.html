@@ -84,6 +84,9 @@
                 @if (settingsForm.get('dob')?.errors?.required) {
                   <small class="form-text text-danger">Date of birth is required.</small>
                 }
+                @if (settingsForm.get('dob')?.errors?.notAfterToday) {
+                  <small class="form-text text-danger">Date of birth cannot be future date.</small>
+                }
               </div>
             }
           </div>

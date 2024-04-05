@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from
 import dayjs from 'dayjs/esm';
 import { DATE_TIME_FORMAT, TIME_FORMAT, DATE_FORMAT } from 'app/config/input.constants';
 import { IAppointment, NewAppointment } from '../appointment.model';
+import { notAfterTodayValidator } from 'app/shared/shared.module';
 
 /**
  * A partial Type with required key is used as form input.
@@ -104,7 +105,7 @@ export class AppointmentFormService {
       //   validators: [Validators.required],
       // }),
       dob: new FormControl(appointmentRawValue.dob, {
-        validators: isNewPatient && isAdmin ? [Validators.required] : [],
+        validators: isNewPatient && isAdmin ? [Validators.required, notAfterTodayValidator()] : [],
       }),
       gender: new FormControl(appointmentRawValue.gender, {
         validators: isNewPatient && isAdmin ? [Validators.required] : [],
