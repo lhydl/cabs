@@ -65,6 +65,7 @@ export class AppointmentComponent implements OnInit {
   statusColors: { [key: number]: string } = {
     0: 'red',
     1: 'green',
+    2: 'red',
   };
 
   private readonly destroy$ = new Subject<void>();

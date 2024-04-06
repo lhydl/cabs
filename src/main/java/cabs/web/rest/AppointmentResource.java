@@ -243,4 +243,9 @@ public class AppointmentResource {
     public List<Appointment> getTodaysAppointments() {
         return appointmentService.getTodaysAppointments();
     }
+
+    @PostMapping("/updateApptStatus")
+    public Integer updateApptStatus(@RequestParam(value = "id") Integer id, @RequestParam(value = "status") Integer status) {
+        return appointmentService.updateApptStatus(id, status);
+    }
 }

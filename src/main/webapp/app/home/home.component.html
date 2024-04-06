@@ -76,7 +76,7 @@
   @if (account != null) {
     @if (account) {
       <!-- only show to patients  -->
-      <div class="col-md-3 today-appt" *ngIf="!isAdmin">
+      <div class="col-md-3 today-appt" *jhiHasAnyAuthority="'ROLE_USER'">
         <h2 class="fw-bold">Appointments Today</h2>
 
         @if (userTodaysAppointments?.length === 0) {
@@ -87,7 +87,7 @@
         @if (userTodaysAppointments?.length !== 0) {
           <span>I have appointments</span>
           <div *ngFor="let appt of userTodaysAppointments">
-            <span>{{ appt.apptDatetime }}</span>
+            <span>{{ appt.id }} {{ appt.apptDatetime }}</span>
           </div>
         }
       </div>
@@ -97,26 +97,31 @@
         <br />
         <div class="current-queue">
           <span>Currently Serving: </span>
-          <h3 class="q-number">1234</h3>
+          <h3 class="q-number">{{ currentAppointment?.id }}</h3>
         </div>
         <br />
         <div class="next-queue">
           <span>Next Queue No: </span>
-          <h3 class="q-number">2345</h3>
+          <h3 class="q-number">{{ nextAppointment?.id }}</h3>
         </div>
         <br />
-        <div class="your-queue">
+        <div class="your-queue" *jhiHasAnyAuthority="'ROLE_USER'">
           <span>Your Q No.: </span>
-          <h3 class="q-number">3333</h3>
+          <h3 class="q-number">{{ userQueueNum }}</h3>
           <span>People before you: </span>
-          <h4 class="text-danger fw-bold">2</h4>
+          <h4 class="text-danger fw-bold">{{ numPeopleInFront }}</h4>
         </div>
-        <div class="p-2 fst-italic">Last updated at 2/4/2024 5:30:45 pm</div>
+        <div class="p-2 fst-italic">Last updated at {{ lastUpdatedTime }}</div>
+        <div class="p-2">Disclaimer: queue number may not be called in sequence</div>
       </div>
 
       <!-- only show to admin -->
-      <div class="col-md-3 admin-queue" *ngIf="isAdmin">
+      <div class="col-md-3 admin-queue" *jhiHasAnyAuthority="'ROLE_ADMIN'">
         <span>I am the admin</span>
+        <div>
+          <button class="btn btn-danger btn-md" (click)="onClickNext(2)">Skip</button>
+          <button class="btn btn-primary btn-md" (click)="onClickNext(1)">Next</button>
+        </div>
       </div>
     }
   }
