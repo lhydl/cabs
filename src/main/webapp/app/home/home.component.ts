@@ -23,8 +23,8 @@ import { HttpParams } from '@angular/common/http';
 })
 export default class HomeComponent implements OnInit, OnDestroy {
   account: Account | null = null;
-  isAdmin: boolean = false;
-  isUser: boolean = false;
+  isAdmin = this.accountService.hasAnyAuthority('ROLE_ADMIN');
+  isUser = this.accountService.hasAnyAuthority('ROLE_USER');
   appointments?: IAppointment[] = [];
   userTodaysAppointments?: IAppointment[] = [];
   currentAppointment?: IAppointment;
@@ -41,19 +41,17 @@ export default class HomeComponent implements OnInit, OnDestroy {
     private router: Router,
   ) {}
 
+  // NOTE: USE *jhiHasAnyAuthority in HTML! I'VE REMOVED USER ROLE FOR admin
   ngOnInit(): void {
     this.accountService
       .getAuthenticationState()
       .pipe(takeUntil(this.destroy$))
       .subscribe(account => (this.account = account));
 
-    this.isAdmin = this.accountService.hasAnyAuthority('ROLE_ADMIN');
-    this.isUser = this.accountService.hasAnyAuthority('ROLE_USER');
-
     this.getTodaysAppointments();
 
     if (this.isUser) {
-      /* real time queue update for users */
+      /* real time queue update for users, polling time 5 secs*/
       setInterval(() => {
         this.getTodaysAppointments();
       }, 5000);
@@ -82,7 +80,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
             this.nextAppointment = this.appointments[1];
           }
         }
-        this.lastUpdatedTime = dayjs().format('DD/MM/YYYY HH:MM:ss');
+        this.lastUpdatedTime = dayjs().format('DD/MM/YYYY HH:mm:ss');
       }
     });
   }
