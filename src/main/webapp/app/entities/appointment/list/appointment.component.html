@@ -97,6 +97,12 @@
               </div>
             </th> -->
             <th></th>
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>Queue No.</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="apptType">
               <div class="d-flex">
                 <span>Appointment Type</span>
@@ -144,6 +150,9 @@
                       </td> -->
             <td>
               <strong>{{ (page - 1) * itemsPerPage + i + 1 }}</strong>
+            </td>
+            <td>
+              <strong>{{ appointment.id }}</strong>
             </td>
             <td>{{ appointment.apptType }}</td>
             <td>{{ appointment.apptDatetime | formatMediumDatetime }}</td>
