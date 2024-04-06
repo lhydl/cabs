@@ -70,4 +70,6 @@ public interface AppointmentService {
     public List<PatientMappingsProjection> getPatientMappings();
 
     public List<Appointment> getTodaysAppointments();
+
+    public Integer updateApptStatus(Integer id, Integer status);
 }

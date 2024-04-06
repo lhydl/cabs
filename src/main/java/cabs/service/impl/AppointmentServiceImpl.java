@@ -123,4 +123,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<Appointment> getTodaysAppointments() {
         return appointmentRepositoryCustom.getTodaysAppointments();
     }
+
+    @Override
+    public Integer updateApptStatus(Integer id, Integer status) {
+        return appointmentRepositoryCustom.updateApptStatus(id, status);
+    }
 }

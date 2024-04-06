@@ -23,12 +23,15 @@ import { HttpParams } from '@angular/common/http';
 })
 export default class HomeComponent implements OnInit, OnDestroy {
   account: Account | null = null;
-  isAdmin: boolean = this.accountService.hasAnyAuthority('ROLE_ADMIN');
-  isUser: boolean = this.accountService.hasAnyAuthority('ROLE_USER');
+  isAdmin: boolean = false;
+  isUser: boolean = false;
   appointments?: IAppointment[] = [];
   userTodaysAppointments?: IAppointment[] = [];
   currentAppointment?: IAppointment;
   nextAppointment?: IAppointment;
+  numPeopleInFront?: number;
+  lastUpdatedTime?: string;
+  userQueueNum?: number;
 
   private readonly destroy$ = new Subject<void>();
 
@@ -44,11 +47,16 @@ export default class HomeComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(account => (this.account = account));
 
+    this.isAdmin = this.accountService.hasAnyAuthority('ROLE_ADMIN');
+    this.isUser = this.accountService.hasAnyAuthority('ROLE_USER');
+
     this.getTodaysAppointments();
 
-    if (!this.isAdmin) {
-      // TODO -> poll backend every 5 sec for real time q status
-      /* if is user, poll backend to get real time q updates for users */
+    if (this.isUser) {
+      /* real time queue update for users */
+      setInterval(() => {
+        this.getTodaysAppointments();
+      }, 5000);
     }
   }
 
@@ -56,24 +64,40 @@ export default class HomeComponent implements OnInit, OnDestroy {
     this.router.navigate(['/login']);
   }
 
-  getTodaysAppointments(userId?: number): void {
+  getTodaysAppointments(): void {
     this.appointmentService.getTodaysAppointments().subscribe((res: any) => {
-      /* can use appt id as q number, then disclaimer q number may not be called in sequence */
+      /* using appt id as q number */
       this.appointments = res;
-      if (this.appointments && !this.isAdmin) {
-        this.userTodaysAppointments = this.appointments.filter(appointment => appointment.patientId === this.account?.id);
+      if (this.appointments) {
+        if (!this.isAdmin) {
+          this.userTodaysAppointments = this.appointments.filter(appointment => appointment.patientId === this.account?.id);
+          this.userQueueNum = this.userTodaysAppointments[0]?.id;
+          if (this.userTodaysAppointments.length > 0) {
+            this.numPeopleInFront = this.appointments.findIndex(obj => obj.id === this.userQueueNum);
+          }
+        }
+        if (this.appointments.length > 0) {
+          this.currentAppointment = this.appointments[0];
+          if (this.appointments.length > 1) {
+            this.nextAppointment = this.appointments[1];
+          }
+        }
+        this.lastUpdatedTime = dayjs().format('DD/MM/YYYY HH:MM:ss');
       }
     });
   }
 
-  getCurrentQueue(): void {
-    // TODO -> get current appt in the queue, and check how many ppl in front of q
-    /* to implement appt status: 0 = new, 1 = completed, 2 = missed*/
-  }
-
-  onClickNext(isMissed?: boolean): void {
-    // TODO -> write api for admin to next (user completed or missed appt)
-    /* make two buttons, "skip" and "next" that calls this with diff params */
+  onClickNext(status: number): void {
+    /* appt status: 0 = default, 1 = completed, 2 = misssed */
+    let params = new HttpParams();
+    if (this.currentAppointment !== undefined) {
+      params = new HttpParams().set('id', this.currentAppointment.id).set('status', status);
+    }
+    this.appointmentService.updateApptStatus(params).subscribe((res: any) => {
+      if (res) {
+        this.getTodaysAppointments();
+      }
+    });
   }
 
   ngOnDestroy(): void {

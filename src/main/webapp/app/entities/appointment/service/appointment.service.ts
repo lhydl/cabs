@@ -103,6 +103,10 @@ export class AppointmentService {
     return this.http.get<IAppointment[]>(`${this.resourceUrl}/getTodayAppt`);
   }
 
+  updateApptStatus(params: HttpParams): Observable<number> {
+    return this.http.post<number>(`${this.resourceUrl}/updateApptStatus`, null, { params });
+  }
+
   addAppointmentToCollectionIfMissing<Type extends Pick<IAppointment, 'id'>>(
     appointmentCollection: Type[],
     ...appointmentsToCheck: (Type | null | undefined)[]
