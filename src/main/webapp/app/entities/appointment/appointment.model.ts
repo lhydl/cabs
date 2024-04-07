@@ -5,6 +5,7 @@ export interface IAppointment {
   id: number;
   apptType?: string | null;
   apptDatetime?: dayjs.Dayjs | null;
+  datetimeString?: string | null;
   apptDate?: string | null;
   apptTime?: string | null;
   remarks?: string | null;

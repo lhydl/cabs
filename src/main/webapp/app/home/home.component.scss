@@ -191,3 +191,17 @@ button:hover {
   justify-content: flex-start;
   width: max-content;
 }
+
+.today-appt-card {
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 280px;
+  background-color: rgb(227, 238, 253);
+}
+
+.today-appt-card span {
+  display: block;
+  margin: 10px;
+  font-size: medium;
+}

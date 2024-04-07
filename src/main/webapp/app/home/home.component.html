@@ -78,6 +78,7 @@
       <!-- only show to patients  -->
       <div class="col-md-3 today-appt" *jhiHasAnyAuthority="'ROLE_USER'">
         <h3 class="fw-bold mb-2 pb-4">Appointments Today</h3>
+        <h4 class="p-2">{{ today }}</h4>
 
         @if (userTodaysAppointments?.length === 0) {
           <div class="alert alert-warning w-100" id="no-result">
@@ -85,9 +86,11 @@
           </div>
         }
         @if (userTodaysAppointments?.length !== 0) {
-          <span>I have appointments</span>
           <div *ngFor="let appt of userTodaysAppointments">
-            <span>{{ appt.id }} {{ appt.apptDatetime }}</span>
+            <div class="today-appt-card">
+              <span class="fw-bold">{{ appt.apptType }}</span>
+              <span>{{ appt.datetimeString }}</span>
+            </div>
           </div>
         }
       </div>

@@ -31,6 +31,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
   nextAppointment?: IAppointment;
   numPeopleInFront?: number;
   lastUpdatedTime?: string;
+  today = dayjs().format('DD MMM YYYY');
   userQueueNum?: number;
 
   private readonly destroy$ = new Subject<void>();
@@ -69,6 +70,16 @@ export default class HomeComponent implements OnInit, OnDestroy {
       if (this.appointments) {
         if (!this.isAdmin) {
           this.userTodaysAppointments = this.appointments.filter(appointment => appointment.patientId === this.account?.id);
+
+          // Format and save datetimeString for each appointment
+          this.userTodaysAppointments.forEach(appointment => {
+            if (appointment.apptDatetime) {
+              appointment.datetimeString = dayjs(appointment.apptDatetime).format('HH:mm a');
+            } else {
+              appointment.datetimeString = null;
+            }
+          });
+
           this.userQueueNum = this.userTodaysAppointments[0]?.id;
           if (this.userTodaysAppointments.length > 0) {
             this.numPeopleInFront = this.appointments.findIndex(obj => obj.id === this.userQueueNum);
