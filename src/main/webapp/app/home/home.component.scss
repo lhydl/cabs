@@ -87,6 +87,28 @@ button:hover {
   white-space: nowrap;
 }
 
+.skip-btn {
+  height: 50px;
+  width: 150px;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.skip-btn:hover {
+  background-color: rgb(185, 18, 18);
+}
+
+.next-btn {
+  height: 50px;
+  width: 150px;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.next-btn:hover {
+  background-color: rgb(18, 18, 199);
+}
+
 .book-appointment {
   background-image: url('../../content/images/calendar-svg.svg');
   background-size: 100px;
@@ -108,12 +130,14 @@ button:hover {
 }
 
 .queue-section {
-  // padding-top: 10px;
-  padding-left: 40px;
+  padding-top: 5px;
+  padding-left: 25px;
+  padding-right: 25px;
   border-left: 1px solid #ccc; // vertical divider
   height: 550px;
   align-items: flex-start;
   justify-content: center;
+  // width: min-content;
 }
 
 .q-number {
@@ -154,13 +178,16 @@ button:hover {
   height: 550px;
   align-items: flex-start;
   justify-content: center;
+  width: min-content;
 }
 
 .today-appt {
-  padding-top: 10px;
-  // padding-left: 40px;
+  padding-top: 5px;
+  padding-left: 25px;
+  padding-right: 25px;
   // border-left: 1px solid #ccc; // vertical divider
   height: 550px;
   align-items: flex-start;
   justify-content: flex-start;
+  width: max-content;
 }
