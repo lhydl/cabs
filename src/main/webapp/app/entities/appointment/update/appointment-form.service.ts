@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 
 import dayjs from 'dayjs/esm';
 import { DATE_TIME_FORMAT, TIME_FORMAT, DATE_FORMAT } from 'app/config/input.constants';
 import { IAppointment, NewAppointment } from '../appointment.model';
+import { notAfterTodayValidator } from 'app/shared/shared.module';
 
 /**
  * A partial Type with required key is used as form input.
@@ -73,7 +74,7 @@ export class AppointmentFormService {
         validators: [Validators.required, Validators.maxLength(100)],
       }),
       apptDate: new FormControl(appointmentRawValue.apptDate, {
-        validators: [Validators.required],
+        validators: [Validators.required, this.notBeforeTodayValidator()],
       }),
       apptTime: new FormControl(appointmentRawValue.apptTime, {
         validators: [Validators.required],
@@ -104,7 +105,7 @@ export class AppointmentFormService {
       //   validators: [Validators.required],
       // }),
       dob: new FormControl(appointmentRawValue.dob, {
-        validators: isNewPatient && isAdmin ? [Validators.required] : [],
+        validators: isNewPatient && isAdmin ? [Validators.required, notAfterTodayValidator()] : [],
       }),
       gender: new FormControl(appointmentRawValue.gender, {
         validators: isNewPatient && isAdmin ? [Validators.required] : [],
@@ -124,6 +125,15 @@ export class AppointmentFormService {
         id: { value: appointmentRawValue.id, disabled: true },
       } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */,
     );
+  }
+
+  notBeforeTodayValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const selectedDate = new Date(control.value);
+      return selectedDate < today ? { notBeforeToday: { value: control.value } } : null;
+    };
   }
 
   private getFormDefaults(): AppointmentFormDefaults {

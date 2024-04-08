@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormGroup, FormControl, FormsModule, ReactiveFormsModule, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import SharedModule from 'app/shared/shared.module';
+import SharedModule, { notAfterTodayValidator } from 'app/shared/shared.module';
 import { IUser } from '../user-management.model';
 import { UserManagementService } from '../service/user-management.service';
 import dayjs from 'dayjs';
@@ -37,15 +37,15 @@ export default class UserManagementUpdateComponent implements OnInit {
         Validators.pattern('^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'),
       ],
     }),
-    firstName: new FormControl(userTemplate.firstName, { validators: [Validators.maxLength(50)] }),
-    lastName: new FormControl(userTemplate.lastName, { validators: [Validators.maxLength(50)] }),
+    firstName: new FormControl(userTemplate.firstName, { validators: [Validators.required, Validators.maxLength(50)] }),
+    lastName: new FormControl(userTemplate.lastName, { validators: [Validators.required, Validators.maxLength(50)] }),
     phoneNumber: new FormControl(userTemplate.phoneNumber, {
       nonNullable: true,
       validators: [Validators.required, Validators.pattern('^[0-9]{1,8}$')],
     }),
     dob: new FormControl(userTemplate.dob, {
       nonNullable: true,
-      validators: [Validators.required],
+      validators: [Validators.required, notAfterTodayValidator()],
     }),
     gender: new FormControl(userTemplate.gender, {
       nonNullable: true,
@@ -53,7 +53,7 @@ export default class UserManagementUpdateComponent implements OnInit {
     }),
     email: new FormControl(userTemplate.email, {
       nonNullable: true,
-      validators: [Validators.minLength(5), Validators.maxLength(254), Validators.email],
+      validators: [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email],
     }),
     activated: new FormControl(userTemplate.activated, { nonNullable: true }),
     authorities: new FormControl(userTemplate.authorities, { nonNullable: true }),
@@ -77,6 +77,16 @@ export default class UserManagementUpdateComponent implements OnInit {
     });
     this.userService.authorities().subscribe(authorities => (this.authorities = authorities));
   }
+
+  // notAfterTodayValidator(): ValidatorFn {
+  //   return (control: AbstractControl): { [key: string]: any } | null => {
+  //     const today = new Date();
+  //     today.setHours(0, 0, 0, 0);
+  //     const selectedDate = new Date(control.value);
+  //     selectedDate.setHours(0, 0, 0, 0);
+  //     return selectedDate > today ? { notAfterToday: { value: control.value } } : null;
+  //   };
+  // }
 
   previousState(): void {
     window.history.back();

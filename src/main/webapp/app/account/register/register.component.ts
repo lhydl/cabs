@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
-import SharedModule from 'app/shared/shared.module';
+import SharedModule, { notAfterTodayValidator } from 'app/shared/shared.module';
 import PasswordStrengthBarComponent from '../password/password-strength-bar/password-strength-bar.component';
 import { RegisterService } from './register.service';
 import dayjs from 'dayjs';
@@ -65,7 +65,7 @@ export default class RegisterComponent implements AfterViewInit {
     }),
     dob: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required],
+      validators: [Validators.required, notAfterTodayValidator()],
     }),
     gender: new FormControl(undefined, {
       nonNullable: true,

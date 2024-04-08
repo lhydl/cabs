@@ -6,7 +6,6 @@ import cabs.repository.AppointmentRepository.PatientDetailsProjection;
 import cabs.repository.AppointmentRepository.PatientMappingsProjection;
 import cabs.repository.AppointmentRepositoryCustom;
 import cabs.service.AppointmentService;
-import cabs.service.dto.PatientDetailsDTO;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -130,5 +129,15 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<PatientMappingsProjection> getPatientMappings() {
         return appointmentRepository.getPatientMappings();
+    }
+
+    @Override
+    public List<Appointment> getTodaysAppointments() {
+        return appointmentRepositoryCustom.getTodaysAppointments();
+    }
+
+    @Override
+    public Integer updateApptStatus(Integer id, Integer status) {
+        return appointmentRepositoryCustom.updateApptStatus(id, status);
     }
 }

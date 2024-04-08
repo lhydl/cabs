@@ -9,7 +9,6 @@ import cabs.service.AppointmentService;
 import cabs.service.UserService;
 import cabs.service.dto.AdminUserDTO;
 import cabs.service.dto.AppointmentDTO;
-import cabs.service.dto.PatientDetailsDTO;
 import cabs.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -238,5 +237,15 @@ public class AppointmentResource {
     @GetMapping("/getPatientMappings")
     public List<PatientMappingsProjection> getPatientMappings() {
         return appointmentService.getPatientMappings();
+    }
+
+    @GetMapping("/getTodayAppt")
+    public List<Appointment> getTodaysAppointments() {
+        return appointmentService.getTodaysAppointments();
+    }
+
+    @PostMapping("/updateApptStatus")
+    public Integer updateApptStatus(@RequestParam(value = "id") Integer id, @RequestParam(value = "status") Integer status) {
+        return appointmentService.updateApptStatus(id, status);
     }
 }

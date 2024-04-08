@@ -23,11 +23,16 @@ import { HttpParams } from '@angular/common/http';
 })
 export default class HomeComponent implements OnInit, OnDestroy {
   account: Account | null = null;
-  isAdmin: boolean = this.accountService.hasAnyAuthority('ROLE_ADMIN');
-  isUser: boolean = this.accountService.hasAnyAuthority('ROLE_USER');
-  appointments?: IAppointment[];
-  allAppointments?: IAppointment[];
-  filteredAppointments: IAppointment[] = [];
+  isAdmin = this.accountService.hasAnyAuthority('ROLE_ADMIN');
+  isUser = this.accountService.hasAnyAuthority('ROLE_USER');
+  appointments?: IAppointment[] = [];
+  userTodaysAppointments?: IAppointment[] = [];
+  currentAppointment?: IAppointment;
+  nextAppointment?: IAppointment;
+  numPeopleInFront?: number;
+  lastUpdatedTime?: string;
+  today = dayjs().format('DD MMM YYYY');
+  userQueueNum?: number;
 
   private readonly destroy$ = new Subject<void>();
 
@@ -37,63 +42,71 @@ export default class HomeComponent implements OnInit, OnDestroy {
     private router: Router,
   ) {}
 
+  // NOTE: USE *jhiHasAnyAuthority in HTML! I'VE REMOVED USER ROLE FOR admin
   ngOnInit(): void {
     this.accountService
       .getAuthenticationState()
       .pipe(takeUntil(this.destroy$))
       .subscribe(account => (this.account = account));
 
-    this.loadUserAppt('appt_datetime', 'ASC');
+    this.getTodaysAppointments();
+
+    if (this.isUser) {
+      /* real time queue update for users, polling time 5 secs*/
+      setInterval(() => {
+        this.getTodaysAppointments();
+      }, 5000);
+    }
   }
 
   login(): void {
     this.router.navigate(['/login']);
   }
 
-  loadUserAppt(predicate: string, sort: string): void {
-    const userId = this.account?.id;
-    let params = new HttpParams();
-    if (userId !== null && userId !== undefined) {
-      params = new HttpParams().set('userId', userId).set('predicate', predicate).set('sort', sort);
-    }
-    this.appointmentService.getUserAppt(params).subscribe(res => {
-      this.onResponseSuccess(res);
+  getTodaysAppointments(): void {
+    this.appointmentService.getTodaysAppointments().subscribe((res: any) => {
+      /* using appt id as q number */
+      this.appointments = res;
+      if (this.appointments) {
+        if (!this.isAdmin) {
+          this.userTodaysAppointments = this.appointments.filter(appointment => appointment.patientId === this.account?.id);
+
+          // Format and save datetimeString for each appointment
+          this.userTodaysAppointments.forEach(appointment => {
+            if (appointment.apptDatetime) {
+              appointment.datetimeString = dayjs(appointment.apptDatetime).format('HH:mm a');
+            } else {
+              appointment.datetimeString = null;
+            }
+          });
+
+          this.userQueueNum = this.userTodaysAppointments[0]?.id;
+          if (this.userTodaysAppointments.length > 0) {
+            this.numPeopleInFront = this.appointments.findIndex(obj => obj.id === this.userQueueNum);
+          }
+        }
+        if (this.appointments.length > 0) {
+          this.currentAppointment = this.appointments[0];
+          if (this.appointments.length > 1) {
+            this.nextAppointment = this.appointments[1];
+          }
+        }
+        this.lastUpdatedTime = dayjs().format('DD/MM/YYYY HH:mm:ss');
+      }
     });
   }
 
-  protected onResponseSuccess(response: EntityArrayResponseType): void {
-    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.appointments = dataFromBody;
-    this.filterAppointments();
-  }
-
-  protected fillComponentAttributesFromResponseBody(data: IAppointment[] | null): IAppointment[] {
-    return data ?? [];
-  }
-
-  filterAppointments(): void {
-    const today = dayjs().startOf('day');
-    if (this.appointments) {
-      this.allAppointments = this.appointments.slice();
-
-      this.allAppointments = this.allAppointments.filter(appointment => appointment.status !== 1);
-
-      this.allAppointments = this.allAppointments.filter(appointment => {
-        const appointmentDate = dayjs(appointment.apptDatetime, 'DD MMM YYYY HH:mm:ss');
-        return appointmentDate.isSame(today, 'day');
-      });
-
-      this.allAppointments.sort((a, b) => {
-        const dateA = dayjs(a.apptDatetime, 'DD MMM YYYY HH:mm:ss');
-        const dateB = dayjs(b.apptDatetime, 'DD MMM YYYY HH:mm:ss');
-        return dateA.diff(dateB);
-      });
-      if (!this.accountService.hasAnyAuthority('ROLE_ADMIN')) {
-        this.filteredAppointments = this.allAppointments.filter(appointment => appointment.patientId === this.account?.id);
-      } else {
-        this.filteredAppointments = this.allAppointments || [];
-      }
+  onClickNext(status: number): void {
+    /* appt status: 0 = default, 1 = completed, 2 = misssed */
+    let params = new HttpParams();
+    if (this.currentAppointment !== undefined) {
+      params = new HttpParams().set('id', this.currentAppointment.id).set('status', status);
     }
+    this.appointmentService.updateApptStatus(params).subscribe((res: any) => {
+      if (res) {
+        this.getTodaysAppointments();
+      }
+    });
   }
 
   ngOnDestroy(): void {

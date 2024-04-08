@@ -58,7 +58,7 @@ export class AlertErrorComponent implements OnDestroy {
               this.addErrorAlert(`Error on field "${fieldName}"`);
             }
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-            this.addErrorAlert(httpErrorResponse.error.detail ?? httpErrorResponse.error.message);
+            this.addErrorAlert(httpErrorResponse.error.message);
           } else {
             this.addErrorAlert(httpErrorResponse.error);
           }

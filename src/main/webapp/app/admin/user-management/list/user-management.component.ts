@@ -90,7 +90,7 @@ export default class UserManagementComponent implements OnInit {
   }
 
   setActive(user: User, isActivated: boolean): void {
-    this.userService.update({ ...user, activated: isActivated }).subscribe(() => this.loadAll());
+    this.userService.update({ ...user, activated: isActivated }).subscribe(() => this.clearSearch());
   }
 
   trackIdentity(_index: number, item: User): number {
@@ -103,7 +103,7 @@ export default class UserManagementComponent implements OnInit {
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
       if (reason === 'deleted') {
-        this.loadAll();
+        this.clearSearch();
       }
     });
   }
