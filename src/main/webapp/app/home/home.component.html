@@ -11,7 +11,7 @@
     </div>
   }
 
-  <div class="col-md-6">
+  <div [ngClass]="isAdmin ? 'col-md-7' : 'col-md-6'">
     <div class="content">
       <div class="background-box px-4">
         @if (account !== null) {
@@ -56,10 +56,13 @@
       <div class="actions-div">
         <button type="submit" [routerLink]="['/appointment/new']" class="book-appointment custom-button px-5">
           <!-- <img src="content/images/appointment.svg" class="book-appointment" alt="book-appointment"/> -->
-          <span class="pt-3">Book Appointment</span>
+          <span class="pt-4">Book Appointment</span>
         </button>
         <button [routerLink]="['/appointment']" class="view-appointment custom-button px-5">
-          <span class="pt-3">View Appointments</span>
+          <span class="pt-4">View Appointments</span>
+        </button>
+        <button *jhiHasAnyAuthority="'ROLE_ADMIN'" [routerLink]="['/admin/user-management']" class="manage-patients custom-button px-5">
+          <span class="pt-4">Manage Patients</span>
         </button>
 
         <!-- <button type="submit" class="btn btn-primary custom-button book-appointment" [routerLink]="['/appointment/new']">
@@ -77,7 +80,7 @@
     @if (account) {
       <!-- only show to patients  -->
       <div class="col-md-3 today-appt" *jhiHasAnyAuthority="'ROLE_USER'">
-        <h3 class="fw-bold mb-2 pb-4">Appointments Today</h3>
+        <h3 class="fw-bold">Appointments Today</h3>
         <h4 class="p-2">{{ today }}</h4>
 
         @if (userTodaysAppointments?.length === 0) {
