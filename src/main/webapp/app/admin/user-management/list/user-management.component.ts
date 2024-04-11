@@ -59,17 +59,17 @@ export default class UserManagementComponent implements OnInit {
   }
 
   clearSearch(): void {
-    this.searchForm.reset();
+    this.searchForm?.reset();
     this.page = 0;
     this.loadAll();
   }
 
   filterUsers() {
     this.page = 1;
-    const firstName = this.searchForm.value.firstName;
-    const lastName = this.searchForm.value.lastName;
-    const login = this.searchForm.value.login;
-    const email = this.searchForm.value.email;
+    const firstName = this.searchForm?.value.firstName;
+    const lastName = this.searchForm?.value.lastName;
+    const login = this.searchForm?.value.login;
+    const email = this.searchForm?.value.email;
     if (this.users !== null) {
       this.filteredUsers = this.users;
       this.displayedUsers = this.users;

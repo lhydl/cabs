@@ -23,8 +23,8 @@ import { HttpParams } from '@angular/common/http';
 })
 export default class HomeComponent implements OnInit, OnDestroy {
   account: Account | null = null;
-  isAdmin = this.accountService.hasAnyAuthority('ROLE_ADMIN');
-  isUser = this.accountService.hasAnyAuthority('ROLE_USER');
+  isAdmin: boolean = false;
+  isUser: boolean = false;
   appointments?: IAppointment[] = [];
   userTodaysAppointments?: IAppointment[] = [];
   currentAppointment?: IAppointment;
@@ -33,6 +33,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
   lastUpdatedTime?: string;
   today = dayjs().format('DD MMM YYYY');
   userQueueNum?: number;
+  updateAppointmentsIntervalId: any;
 
   private readonly destroy$ = new Subject<void>();
 
@@ -47,16 +48,25 @@ export default class HomeComponent implements OnInit, OnDestroy {
     this.accountService
       .getAuthenticationState()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(account => (this.account = account));
+      .subscribe(account => {
+        this.account = account;
+        this.isAdmin = this.accountService.hasAnyAuthority('ROLE_ADMIN');
+        this.isUser = this.accountService.hasAnyAuthority('ROLE_USER');
 
-    this.getTodaysAppointments();
-
-    if (this.isUser) {
-      /* real time queue update for users, polling time 5 secs*/
-      setInterval(() => {
-        this.getTodaysAppointments();
-      }, 5000);
-    }
+        if (this.account) {
+          this.getTodaysAppointments();
+          if (this.isUser) {
+            // Real-time queue update for users, polling every 5 seconds
+            this.updateAppointmentsIntervalId = setInterval(() => {
+              this.getTodaysAppointments();
+            }, 5000);
+          }
+        } else {
+          if (this.updateAppointmentsIntervalId) {
+            clearInterval(this.updateAppointmentsIntervalId);
+          }
+        }
+      });
   }
 
   login(): void {

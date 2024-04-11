@@ -40,5 +40,6 @@ module.exports = {
 
     '<rootDir>/src/main/webapp/app/entities/appointment/update/appointment-form.service.spec.ts',
     '<rootDir>/src/main/webapp/app/entities/appointment/detail/appointment-detail.component.spec.ts',
+    '<rootDir>/src/main/webapp/app/home/home.component.spec.ts',
   ],
 };
