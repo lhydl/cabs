@@ -17,7 +17,9 @@
         @if (account !== null) {
           @if (account) {
             <h1 id="home-logged-message" class="display-3">
-              Welcome, <span class="fw-bold text-primary">{{ account.firstName }}</span
+              Welcome,
+              <br />
+              <span class="fw-bold text-primary">{{ account.firstName }}</span
               >!
             </h1>
           }
@@ -85,7 +87,7 @@
 
         @if (userTodaysAppointments?.length === 0) {
           <div class="alert alert-warning w-100" id="no-result">
-            <span class="justify-content-center">No appointments today</span>
+            <span class="justify-content-center">You have no appointments today</span>
           </div>
         }
         @if (userTodaysAppointments?.length !== 0) {
@@ -107,7 +109,7 @@
         </div>
         <br />
         <div class="next-queue">
-          <span>Next Queue No: </span>
+          <span>Next Queue No.: </span>
           <h3 class="q-number">{{ nextAppointment?.id }}</h3>
         </div>
         <br />
